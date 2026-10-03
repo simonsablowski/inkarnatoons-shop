@@ -56,7 +56,7 @@ Alles Wichtige steht in `shop.config.json`:
 | `shipping.freeShippingFromCents` | Warenwert, ab dem der Versand kostenlos ist (`null` = nie) |
 | `shipping.excludedCountries` | Länder, in die nicht geliefert wird |
 
-Die Versandpreise in der Datei sind Platzhalter. Das Gewicht jedes Produkts wird in der Verwaltung gepflegt. Ist eine Bestellung schwerer als die höchste Stufe einer Zone, kann sie nicht bestellt werden und der Warenkorb zeigt einen Hinweis.
+Die Versandpreise sind ein Vorschlag auf Basis der DHL-Preise für Privatkunden mit Online-Frankierung (DHL Paket 2, 5, 10 und 20 kg, Stand 3.10.2026) und sollten vor dem Start geprüft werden. Das Gewicht jedes Produkts wird in der Verwaltung gepflegt. Ist eine Bestellung schwerer als die höchste Stufe einer Zone, kann sie nicht bestellt werden und der Warenkorb zeigt einen Hinweis.
 
 Die Themenwelten stehen in der Tabelle `worlds`, die Kategorien in `categories` (siehe `migrations/`). Eine neue Welt ist eine Zeile in `worlds` mit Name, Kurztext und optional einem Bild für die Kachel. Texte der Oberfläche stehen in `public/i18n/de.json` und `public/i18n/en.json`. Rechtstexte (AGB, Widerruf, Datenschutz, Impressum) sind in `public/legal.html` noch Platzhalter.
 
@@ -171,7 +171,7 @@ In Cloudflare Pages unter *Custom domains* die Domain hinzufügen und den genann
 - Firmendaten für Rechnung und Aufkleber (`seller`) und die Steuerart (`tax.mode`).
 - Videoquelle für den Film und Name der Ko-fi-Seite.
 - Echte Produkte, Fotos, Texte, Preise und Gewichte, auch für Wild Wolf, King of Fools und Schwarzer Peter.
-- Echte Versandtarife und Entscheidung, in welche Länder geliefert wird.
+- Versandtarife bestätigen (bisher DHL Paket für Privatkunden), Länderzuordnung der Zonen prüfen und entscheiden, in welche Länder geliefert wird.
 - Rechtstexte: AGB, Widerrufsbelehrung, Datenschutzerklärung, Impressum.
 - Umsatzsteuer: Alle Preise gelten bisher als Bruttopreise für alle Länder, und die Rechnung weist immer den deutschen Steuersatz aus, auch bei Lieferungen ins Ausland. Ob für Verkäufe in andere EU-Länder das OSS-Verfahren nötig ist und wie Lieferungen in Drittländer besteuert werden, sollte die Steuerberatung der Betreiber klären.
 - Altersfreigabe: Die DVD trägt eine FSK-16-Kennzeichnung. Ob daraus Pflichten für den Versandhandel folgen, sollten die Betreiber prüfen lassen.

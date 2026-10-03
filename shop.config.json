@@ -56,7 +56,8 @@
     "holdMinutes": 31
   },
   "shipping": {
-    "_hinweis": "Alle Versandpreise sind Platzhalter in Cent und müssen an die tatsächlichen Tarife des Versanddienstleisters angepasst werden. maxWeightG ist das Gesamtgewicht des Warenkorbs inklusive Verpackung in Gramm.",
+    "_hinweis": "Vorschlag auf Basis der DHL-Preise für Privatkunden mit Online-Frankierung (dhl.de, abgerufen am 3.10.2026): DHL Paket 2 kg, 5 kg, 10 kg und 20 kg je Zone. Preise in Cent. maxWeightG ist das Gesamtgewicht des Warenkorbs inklusive Verpackung in Gramm. Die Zuordnung der Länder zu den Zonen 5 bis 8 folgt den Regionen der DHL-Zonen und sollte vor dem Start mit der DHL-Länderliste abgeglichen werden.",
+    "carrier": "DHL Paket",
     "packagingWeightG": 150,
     "freeShippingFromCents": null,
     "excludedCountries": [
@@ -72,6 +73,7 @@
       "MP",
       "NF",
       "PW",
+      "RU",
       "SD",
       "SY",
       "UM",
@@ -89,20 +91,20 @@
         ],
         "rates": [
           {
-            "maxWeightG": 500,
-            "cents": 390
-          },
-          {
             "maxWeightG": 2000,
-            "cents": 590
+            "cents": 619
           },
           {
             "maxWeightG": 5000,
-            "cents": 790
+            "cents": 769
           },
           {
             "maxWeightG": 10000,
-            "cents": 1090
+            "cents": 1049
+          },
+          {
+            "maxWeightG": 20000,
+            "cents": 1899
           }
         ]
       },
@@ -131,6 +133,7 @@
           "LT",
           "LU",
           "LV",
+          "MC",
           "MT",
           "NL",
           "PL",
@@ -142,43 +145,71 @@
         ],
         "rates": [
           {
-            "maxWeightG": 500,
-            "cents": 790
-          },
-          {
             "maxWeightG": 2000,
-            "cents": 1490
+            "cents": 1449
           },
           {
             "maxWeightG": 5000,
-            "cents": 1790
+            "cents": 1749
           },
           {
             "maxWeightG": 10000,
-            "cents": 2290
+            "cents": 2249
+          },
+          {
+            "maxWeightG": 20000,
+            "cents": 2849
+          }
+        ]
+      },
+      {
+        "id": "gb-ch",
+        "name": {
+          "de": "Vereinigtes Königreich und Schweiz",
+          "en": "United Kingdom and Switzerland"
+        },
+        "countries": [
+          "CH",
+          "GB",
+          "IM"
+        ],
+        "rates": [
+          {
+            "maxWeightG": 2000,
+            "cents": 1949
+          },
+          {
+            "maxWeightG": 5000,
+            "cents": 2699
+          },
+          {
+            "maxWeightG": 10000,
+            "cents": 3499
+          },
+          {
+            "maxWeightG": 20000,
+            "cents": 4899
           }
         ]
       },
       {
         "id": "europe",
         "name": {
-          "de": "Europa außerhalb der EU",
-          "en": "Europe outside the EU"
+          "de": "Übriges Europa",
+          "en": "Rest of Europe"
         },
         "countries": [
           "AD",
           "AL",
+          "AX",
           "BA",
-          "CH",
+          "BY",
           "FO",
-          "GB",
           "GG",
           "GI",
-          "IM",
           "IS",
           "JE",
           "LI",
-          "MC",
           "MD",
           "ME",
           "MK",
@@ -192,46 +223,208 @@
         ],
         "rates": [
           {
-            "maxWeightG": 500,
-            "cents": 990
-          },
-          {
             "maxWeightG": 2000,
-            "cents": 1790
+            "cents": 2249
           },
           {
             "maxWeightG": 5000,
-            "cents": 2990
+            "cents": 2999
           },
           {
             "maxWeightG": 10000,
-            "cents": 3990
+            "cents": 3799
+          },
+          {
+            "maxWeightG": 20000,
+            "cents": 5299
+          }
+        ]
+      },
+      {
+        "id": "americas",
+        "name": {
+          "de": "Nord-, Mittel- und Südamerika",
+          "en": "North, Central and South America"
+        },
+        "countries": [
+          "US",
+          "CA",
+          "MX",
+          "GL",
+          "PM",
+          "BM",
+          "BZ",
+          "CR",
+          "GT",
+          "HN",
+          "NI",
+          "PA",
+          "SV",
+          "AG",
+          "AI",
+          "AW",
+          "BB",
+          "BL",
+          "BQ",
+          "BS",
+          "CW",
+          "DM",
+          "DO",
+          "GD",
+          "GP",
+          "HT",
+          "JM",
+          "KN",
+          "KY",
+          "LC",
+          "MF",
+          "MQ",
+          "MS",
+          "PR",
+          "SX",
+          "TC",
+          "TT",
+          "VC",
+          "VG",
+          "AR",
+          "BO",
+          "BR",
+          "CL",
+          "CO",
+          "EC",
+          "FK",
+          "GF",
+          "GY",
+          "PE",
+          "PY",
+          "SR",
+          "UY",
+          "VE"
+        ],
+        "rates": [
+          {
+            "maxWeightG": 2000,
+            "cents": 2649
+          },
+          {
+            "maxWeightG": 5000,
+            "cents": 4799
+          },
+          {
+            "maxWeightG": 10000,
+            "cents": 7799
+          },
+          {
+            "maxWeightG": 20000,
+            "cents": 14299
+          }
+        ]
+      },
+      {
+        "id": "mena",
+        "name": {
+          "de": "Nordafrika und Naher Osten",
+          "en": "North Africa and Middle East"
+        },
+        "countries": [
+          "DZ",
+          "EG",
+          "IL",
+          "JO",
+          "LB",
+          "LY",
+          "MA",
+          "PS",
+          "TN"
+        ],
+        "rates": [
+          {
+            "maxWeightG": 2000,
+            "cents": 2249
+          },
+          {
+            "maxWeightG": 5000,
+            "cents": 3799
+          },
+          {
+            "maxWeightG": 10000,
+            "cents": 5199
+          },
+          {
+            "maxWeightG": 20000,
+            "cents": 7599
+          }
+        ]
+      },
+      {
+        "id": "oceania",
+        "name": {
+          "de": "Australien und Ozeanien",
+          "en": "Australia and Oceania"
+        },
+        "countries": [
+          "AU",
+          "NZ",
+          "CK",
+          "FJ",
+          "GU",
+          "KI",
+          "NC",
+          "NR",
+          "NU",
+          "PF",
+          "PG",
+          "PN",
+          "SB",
+          "TK",
+          "TO",
+          "TV",
+          "VU",
+          "WF",
+          "WS"
+        ],
+        "rates": [
+          {
+            "maxWeightG": 2000,
+            "cents": 2749
+          },
+          {
+            "maxWeightG": 5000,
+            "cents": 5599
+          },
+          {
+            "maxWeightG": 10000,
+            "cents": 9699
+          },
+          {
+            "maxWeightG": 20000,
+            "cents": 17699
           }
         ]
       },
       {
         "id": "world",
         "name": {
-          "de": "Rest der Welt",
-          "en": "Rest of the world"
+          "de": "Asien und übriges Afrika",
+          "en": "Asia and rest of Africa"
         },
         "countries": "*",
         "rates": [
           {
-            "maxWeightG": 500,
-            "cents": 1290
-          },
-          {
             "maxWeightG": 2000,
-            "cents": 1990
+            "cents": 2549
           },
           {
             "maxWeightG": 5000,
-            "cents": 3990
+            "cents": 4599
           },
           {
             "maxWeightG": 10000,
-            "cents": 5490
+            "cents": 6199
+          },
+          {
+            "maxWeightG": 20000,
+            "cents": 10099
           }
         ]
       }
