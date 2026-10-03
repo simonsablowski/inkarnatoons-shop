@@ -1,5 +1,5 @@
 // Detailansicht eines Artikels
-import { start, api, t, loc, money, config, cart, heartButton, esc } from "./shop.js";
+import { start, api, t, loc, money, config, cart, heartButton, worldOf, brandName, esc } from "./shop.js";
 
 const view = document.querySelector("#view");
 const slug = new URLSearchParams(location.search).get("p");
@@ -20,7 +20,8 @@ function render() {
     return;
   }
   const name = loc(product, "name");
-  document.title = `${name} · Judas & Jesus Shop`;
+  document.title = `${name} · ${brandName()}`;
+  const world = worldOf(product.world);
   const cat = config().categories.find((c) => c.slug === product.category);
   const multi = product.variants.length > 1;
   if (!multi) chosen = product.variants[0];
@@ -33,7 +34,7 @@ function render() {
       ${product.images.length > 1 ? `<div class="thumbs">${product.images.map((src, i) => `<button type="button" data-img="${esc(src)}" aria-pressed="${i === 0}"><img src="${esc(src)}" alt=""></button>`).join("")}</div>` : ""}
     </div>
     <div class="info">
-      <p class="crumb"><a href="/">${t("product.back")}</a>${cat ? ` / <a href="/?category=${cat.slug}">${esc(loc(cat, "name"))}</a>` : ""}</p>
+      <p class="crumb"><a href="/">${t("product.back")}</a>${world ? ` / <a href="/?world=${world.slug}">${esc(world.name)}</a>` : ""}${cat ? ` / <a href="/?${world ? `world=${world.slug}&` : ""}category=${cat.slug}">${esc(loc(cat, "name"))}</a>` : ""}</p>
       <h1>${esc(name)}</h1>
       <p class="price">${money(product.priceCents)}</p>
       <p class="small">${t("product.priceNote", { link: `<a href="/legal.html#versand">${t("product.shippingLink")}</a>` })}</p>

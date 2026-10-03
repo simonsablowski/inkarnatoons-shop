@@ -1,12 +1,15 @@
 // GET /api/config – öffentliche Einstellungen für die Oberfläche
 import { config, COUNTRIES } from "../_lib/config.js";
-import { listCategories } from "../_lib/catalog.js";
+import { listCategories, listWorlds } from "../_lib/catalog.js";
 import { json } from "../_lib/http.js";
 
 export async function onRequestGet({ env }) {
   return json({
     ok: true,
     shopName: config.shopName,
+    brand: { name: config.brand.name, suffix: config.brand.suffix },
+    film: { world: config.film.world, provider: config.film.provider, id: config.film.id },
+    worlds: await listWorlds(env.DB),
     currency: config.currency,
     languages: config.languages,
     paymentMethods: config.payments.methods,

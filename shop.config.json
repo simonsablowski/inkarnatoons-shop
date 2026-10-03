@@ -1,60 +1,233 @@
 {
-  "shopName": "Judas & Jesus Shop",
+  "shopName": "Inkarnatoons Shop",
+  "brand": {
+    "_hinweis": "Name des gemeinsamen Dachs, vorläufig. Erscheint in Kopfzeile, Seitentiteln und E-Mails.",
+    "name": "Inkarnatoons",
+    "suffix": "Shop"
+  },
   "currency": "EUR",
-  "languages": ["de", "en"],
+  "languages": [
+    "de",
+    "en"
+  ],
   "orderPrefix": "JJ",
+  "seller": {
+    "_hinweis": "Platzhalter. Diese Angaben stehen auf Rechnung und Adressaufkleber.",
+    "name": "Platzhalter Firmenname",
+    "street": "Musterstraße 1",
+    "zip": "10000",
+    "city": "Berlin",
+    "country": "Deutschland",
+    "email": "shop@example.com",
+    "web": "",
+    "taxNumber": "",
+    "vatId": "",
+    "bank": ""
+  },
+  "tax": {
+    "_hinweis": "mode: \"vat\" weist die enthaltene Umsatzsteuer aus, \"small_business\" druckt den Hinweis nach § 19 UStG und weist keine Steuer aus.",
+    "mode": "vat",
+    "ratePercent": 19
+  },
+  "invoice": {
+    "prefix": "RE-"
+  },
+  "label": {
+    "_hinweis": "Größe des Adressaufklebers in Millimetern, passend zum Etikettendrucker.",
+    "widthMm": 100,
+    "heightMm": 62
+  },
+  "film": {
+    "_hinweis": "provider: \"youtube\", \"vimeo\" oder \"file\". id: Video-ID bei YouTube/Vimeo bzw. Adresse der Videodatei bei \"file\". Leer = Platzhalter.",
+    "world": "judas-jesus",
+    "provider": "",
+    "id": ""
+  },
   "payments": {
-    "methods": ["card", "paypal"],
+    "methods": [
+      "card",
+      "paypal"
+    ],
     "holdMinutes": 31
   },
   "shipping": {
     "_hinweis": "Alle Versandpreise sind Platzhalter in Cent und müssen an die tatsächlichen Tarife des Versanddienstleisters angepasst werden. maxWeightG ist das Gesamtgewicht des Warenkorbs inklusive Verpackung in Gramm.",
     "packagingWeightG": 150,
     "freeShippingFromCents": null,
-    "excludedCountries": ["AS", "CC", "CU", "CX", "FM", "HM", "IR", "KP", "MH", "MP", "NF", "PW", "SD", "SY", "UM", "VI"],
+    "excludedCountries": [
+      "AS",
+      "CC",
+      "CU",
+      "CX",
+      "FM",
+      "HM",
+      "IR",
+      "KP",
+      "MH",
+      "MP",
+      "NF",
+      "PW",
+      "SD",
+      "SY",
+      "UM",
+      "VI"
+    ],
     "zones": [
       {
         "id": "de",
-        "name": { "de": "Deutschland", "en": "Germany" },
-        "countries": ["DE"],
+        "name": {
+          "de": "Deutschland",
+          "en": "Germany"
+        },
+        "countries": [
+          "DE"
+        ],
         "rates": [
-          { "maxWeightG": 500, "cents": 390 },
-          { "maxWeightG": 2000, "cents": 590 },
-          { "maxWeightG": 5000, "cents": 790 },
-          { "maxWeightG": 10000, "cents": 1090 }
+          {
+            "maxWeightG": 500,
+            "cents": 390
+          },
+          {
+            "maxWeightG": 2000,
+            "cents": 590
+          },
+          {
+            "maxWeightG": 5000,
+            "cents": 790
+          },
+          {
+            "maxWeightG": 10000,
+            "cents": 1090
+          }
         ]
       },
       {
         "id": "eu",
-        "name": { "de": "Europäische Union", "en": "European Union" },
-        "countries": ["AT", "BE", "BG", "CY", "CZ", "DK", "EE", "ES", "FI", "FR", "GR", "HR", "HU", "IE", "IT", "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO", "SE", "SI", "SK"],
+        "name": {
+          "de": "Europäische Union",
+          "en": "European Union"
+        },
+        "countries": [
+          "AT",
+          "BE",
+          "BG",
+          "CY",
+          "CZ",
+          "DK",
+          "EE",
+          "ES",
+          "FI",
+          "FR",
+          "GR",
+          "HR",
+          "HU",
+          "IE",
+          "IT",
+          "LT",
+          "LU",
+          "LV",
+          "MT",
+          "NL",
+          "PL",
+          "PT",
+          "RO",
+          "SE",
+          "SI",
+          "SK"
+        ],
         "rates": [
-          { "maxWeightG": 500, "cents": 790 },
-          { "maxWeightG": 2000, "cents": 1490 },
-          { "maxWeightG": 5000, "cents": 1790 },
-          { "maxWeightG": 10000, "cents": 2290 }
+          {
+            "maxWeightG": 500,
+            "cents": 790
+          },
+          {
+            "maxWeightG": 2000,
+            "cents": 1490
+          },
+          {
+            "maxWeightG": 5000,
+            "cents": 1790
+          },
+          {
+            "maxWeightG": 10000,
+            "cents": 2290
+          }
         ]
       },
       {
         "id": "europe",
-        "name": { "de": "Europa außerhalb der EU", "en": "Europe outside the EU" },
-        "countries": ["AD", "AL", "BA", "CH", "FO", "GB", "GG", "GI", "IM", "IS", "JE", "LI", "MC", "MD", "ME", "MK", "NO", "RS", "SM", "TR", "UA", "VA", "XK"],
+        "name": {
+          "de": "Europa außerhalb der EU",
+          "en": "Europe outside the EU"
+        },
+        "countries": [
+          "AD",
+          "AL",
+          "BA",
+          "CH",
+          "FO",
+          "GB",
+          "GG",
+          "GI",
+          "IM",
+          "IS",
+          "JE",
+          "LI",
+          "MC",
+          "MD",
+          "ME",
+          "MK",
+          "NO",
+          "RS",
+          "SM",
+          "TR",
+          "UA",
+          "VA",
+          "XK"
+        ],
         "rates": [
-          { "maxWeightG": 500, "cents": 990 },
-          { "maxWeightG": 2000, "cents": 1790 },
-          { "maxWeightG": 5000, "cents": 2990 },
-          { "maxWeightG": 10000, "cents": 3990 }
+          {
+            "maxWeightG": 500,
+            "cents": 990
+          },
+          {
+            "maxWeightG": 2000,
+            "cents": 1790
+          },
+          {
+            "maxWeightG": 5000,
+            "cents": 2990
+          },
+          {
+            "maxWeightG": 10000,
+            "cents": 3990
+          }
         ]
       },
       {
         "id": "world",
-        "name": { "de": "Rest der Welt", "en": "Rest of the world" },
+        "name": {
+          "de": "Rest der Welt",
+          "en": "Rest of the world"
+        },
         "countries": "*",
         "rates": [
-          { "maxWeightG": 500, "cents": 1290 },
-          { "maxWeightG": 2000, "cents": 1990 },
-          { "maxWeightG": 5000, "cents": 3990 },
-          { "maxWeightG": 10000, "cents": 5490 }
+          {
+            "maxWeightG": 500,
+            "cents": 1290
+          },
+          {
+            "maxWeightG": 2000,
+            "cents": 1990
+          },
+          {
+            "maxWeightG": 5000,
+            "cents": 3990
+          },
+          {
+            "maxWeightG": 10000,
+            "cents": 5490
+          }
         ]
       }
     ]

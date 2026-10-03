@@ -4,6 +4,7 @@ const $ = (s) => document.querySelector(s);
 let token = "";
 try { token = sessionStorage.getItem("jj-admin") || ""; } catch { /* egal */ }
 let categories = [];
+let worlds = [];
 
 const money = (c, cur = "EUR") => new Intl.NumberFormat("de-DE", { style: "currency", currency: cur }).format(c / 100);
 const dateTime = (iso) => new Intl.DateTimeFormat("de-DE", { dateStyle: "short", timeStyle: "short" }).format(new Date(iso));
@@ -12,7 +13,7 @@ const STATUS = { pending_payment: "Zahlung offen", paid: "bezahlt", shipped: "ve
 const ERRORS = {
   name_required: "Bitte einen Namen eingeben.", slug_taken: "Diese Adresse (Slug) wird schon von einem anderen Produkt verwendet.",
   price_invalid: "Der Preis ist ungültig.", weight_invalid: "Das Gewicht ist ungültig.", stock_invalid: "Ein Bestand ist ungültig.",
-  variant_label_required: "Bei mehreren Varianten braucht jede eine Bezeichnung (z. B. S, M, L).", category_unknown: "Bitte eine Kategorie wählen.",
+  variant_label_required: "Bei mehreren Varianten braucht jede eine Bezeichnung (z. B. S, M, L).", category_unknown: "Bitte eine Kategorie wählen.", world_unknown: "Bitte eine Produktwelt wählen.",
   image_type_unsupported: "Bitte JPG, PNG oder WebP hochladen.", image_too_large: "Das Bild ist größer als 8 MB.",
   not_paid: "Die Bestellung ist noch nicht bezahlt.", cannot_cancel: "Diese Bestellung kann nicht mehr storniert werden.",
 };
@@ -38,11 +39,13 @@ const clearError = () => { $("#panel-error").hidden = true; };
 async function loadProducts() {
   const data = await api("/api/admin/products");
   categories = data.categories;
+  worlds = data.worlds;
+  const worldName = Object.fromEntries(worlds.map((w) => [w.slug, w.name]));
   const catName = Object.fromEntries(categories.map((c) => [c.slug, c.name_de]));
   $("#product-rows").innerHTML = data.products.map((p) => `<tr>
       <td>${p.image ? `<img src="${esc(p.image)}" alt="">` : ""}</td>
       <td><strong>${esc(p.name_de)}</strong><br><span class="small">/${esc(p.slug)}${p.is_unique ? " · Einzelstück" : ""}</span></td>
-      <td>${esc(catName[p.category] || p.category)}</td>
+      <td>${esc(worldName[p.world] || p.world)}<br><span class="small">${esc(catName[p.category] || p.category)}</span></td>
       <td>${money(p.price_cents)}</td>
       <td>${p.variants.map((v) => `<div class="variant-stock">${p.variants.length > 1 ? `<span>${esc(v.label)}</span>` : ""}<input type="number" class="stock-input" min="0" value="${v.stock}" data-product="${p.id}" data-variant="${v.id}" aria-label="Bestand ${esc(p.name_de)} ${esc(v.label)}"></div>`).join("")}</td>
       <td>${p.active ? "ja" : "<strong>Entwurf</strong>"}</td>
@@ -50,7 +53,7 @@ async function loadProducts() {
     </tr>`).join("") || `<tr><td colspan="7">Noch keine Produkte.</td></tr>`;
 }
 
-const EMPTY = { id: null, name_de: "", name_en: "", slug: "", category: "", desc_de: "", desc_en: "", price_cents: 0, weight_g: 0, is_unique: 0, active: 0, sort: 0, variants: [{ id: null, label: "", sku: "", stock: 0 }], images: [] };
+const EMPTY = { id: null, name_de: "", name_en: "", slug: "", world: "", category: "", desc_de: "", desc_en: "", price_cents: 0, weight_g: 0, is_unique: 0, active: 0, sort: 0, variants: [{ id: null, label: "", sku: "", stock: 0 }], images: [] };
 
 function variantRow(v) {
   return `<div class="variant-row" data-variant-id="${v.id ?? ""}">
@@ -72,6 +75,7 @@ function openEditor(p) {
       <label><span>Name (Englisch)</span><input type="text" name="name_en" value="${esc(p.name_en)}"></label>
     </div>
     <div class="row">
+      <label><span>Produktwelt</span><select name="world">${worlds.map((w) => `<option value="${w.slug}"${w.slug === p.world ? " selected" : ""}>${esc(w.name)}</option>`).join("")}</select></label>
       <label><span>Kategorie</span><select name="category">${categories.map((c) => `<option value="${c.slug}"${c.slug === p.category ? " selected" : ""}>${esc(c.name_de)}</option>`).join("")}</select></label>
       <label><span>Preis in € (inkl. MwSt.)</span><input type="number" name="price" min="0" step="0.01" value="${(p.price_cents / 100).toFixed(2)}" required></label>
       <label><span>Gewicht in Gramm (für den Versand)</span><input type="number" name="weight_g" min="0" step="1" value="${p.weight_g}" required></label>
@@ -109,7 +113,7 @@ async function editProduct(id) {
 
 $("#tab-products").addEventListener("click", async (e) => {
   try {
-    if (e.target.closest("#new-product")) return openEditor({ ...EMPTY, category: categories[0]?.slug });
+    if (e.target.closest("#new-product")) return openEditor({ ...EMPTY, world: worlds[0]?.slug, category: categories[0]?.slug });
     const edit = e.target.closest("[data-edit]");
     if (edit) return await editProduct(edit.dataset.edit);
     if (e.target.closest("#close-editor")) { $("#editor").hidden = true; return; }
@@ -142,7 +146,7 @@ $("#tab-products").addEventListener("submit", async (e) => {
   clearError();
   const f = e.target;
   const body = {
-    name_de: f.name_de.value, name_en: f.name_en.value, slug: f.slug.value, category: f.category.value,
+    name_de: f.name_de.value, name_en: f.name_en.value, slug: f.slug.value, world: f.world.value, category: f.category.value,
     desc_de: f.desc_de.value, desc_en: f.desc_en.value,
     price_cents: Math.round(Number(f.price.value) * 100), weight_g: Number(f.weight_g.value), sort: Number(f.sort.value) || 0,
     is_unique: f.is_unique.checked, active: f.active.checked,
@@ -189,18 +193,21 @@ function address(o) {
 async function loadOrders() {
   const { orders } = await api(`/api/admin/orders${$("#show-all").checked ? "?all=1" : ""}`);
   $("#order-rows").innerHTML = orders.map((o) => `<tr>
-      <td><strong>${esc(o.id)}</strong></td>
+      <td><strong>${esc(o.id)}</strong>${o.invoice_number ? `<br><span class="small">${esc(o.invoice_number)}</span>` : ""}</td>
       <td><span class="status ${o.status}">${STATUS[o.status] || o.status}</span>${o.tracking ? `<br><span class="small">${esc(o.tracking)}</span>` : ""}${o.note ? `<br><span class="small">${esc(o.note)}</span>` : ""}</td>
       <td>${dateTime(o.created_at)}</td>
       <td>${o.items.map((i) => `${i.quantity} × ${esc(i.name)}${i.variant_label ? ` (${esc(i.variant_label)})` : ""}${i.sku ? ` <span class="small">${esc(i.sku)}</span>` : ""}`).join("<br>")}<br><span class="small">${o.weight_g} g inkl. Verpackung</span></td>
       <td>${address(o)}</td>
       <td>${money(o.total_cents, o.currency)}<br><span class="small">davon Versand ${money(o.shipping_cents, o.currency)}${o.payment_method ? ` · ${esc(o.payment_method)}` : ""}</span></td>
-      <td>${o.status === "paid" ? `<button type="button" class="btn small-btn" data-ship="${esc(o.id)}">Versendet</button><br>` : ""}${o.status === "paid" || o.status === "pending_payment" ? `<button type="button" class="linkish" data-cancel="${esc(o.id)}" style="margin-top:8px">stornieren</button>` : ""}</td>
+      <td>${o.status === "paid" || o.status === "shipped" ? `<button type="button" class="linkish" data-print="invoice" data-order="${esc(o.id)}">Rechnung</button><br><button type="button" class="linkish" data-print="label" data-order="${esc(o.id)}">Adressaufkleber</button><br>` : ""}${o.status === "paid" ? `<button type="button" class="btn small-btn" data-ship="${esc(o.id)}" style="margin-top:8px">Versendet</button><br>` : ""}${o.status === "paid" || o.status === "pending_payment" ? `<button type="button" class="linkish" data-cancel="${esc(o.id)}" style="margin-top:8px">stornieren</button>` : ""}</td>
     </tr>`).join("") || `<tr><td colspan="7">Keine Bestellungen.</td></tr>`;
 }
 
 $("#tab-orders").addEventListener("click", async (e) => {
   try {
+    const print = e.target.closest("[data-print]");
+    // Neuer Tab ohne "noopener", damit die Anmeldung dieser Sitzung dort gilt
+    if (print) return void window.open(`/print.html?order=${encodeURIComponent(print.dataset.order)}&doc=${print.dataset.print}`, "_blank");
     const ship = e.target.closest("[data-ship]");
     if (ship) {
       const tracking = prompt(`Sendungsnummer für ${ship.dataset.ship} (kann leer bleiben). Die Kundin oder der Kunde bekommt eine Versandmail.`);

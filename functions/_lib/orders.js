@@ -154,10 +154,25 @@ export async function markPaid(db, id, d = {}) {
   const res = await db
     .prepare(
       `UPDATE orders SET status = 'paid', hold_expires_at = NULL, email = ?2, customer_name = ?3, phone = ?4,
-         shipping_address = ?5, payment_method = ?6, stripe_payment_id = ?7, updated_at = ${NOW}
+         shipping_address = ?5, payment_method = ?6, stripe_payment_id = ?7, paid_at = ${NOW}, updated_at = ${NOW}
        WHERE id = ?1 AND status IN ('pending_payment','expired','cancelled')`
     )
     .bind(id, d.email ?? null, d.name ?? null, d.phone ?? null, d.address ? JSON.stringify(d.address) : null, d.paymentMethod ?? null, d.paymentId ?? null)
     .run();
-  return res.meta.changes === 1;
+  if (res.meta.changes !== 1) return false;
+  await assignInvoiceNumber(db, id);
+  return true;
+}
+
+// Vergibt eine fortlaufende Rechnungsnummer (z. B. RE-2026-0001), falls die Bestellung noch keine hat.
+// Der Zähler wird in einer einzigen Anweisung erhöht und gelesen, damit keine Nummer doppelt vergeben wird.
+export async function assignInvoiceNumber(db, id) {
+  const o = await db.prepare(`SELECT invoice_number, paid_at, status FROM orders WHERE id = ?1`).bind(id).first();
+  if (!o || o.invoice_number) return o?.invoice_number || null;
+  if (!["paid", "shipped"].includes(o.status)) return null;
+  const c = await db.prepare(`UPDATE counters SET value = value + 1 WHERE name = 'invoice' RETURNING value`).first();
+  const year = (o.paid_at || new Date().toISOString()).slice(0, 4);
+  const number = `${config.invoice.prefix}${year}-${String(c.value).padStart(4, "0")}`;
+  await db.prepare(`UPDATE orders SET invoice_number = ?2, paid_at = COALESCE(paid_at, ${NOW}) WHERE id = ?1 AND invoice_number IS NULL`).bind(id, number).run();
+  return number;
 }

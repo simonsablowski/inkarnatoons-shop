@@ -9,7 +9,7 @@
     "db:local": "node ./node_modules/wrangler/bin/wrangler.js d1 migrations apply judas-jesus-shop --local",
     "db:remote": "node ./node_modules/wrangler/bin/wrangler.js d1 migrations apply judas-jesus-shop --remote",
     "seed:local": "node ./node_modules/wrangler/bin/wrangler.js d1 execute judas-jesus-shop --local --file=seed/demo.sql",
-    "seed:remote": "node ./node_modules/wrangler/bin/wrangler.js d1 execute judas-jesus-shop --remote --file=seed/demo.sql",
+    "seed:remote": "node ./node_modules/wrangler/bin/wrangler.js d1 execute judas-jesus-shop --remote --yes --file=seed/demo.sql",
     "setup:cloudflare": "node ./scripts/setup-cloudflare.mjs",
     "deploy": "node ./node_modules/wrangler/bin/wrangler.js pages deploy --branch main"
   },

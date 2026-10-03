@@ -82,5 +82,19 @@
   "footer.privacy": "Privacy",
   "footer.terms": "Terms & cancellation",
   "footer.shipping": "Shipping & payment",
-  "footer.claim": "Official shop for the film Judas & Jesus"
+  "footer.claim": "Official Inkarnatoons shop",
+  "nav.film": "Watch the film",
+  "home.line": "The Inkarnatoons shop: films, games, original drawings and more, shipped worldwide.",
+  "home.worlds": "Product worlds",
+  "home.all": "All items",
+  "world.items": "{n} items",
+  "world.soon": "Available soon",
+  "film.title": "Watch Judas & Jesus",
+  "film.intro": "You can watch the complete film here for free.",
+  "film.play": "Play the film",
+  "film.consent.youtube": "When you start playback, the video is loaded from YouTube and data is transferred to YouTube.",
+  "film.consent.vimeo": "When you start playback, the video is loaded from Vimeo and data is transferred to Vimeo.",
+  "film.soon": "The film will be available here soon.",
+  "film.shop": "DVDs, original drawings and T-shirts from the film are available in the shop.",
+  "film.toShop": "Go to the Judas & Jesus shop"
 }

@@ -1,7 +1,7 @@
 // /api/admin/products
 //   GET   Liste aller Produkte (auch Entwürfe) mit Varianten und Beständen
 //   POST  neues Produkt anlegen
-import { listProducts, listCategories } from "../../_lib/catalog.js";
+import { listProducts, listCategories, listWorlds } from "../../_lib/catalog.js";
 import { json, error, requireAdmin } from "../../_lib/http.js";
 import { readProduct, saveVariants } from "../../_lib/adminProducts.js";
 
@@ -15,6 +15,7 @@ export async function onRequestGet({ request, env }) {
   return json({
     ok: true,
     categories: await listCategories(env.DB),
+    worlds: await listWorlds(env.DB),
     products: products.map((p) => ({ ...p, variants: byProduct.get(p.id) || [] })),
   });
 }
@@ -27,10 +28,10 @@ export async function onRequestPost({ request, env }) {
   try {
     const res = await env.DB
       .prepare(
-        `INSERT INTO products (slug, category, name_de, name_en, desc_de, desc_en, price_cents, weight_g, is_unique, active, sort)
-         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11)`
+        `INSERT INTO products (slug, category, name_de, name_en, desc_de, desc_en, price_cents, weight_g, is_unique, active, sort, world)
+         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12)`
       )
-      .bind(p.slug, p.category, p.name_de, p.name_en, p.desc_de, p.desc_en, p.price_cents, p.weight_g, p.is_unique, p.active, p.sort)
+      .bind(p.slug, p.category, p.name_de, p.name_en, p.desc_de, p.desc_en, p.price_cents, p.weight_g, p.is_unique, p.active, p.sort, p.world)
       .run();
     const id = res.meta.last_row_id;
     await saveVariants(env.DB, id, p.variants);

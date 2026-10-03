@@ -28,6 +28,9 @@ export async function readProduct(request, env) {
   const category = clean(b.category, 60);
   const cat = await env.DB.prepare(`SELECT slug FROM categories WHERE slug = ?1`).bind(category).first();
   if (!cat) return { error: "category_unknown" };
+  const world = clean(b.world, 60);
+  const w = await env.DB.prepare(`SELECT slug FROM worlds WHERE slug = ?1`).bind(world).first();
+  if (!w) return { error: "world_unknown" };
   const price_cents = int(b.price_cents);
   const weight_g = int(b.weight_g, 0, 100000);
   if (price_cents === null) return { error: "price_invalid" };
@@ -46,7 +49,7 @@ export async function readProduct(request, env) {
   if (variants.length > 1 && variants.some((v) => !v.label)) return { error: "variant_label_required" };
 
   return {
-    slug, category, name_de, name_en,
+    slug, world, category, name_de, name_en,
     desc_de: clean(b.desc_de, 5000), desc_en: clean(b.desc_en, 5000),
     price_cents, weight_g, is_unique: b.is_unique ? 1 : 0, active: b.active ? 1 : 0, sort: int(b.sort, 0, 100000) ?? 0,
     variants,

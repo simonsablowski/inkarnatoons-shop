@@ -1,10 +1,12 @@
-# Judas & Jesus Shop
+# Inkarnatoons Shop (Projekt jj-shop)
 
-Online-Shop für Merchandise zum Zeichentrickfilm Judas & Jesus (DVDs, Originalzeichnungen, T-Shirts), auf Deutsch und Englisch, mit weltweitem Versand.
+Online-Shop mit mehreren Produktwelten unter einem gemeinsamen Dach: Judas & Jesus (DVDs, Originalzeichnungen, T-Shirts), Kartenspiel und Wild Wolf. Deutsch und Englisch, mit weltweitem Versand. Der Name des Dachs ist vorläufig und steht in `shop.config.json` unter `brand`.
 Cloudflare Pages liefert die Seite aus, Pages Functions bilden die API, eine D1-Datenbank speichert Produkte, Bestände und Bestellungen, ein R2-Speicher die hochgeladenen Produktfotos. Bezahlt wird über Stripe Checkout (Kreditkarte und PayPal).
 
 ## Was der Shop kann
 
+- Startseite mit den Produktwelten als Kacheln. Jede Welt hat ihre eigene Übersicht, Judas & Jesus mit der Titelkarte des Films.
+- Filmseite `/film.html` zum kostenlosen Anschauen von Judas & Jesus.
 - Produktübersicht mit Kategorien, Suche, Sortierung, Höchstpreis und „nur lieferbare Artikel“. Die Filter stehen in der Adresse und lassen sich verlinken.
 - Detailansicht mit Bildergalerie, Varianten (z. B. Größen) und Bestandsanzeige. Einzelstücke (Originalzeichnungen) werden als solche gekennzeichnet und nach dem Verkauf als „Verkauft“ gezeigt.
 - Wunschliste und Warenkorb ohne Kundenkonto. Beide liegen nur im Browser.
@@ -13,6 +15,7 @@ Cloudflare Pages liefert die Seite aus, Pages Functions bilden die API, eine D1-
 - Bestandsführung: Beim Gang zur Kasse wird die Ware reserviert. Wird nicht bezahlt, geht sie nach gut einer halben Stunde zurück in den Bestand.
 - Bestätigungsmail an die Kundin oder den Kunden (in der gewählten Sprache), Benachrichtigung an den Shop, Versandmail mit Sendungsnummer.
 - Verwaltung unter `/admin.html`: Produkte anlegen und ändern, Bestände pflegen, Fotos hochladen, Bestellungen ansehen, als versendet markieren, stornieren.
+- Rechnung (A4) und Adressaufkleber pro Bestellung als Druckansicht, mit fortlaufender Rechnungsnummer.
 - Keine Cookies, kein Tracking, keine externen Schriften.
 
 ## Lokal entwickeln
@@ -38,7 +41,13 @@ Alles Wichtige steht in `shop.config.json`:
 
 | Einstellung | Bedeutung |
 |---|---|
+| `brand.name`, `brand.suffix`, `shopName` | Name des gemeinsamen Dachs in Kopfzeile, Seitentiteln und E-Mails |
 | `currency` | Währung des Shops (EUR) |
+| `seller` | Firmenname, Anschrift, Steuernummer, USt-IdNr. für Rechnung und Adressaufkleber |
+| `tax.mode`, `tax.ratePercent` | `vat` weist die enthaltene Umsatzsteuer aus, `small_business` druckt den Hinweis nach § 19 UStG |
+| `invoice.prefix` | Anfang der Rechnungsnummer, z. B. `RE-` ergibt `RE-2026-0001` |
+| `label.widthMm`, `label.heightMm` | Größe des Adressaufklebers, passend zum Etikettendrucker |
+| `film.provider`, `film.id` | Videoquelle der Filmseite: `youtube`, `vimeo` oder `file` mit Video-ID bzw. Dateiadresse. Leer zeigt einen Platzhalter |
 | `payments.methods` | Zahlarten in Stripe Checkout: `card`, `paypal` |
 | `payments.holdMinutes` | So lange bleibt die Bezahlseite offen (Stripe verlangt mindestens 30 Minuten) |
 | `shipping.zones` | Versandzonen mit Ländern und Preisstufen nach Gewicht (Preise in Cent) |
@@ -48,7 +57,7 @@ Alles Wichtige steht in `shop.config.json`:
 
 Die Versandpreise in der Datei sind Platzhalter. Das Gewicht jedes Produkts wird in der Verwaltung gepflegt. Ist eine Bestellung schwerer als die höchste Stufe einer Zone, kann sie nicht bestellt werden und der Warenkorb zeigt einen Hinweis.
 
-Die Kategorien stehen in der Tabelle `categories` (siehe `migrations/0001_init.sql`). Texte der Oberfläche stehen in `public/i18n/de.json` und `public/i18n/en.json`. Rechtstexte (AGB, Widerruf, Datenschutz, Impressum) sind in `public/legal.html` noch Platzhalter.
+Die Produktwelten stehen in der Tabelle `worlds`, die Kategorien in `categories` (siehe `migrations/`). Eine neue Welt ist eine Zeile in `worlds` mit Name, Kurztext und optional einem Bild für die Kachel. Texte der Oberfläche stehen in `public/i18n/de.json` und `public/i18n/en.json`. Rechtstexte (AGB, Widerruf, Datenschutz, Impressum) sind in `public/legal.html` noch Platzhalter.
 
 Nach jeder Änderung neu deployen.
 
@@ -62,6 +71,18 @@ In der Verwaltung unter „Produkte & Bestand“:
 4. „Im Shop sichtbar“ ankreuzen, sobald das Produkt fertig ist. Vorher bleibt es ein Entwurf.
 
 Der Bestand lässt sich auch direkt in der Produktliste ändern. Bezahlte Bestellungen verringern ihn automatisch, Stornierungen buchen ihn zurück.
+
+## Rechnung, Adressaufkleber und Film
+
+In der Verwaltung unter „Bestellungen“ öffnen die Links „Rechnung“ und „Adressaufkleber“ eine Druckansicht in einem neuen Tab. Über den Druckdialog lässt sich die Rechnung drucken oder als PDF speichern, der Aufkleber geht an den Etikettendrucker. Die Rechnungsnummer wird beim Zahlungseingang fortlaufend vergeben. Die Rechnung erscheint in der Sprache der Bestellung. Bei YouTube und Vimeo lädt die Filmseite das Video erst nach einem Klick, vorher werden keine Daten dorthin übertragen.
+
+## Änderungen einspielen (nach der ersten Einrichtung)
+
+```
+npm run db:remote     # neue Datenbankänderungen aus migrations/ einspielen
+npm run deploy        # Seite und API deployen
+```
+`npm run seed:remote` ersetzt alle Produkte durch die Platzhalter aus `seed/demo.sql`.
 
 ## Einrichtung bei Cloudflare (einmalig)
 
@@ -123,10 +144,13 @@ In Cloudflare Pages unter *Custom domains* die Domain hinzufügen und den genann
 
 ## Offene Punkte vor dem Start
 
-- Echte Produkte, Fotos, Texte, Preise und Gewichte.
+- Name des gemeinsamen Dachs und Domain.
+- Firmendaten für Rechnung und Aufkleber (`seller`) und die Steuerart (`tax.mode`).
+- Videoquelle für die Filmseite.
+- Echte Produkte, Fotos, Texte, Preise und Gewichte, auch für Kartenspiel und Wild Wolf.
 - Echte Versandtarife und Entscheidung, in welche Länder geliefert wird.
 - Rechtstexte: AGB, Widerrufsbelehrung, Datenschutzerklärung, Impressum.
-- Umsatzsteuer: Alle Preise gelten bisher als Bruttopreise für alle Länder. Ob für Verkäufe in andere EU-Länder das OSS-Verfahren nötig ist und wie Lieferungen in Drittländer besteuert werden, sollte die Steuerberatung der Betreiber klären.
+- Umsatzsteuer: Alle Preise gelten bisher als Bruttopreise für alle Länder, und die Rechnung weist immer den deutschen Steuersatz aus, auch bei Lieferungen ins Ausland. Ob für Verkäufe in andere EU-Länder das OSS-Verfahren nötig ist und wie Lieferungen in Drittländer besteuert werden, sollte die Steuerberatung der Betreiber klären.
 - Altersfreigabe: Die DVD trägt eine FSK-16-Kennzeichnung. Ob daraus Pflichten für den Versandhandel folgen, sollten die Betreiber prüfen lassen.
 - Die Bilder in `public/img` sind kleine Web-Fassungen. Für den fertigen Shop werden Originaldateien in höherer Auflösung gebraucht.
 
@@ -148,6 +172,9 @@ functions/api/              API-Endpunkte
 functions/media/            Auslieferung der hochgeladenen Bilder aus R2
 functions/_lib/             gemeinsame Logik (Katalog, Bestellungen, Versand, Stripe, Mail)
 public/                     Website (HTML, CSS, JS, Sprachdateien, Schriften, Bilder)
+  film.html                 Filmseite
+  print.html                Druckansicht für Rechnung und Adressaufkleber
+scripts/setup-cloudflare.mjs  Ersteinrichtung bei Cloudflare
 ```
 
 Überverkäufe sind ausgeschlossen: Der Bestand wird in einer einzigen Datenbankanweisung geprüft und abgezogen.

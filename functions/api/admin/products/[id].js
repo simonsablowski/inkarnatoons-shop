@@ -24,11 +24,11 @@ export async function onRequestPut({ request, env, params }) {
     const res = await env.DB
       .prepare(
         `UPDATE products SET slug = ?2, category = ?3, name_de = ?4, name_en = ?5, desc_de = ?6, desc_en = ?7,
-           price_cents = ?8, weight_g = ?9, is_unique = ?10, active = ?11, sort = ?12,
+           price_cents = ?8, weight_g = ?9, is_unique = ?10, active = ?11, sort = ?12, world = ?13,
            updated_at = strftime('%Y-%m-%dT%H:%M:%SZ','now')
          WHERE id = ?1`
       )
-      .bind(id, p.slug, p.category, p.name_de, p.name_en, p.desc_de, p.desc_en, p.price_cents, p.weight_g, p.is_unique, p.active, p.sort)
+      .bind(id, p.slug, p.category, p.name_de, p.name_en, p.desc_de, p.desc_en, p.price_cents, p.weight_g, p.is_unique, p.active, p.sort, p.world)
       .run();
     if (res.meta.changes !== 1) return error("not_found", 404);
   } catch (err) {

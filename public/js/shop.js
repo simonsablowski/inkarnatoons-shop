@@ -97,6 +97,8 @@ export function heartButton(slug, extraClass = "") {
 export function productCard(p) {
   const name = loc(p, "name");
   const cat = shopConfig.categories.find((c) => c.slug === p.category);
+  const world = worldOf(p.world);
+  const label = [world?.name, cat ? loc(cat, "name") : ""].filter(Boolean).join(", ");
   const badges = [];
   if (!p.stock.available) badges.push(`<span class="badge out">${t(p.isUnique ? "badge.sold" : "badge.soldout")}</span>`);
   else if (p.isUnique) badges.push(`<span class="badge">${t("badge.unique")}</span>`);
@@ -105,7 +107,7 @@ export function productCard(p) {
     <a class="card-link" href="/product.html?p=${encodeURIComponent(p.slug)}">
       <div class="pic">${p.image ? `<img src="${esc(p.image)}" alt="" loading="lazy" width="600" height="600">` : ""}</div>
       <div class="body">
-        <span class="cat">${esc(cat ? loc(cat, "name") : "")}</span>
+        <span class="cat">${esc(label)}</span>
         <h3>${esc(name)}</h3>
         <span class="price">${money(p.priceCents)}</span>
       </div>
@@ -115,18 +117,21 @@ export function productCard(p) {
   </article>`;
 }
 
+export const worldOf = (slug) => shopConfig.worlds.find((w) => w.slug === slug);
+export const brandName = () => `${shopConfig.brand.name} ${shopConfig.brand.suffix}`.trim();
+
 function renderShell() {
-  const here = location.pathname.replace(/\/index\.html$/, "/");
-  const cat = new URLSearchParams(location.search).get("category");
+  const here = location.pathname.replace(/\/index\.html$/, "/").replace(/\.html$/, "");
+  const world = new URLSearchParams(location.search).get("world");
   const isHome = here === "/";
   const header = document.querySelector("#site-header");
   if (header) {
     header.className = "topbar";
     header.innerHTML = `<div class="wrap topbar-inner">
-      <a class="brand" href="/">Judas &amp; Jesus<span>Shop</span></a>
-      <nav class="mainnav" aria-label="Kategorien">
-        <a href="/"${isHome && !cat ? ' aria-current="page"' : ""}>${t("nav.all")}</a>
-        ${shopConfig.categories.map((c) => `<a href="/?category=${c.slug}"${isHome && cat === c.slug ? ' aria-current="page"' : ""}>${esc(loc(c, "name"))}</a>`).join("")}
+      <a class="brand" href="/">${esc(shopConfig.brand.name)}<span>${esc(shopConfig.brand.suffix)}</span></a>
+      <nav class="mainnav" aria-label="Produktwelten">
+        ${shopConfig.worlds.map((w) => `<a href="/?world=${w.slug}"${isHome && world === w.slug ? ' aria-current="page"' : ""}>${esc(w.name)}</a>`).join("")}
+        <a href="/film.html"${here === "/film" ? ' aria-current="page"' : ""}>${t("nav.film")}</a>
       </nav>
       <div class="tools">
         <div class="lang" role="group" aria-label="Sprache / Language">
@@ -150,6 +155,8 @@ function renderShell() {
       </nav>
     </div>`;
   }
+  // Seitentitel: "… · Judas & Jesus Shop" aus den HTML-Dateien durch den aktuellen Shopnamen ersetzen
+  document.title = document.title.replace(/Judas & Jesus Shop$/, brandName());
   updateCounts();
 }
 

@@ -1,9 +1,28 @@
+// GET  /api/admin/orders/:id   Bestellung mit Verkäuferdaten für Rechnung und Adressaufkleber
 // POST /api/admin/orders/:id
 //   { action: "ship", tracking, notify }   als versendet markieren, optional Versandmail schicken
 //   { action: "cancel" }                   stornieren und Bestand zurückbuchen (Erstattung separat in Stripe)
 import { json, error, requireAdmin, clean } from "../../../_lib/http.js";
-import { getOrder, releaseOrder } from "../../../_lib/orders.js";
+import { getOrder, releaseOrder, assignInvoiceNumber } from "../../../_lib/orders.js";
+import { config } from "../../../_lib/config.js";
 import { sendShippedNotice } from "../../../_lib/mail.js";
+
+export async function onRequestGet({ request, env, params }) {
+  const denied = await requireAdmin(request, env);
+  if (denied) return denied;
+  await assignInvoiceNumber(env.DB, params.id); // für ältere Bestellungen ohne Nummer
+  const order = await getOrder(env.DB, params.id);
+  if (!order) return error("not_found", 404);
+  const { _hinweis, ...seller } = config.seller;
+  return json({
+    ok: true,
+    order: { ...order, token: undefined },
+    seller,
+    tax: { mode: config.tax.mode, ratePercent: config.tax.ratePercent },
+    label: { widthMm: config.label.widthMm, heightMm: config.label.heightMm },
+    shopName: config.shopName,
+  });
+}
 
 export async function onRequestPost({ request, env, params, waitUntil }) {
   const denied = await requireAdmin(request, env);
