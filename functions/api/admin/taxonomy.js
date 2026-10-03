@@ -1,14 +1,19 @@
 // /api/admin/taxonomy – Themenwelten und Kategorien
 //   GET   beide Listen
+//   PUT   { worlds:[slug, …], categories:[slug, …] }   Reihenfolge festlegen
 //   POST  { worlds:[{ name, tagline_de?, tagline_en? }], categories:[{ name_de, name_en? }] }
 //         legt fehlende Einträge an. Vorhandene (gleicher Name oder gleiche Adresse) bleiben unverändert.
 import { json, error, requireAdmin, clean } from "../../_lib/http.js";
 import { slugify } from "../../_lib/adminProducts.js";
 
-async function lists(db) {
+export async function lists(db) {
   const [w, c] = await db.batch([
-    db.prepare(`SELECT slug, name, tagline_de, tagline_en, image, sort FROM worlds ORDER BY sort, slug`),
-    db.prepare(`SELECT slug, name_de, name_en, sort FROM categories ORDER BY sort, slug`),
+    db.prepare(`SELECT slug, name, tagline_de, tagline_en, image, sort,
+                  (SELECT COUNT(*) FROM products p WHERE p.world = worlds.slug) AS product_count
+                FROM worlds ORDER BY sort, slug`),
+    db.prepare(`SELECT slug, name_de, name_en, sort,
+                  (SELECT COUNT(*) FROM products p WHERE p.category = categories.slug) AS product_count
+                FROM categories ORDER BY sort, slug`),
   ]);
   return { worlds: w.results, categories: c.results };
 }
@@ -55,4 +60,20 @@ export async function onRequestPost({ request, env }) {
 
   if (stmts.length) await env.DB.batch(stmts);
   return json({ ok: true, created, ...(await lists(env.DB)) });
+}
+
+export async function onRequestPut({ request, env }) {
+  const denied = await requireAdmin(request, env);
+  if (denied) return denied;
+  const body = await request.json().catch(() => null);
+  if (!body) return error("invalid_body");
+  const stmts = [];
+  const order = (list, table) => {
+    if (!Array.isArray(list)) return;
+    list.slice(0, 100).forEach((slug, i) => stmts.push(env.DB.prepare(`UPDATE ${table} SET sort = ?2 WHERE slug = ?1`).bind(String(slug), (i + 1) * 10)));
+  };
+  order(body.worlds, "worlds");
+  order(body.categories, "categories");
+  if (stmts.length) await env.DB.batch(stmts);
+  return json({ ok: true, ...(await lists(env.DB)) });
 }

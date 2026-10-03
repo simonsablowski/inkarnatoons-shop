@@ -28,6 +28,7 @@
       <div class="tabs">
         <button type="button" class="chip" data-tab="products" aria-pressed="true">Produkte &amp; Bestand</button>
         <button type="button" class="chip" data-tab="orders" aria-pressed="false">Bestellungen</button>
+        <button type="button" class="chip" data-tab="worlds" aria-pressed="false">Themenwelten &amp; Kategorien</button>
       </div>
       <p class="notice error" id="panel-error" hidden></p>
 
@@ -52,6 +53,30 @@
           </table>
         </div>
         <p class="small">Beim Stornieren wird der Bestand zurückgebucht. Die Erstattung an die Kundin oder den Kunden löst du separat im Stripe-Dashboard aus.</p>
+      </section>
+
+      <section id="tab-worlds" hidden>
+        <h2>Themenwelten</h2>
+        <p class="small">Jede Themenwelt erscheint als Kachel auf der Startseite und als Punkt im Menü, in der Reihenfolge von oben nach unten. Änderungen an Name und Kurztext werden mit „Speichern“ übernommen.</p>
+        <div id="world-list"></div>
+        <form class="editor inline-form" id="new-world">
+          <label><span>Neue Themenwelt</span><input type="text" name="name" placeholder="Name, z. B. Wild Wolf" required></label>
+          <button type="submit" class="btn">Anlegen</button>
+        </form>
+
+        <h2 style="margin-top:44px">Kategorien</h2>
+        <p class="small">Kategorien sind die Produktarten, nach denen die Kundschaft innerhalb einer Themenwelt filtern kann.</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Name (Deutsch)</th><th>Name (Englisch)</th><th>Produkte</th><th></th></tr></thead>
+            <tbody id="category-rows"></tbody>
+          </table>
+        </div>
+        <form class="editor inline-form" id="new-category" style="margin-top:18px">
+          <label><span>Neue Kategorie</span><input type="text" name="name_de" placeholder="Name (Deutsch)" required></label>
+          <label><span>&nbsp;</span><input type="text" name="name_en" placeholder="Name (Englisch)"></label>
+          <button type="submit" class="btn">Anlegen</button>
+        </form>
       </section>
     </div>
   </main>

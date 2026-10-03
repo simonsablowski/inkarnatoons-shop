@@ -269,3 +269,19 @@ td .stock-input { width: 74px; padding: 5px 8px; }
 .btn.kofi svg { width: 22px; height: 22px; }
 .btn.kofi[aria-disabled="true"] { cursor: default; }
 .btn.kofi[aria-disabled="true"]:active { transform: none; box-shadow: var(--pop); }
+
+/* Verwaltung: Themenwelten und Kategorien */
+.editor.world { grid-template-columns: 200px 1fr; align-items: start; margin-bottom: 18px; }
+.world-pic { aspect-ratio: 16 / 10; border: 2px solid var(--ink); border-radius: 10px; overflow: hidden; display: grid; place-items: center; background: repeating-radial-gradient(circle at 50% 50%, var(--spiral-light) 0, var(--spiral-dark) 30px, var(--spiral-light) 60px); }
+.world-pic img { width: 100%; height: 100%; object-fit: contain; }
+.world-pic span { background: var(--sheet); border: 2px solid var(--ink); border-radius: 999px; padding: 2px 12px; font-size: .85rem; font-weight: 600; }
+.world-fields { display: grid; gap: 12px; }
+.world-fields input[readonly] { background: #ebe5d2; color: var(--muted); }
+.file-btn { cursor: pointer; }
+.inline-form { display: flex; flex-wrap: wrap; gap: 14px; align-items: end; }
+.inline-form label { flex: 1 1 240px; }
+.inline-form input { width: 100%; }
+#category-rows input { width: 100%; min-width: 160px; }
+#category-rows td.actions { display: flex; white-space: nowrap; }
+.btn[disabled].secondary { background: #e6e0cd; color: #9a9585; }
+@media (max-width: 820px) { .editor.world { grid-template-columns: 1fr; } .world-pic { max-width: 260px; } }

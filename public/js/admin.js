@@ -15,6 +15,7 @@ const ERRORS = {
   price_invalid: "Der Preis ist ungültig.", weight_invalid: "Das Gewicht ist ungültig.", stock_invalid: "Ein Bestand ist ungültig.",
   variant_label_required: "Bei mehreren Varianten braucht jede eine Bezeichnung (z. B. S, M, L).", category_unknown: "Bitte eine Kategorie wählen.", world_unknown: "Bitte eine Produktwelt wählen.",
   image_type_unsupported: "Bitte JPG, PNG oder WebP hochladen.", image_too_large: "Das Bild ist größer als 8 MB.",
+  world_in_use: "Dieser Themenwelt sind noch Produkte zugeordnet. Bitte die Produkte zuerst einer anderen Welt zuordnen oder löschen.", category_in_use: "Dieser Kategorie sind noch Produkte zugeordnet. Bitte die Produkte zuerst einer anderen Kategorie zuordnen oder löschen.",
   not_paid: "Die Bestellung ist noch nicht bezahlt.", cannot_cancel: "Diese Bestellung kann nicht mehr storniert werden.",
 };
 
@@ -226,6 +227,127 @@ $("#tab-orders").addEventListener("click", async (e) => {
 });
 $("#show-all").addEventListener("change", () => loadOrders().catch(fail));
 
+// ---------- Themenwelten und Kategorien ----------
+let tax = { worlds: [], categories: [] };
+
+function arrows(kind, slug, i, n) {
+  return `<button type="button" class="btn secondary small-btn" data-move="${kind}" data-slug="${esc(slug)}" data-dir="-1" aria-label="nach oben" ${i === 0 ? "disabled" : ""}>↑</button>
+    <button type="button" class="btn secondary small-btn" data-move="${kind}" data-slug="${esc(slug)}" data-dir="1" aria-label="nach unten" ${i === n - 1 ? "disabled" : ""}>↓</button>`;
+}
+
+function renderTaxonomy() {
+  $("#world-list").innerHTML = tax.worlds.map((w, i) => `<form class="editor world" data-world="${esc(w.slug)}">
+      <div class="world-pic">${w.image ? `<img src="${esc(w.image)}" alt="">` : `<span>kein Bild</span>`}</div>
+      <div class="world-fields">
+        <div class="row">
+          <label><span>Name</span><input type="text" name="name" value="${esc(w.name)}" required></label>
+          <label><span>Adresse im Shop</span><input type="text" value="/?world=${esc(w.slug)}" readonly></label>
+        </div>
+        <label><span>Kurztext (Deutsch)</span><input type="text" name="tagline_de" value="${esc(w.tagline_de)}" maxlength="200"></label>
+        <label><span>Kurztext (Englisch)</span><input type="text" name="tagline_en" value="${esc(w.tagline_en)}" maxlength="200"></label>
+        <div class="actions">
+          <button type="submit" class="btn small-btn">Speichern</button>
+          ${arrows("worlds", w.slug, i, tax.worlds.length)}
+          <label class="btn secondary small-btn file-btn">Bild ${w.image ? "ersetzen" : "hochladen"}<input type="file" accept="image/jpeg,image/png,image/webp" data-world-image="${esc(w.slug)}" hidden></label>
+          ${w.image ? `<button type="button" class="linkish" data-remove-world-image="${esc(w.slug)}">Bild entfernen</button>` : ""}
+          <span class="small" style="margin-left:auto">${w.product_count === 1 ? "1 Produkt" : `${w.product_count} Produkte`}</span>
+          ${w.product_count ? "" : `<button type="button" class="linkish" data-delete-world="${esc(w.slug)}">löschen</button>`}
+        </div>
+      </div>
+    </form>`).join("");
+  $("#category-rows").innerHTML = tax.categories.map((c, i) => `<tr data-category="${esc(c.slug)}">
+      <td><input type="text" value="${esc(c.name_de)}" data-f="name_de" aria-label="Name (Deutsch)"></td>
+      <td><input type="text" value="${esc(c.name_en)}" data-f="name_en" aria-label="Name (Englisch)"></td>
+      <td>${c.product_count}</td>
+      <td class="actions"><button type="button" class="btn small-btn" data-save-category="${esc(c.slug)}">Speichern</button>
+        ${arrows("categories", c.slug, i, tax.categories.length)}
+        ${c.product_count ? "" : `<button type="button" class="linkish" data-delete-category="${esc(c.slug)}">löschen</button>`}</td>
+    </tr>`).join("");
+}
+
+async function loadTaxonomy() {
+  const data = await api("/api/admin/taxonomy");
+  tax = { worlds: data.worlds, categories: data.categories };
+  renderTaxonomy();
+}
+
+function saved(el) {
+  const old = el.textContent;
+  el.textContent = "Gespeichert";
+  setTimeout(() => { el.textContent = old; }, 1200);
+}
+
+$("#tab-worlds").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  clearError();
+  const f = e.target;
+  try {
+    if (f.id === "new-world") {
+      await api("/api/admin/taxonomy", { method: "POST", body: JSON.stringify({ worlds: [{ name: f.name.value }] }) });
+      f.reset();
+      return await loadTaxonomy();
+    }
+    if (f.id === "new-category") {
+      await api("/api/admin/taxonomy", { method: "POST", body: JSON.stringify({ categories: [{ name_de: f.name_de.value, name_en: f.name_en.value }] }) });
+      f.reset();
+      return await loadTaxonomy();
+    }
+    if (f.dataset.world) {
+      await api(`/api/admin/worlds/${f.dataset.world}`, { method: "PUT", body: JSON.stringify({ name: f.name.value, tagline_de: f.tagline_de.value, tagline_en: f.tagline_en.value }) });
+      saved(f.querySelector('button[type="submit"]'));
+    }
+  } catch (err) { fail(err); }
+});
+
+$("#tab-worlds").addEventListener("click", async (e) => {
+  clearError();
+  try {
+    const move = e.target.closest("[data-move]");
+    if (move) {
+      const kind = move.dataset.move;
+      const slugs = tax[kind].map((x) => x.slug);
+      const i = slugs.indexOf(move.dataset.slug);
+      const j = i + Number(move.dataset.dir);
+      if (j < 0 || j >= slugs.length) return;
+      [slugs[i], slugs[j]] = [slugs[j], slugs[i]];
+      const data = await api("/api/admin/taxonomy", { method: "PUT", body: JSON.stringify({ [kind]: slugs }) });
+      tax = { worlds: data.worlds, categories: data.categories };
+      return renderTaxonomy();
+    }
+    const rmImg = e.target.closest("[data-remove-world-image]");
+    if (rmImg) { await api(`/api/admin/worlds/${rmImg.dataset.removeWorldImage}/image`, { method: "DELETE" }); return await loadTaxonomy(); }
+    const delWorld = e.target.closest("[data-delete-world]");
+    if (delWorld) {
+      if (!confirm("Diese Themenwelt wirklich löschen?")) return;
+      await api(`/api/admin/worlds/${delWorld.dataset.deleteWorld}`, { method: "DELETE" });
+      return await loadTaxonomy();
+    }
+    const saveCat = e.target.closest("[data-save-category]");
+    if (saveCat) {
+      const row = saveCat.closest("tr");
+      await api(`/api/admin/categories/${saveCat.dataset.saveCategory}`, { method: "PUT", body: JSON.stringify({ name_de: row.querySelector('[data-f="name_de"]').value, name_en: row.querySelector('[data-f="name_en"]').value }) });
+      return saved(saveCat);
+    }
+    const delCat = e.target.closest("[data-delete-category]");
+    if (delCat) {
+      if (!confirm("Diese Kategorie wirklich löschen?")) return;
+      await api(`/api/admin/categories/${delCat.dataset.deleteCategory}`, { method: "DELETE" });
+      return await loadTaxonomy();
+    }
+  } catch (err) { fail(err); }
+});
+
+$("#tab-worlds").addEventListener("change", async (e) => {
+  const slug = e.target.dataset.worldImage;
+  if (!slug || !e.target.files[0]) return;
+  clearError();
+  try {
+    const file = e.target.files[0];
+    await api(`/api/admin/worlds/${slug}/image`, { method: "POST", body: file, headers: { "content-type": file.type } });
+    await loadTaxonomy();
+  } catch (err) { fail(err); }
+});
+
 // ---------- Anmeldung und Reiter ----------
 document.querySelector(".tabs").addEventListener("click", (e) => {
   const tab = e.target.closest("[data-tab]");
@@ -234,7 +356,8 @@ document.querySelector(".tabs").addEventListener("click", (e) => {
   document.querySelectorAll("[data-tab]").forEach((b) => b.setAttribute("aria-pressed", String(b === tab)));
   $("#tab-products").hidden = tab.dataset.tab !== "products";
   $("#tab-orders").hidden = tab.dataset.tab !== "orders";
-  (tab.dataset.tab === "orders" ? loadOrders() : loadProducts()).catch(fail);
+  $("#tab-worlds").hidden = tab.dataset.tab !== "worlds";
+  ({ orders: loadOrders, worlds: loadTaxonomy }[tab.dataset.tab] || loadProducts)().catch(fail);
 });
 
 function show(loggedIn) {

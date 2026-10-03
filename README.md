@@ -58,7 +58,7 @@ Alles Wichtige steht in `shop.config.json`:
 
 Die Versandpreise sind ein Vorschlag auf Basis der DHL-Preise für Privatkunden mit Online-Frankierung (DHL Paket 2, 5, 10 und 20 kg, Stand 3.10.2026) und sollten vor dem Start geprüft werden. Das Gewicht jedes Produkts wird in der Verwaltung gepflegt. Ist eine Bestellung schwerer als die höchste Stufe einer Zone, kann sie nicht bestellt werden und der Warenkorb zeigt einen Hinweis.
 
-Die Themenwelten stehen in der Tabelle `worlds`, die Kategorien in `categories` (siehe `migrations/`). Eine neue Welt ist eine Zeile in `worlds` mit Name, Kurztext und optional einem Bild für die Kachel. Texte der Oberfläche stehen in `public/i18n/de.json` und `public/i18n/en.json`. Rechtstexte (AGB, Widerruf, Datenschutz, Impressum) sind in `public/legal.html` noch Platzhalter.
+Themenwelten und Kategorien werden in der Verwaltung gepflegt (siehe unten). Texte der Oberfläche stehen in `public/i18n/de.json` und `public/i18n/en.json`. Rechtstexte (AGB, Widerruf, Datenschutz, Impressum) sind in `public/legal.html` noch Platzhalter.
 
 Nach jeder Änderung neu deployen.
 
@@ -72,6 +72,10 @@ In der Verwaltung unter „Produkte & Bestand“:
 4. „Im Shop sichtbar“ ankreuzen, sobald das Produkt fertig ist. Vorher bleibt es ein Entwurf.
 
 Der Bestand lässt sich auch direkt in der Produktliste ändern. Bezahlte Bestellungen verringern ihn automatisch, Stornierungen buchen ihn zurück.
+
+## Themenwelten und Kategorien pflegen
+
+In der Verwaltung unter „Themenwelten & Kategorien“ lassen sich Themenwelten anlegen, umbenennen, mit Kurztext (deutsch und englisch) und Kachelbild versehen und mit den Pfeilen in die gewünschte Reihenfolge bringen. Die Reihenfolge gilt für die Kacheln auf der Startseite und für das Menü. Kategorien lassen sich dort ebenfalls anlegen, umbenennen und sortieren. Löschen geht nur, solange keine Produkte zugeordnet sind. Die Adresse einer Themenwelt (`/?world=…`) bleibt beim Umbenennen gleich, damit Links weiter funktionieren.
 
 ## Produktliste aus Google Sheets übernehmen
 
