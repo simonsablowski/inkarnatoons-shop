@@ -1,14 +1,14 @@
 // Übernimmt die Produktliste aus Google Sheets in den Shop.
 //
 //   npm run import                       Probelauf gegen den lokalen Shop: zeigt nur, was passieren würde
-//   npm run import -- --schreiben        legt Produkte lokal an bzw. ändert sie
-//   npm run import -- --ziel online --schreiben     dasselbe im Shop bei Cloudflare
+//   npm run import -- --write        legt Produkte lokal an bzw. ändert sie
+//   npm run import -- --target online --write     dasselbe im Shop bei Cloudflare
 //
 // Weitere Schalter:
-//   --datei liste.csv     statt Google Sheets eine CSV-Datei lesen (in Sheets: Datei → Herunterladen → CSV, Blatt „Produkte“)
-//   --bestand             bei schon vorhandenen Produkten auch den Bestand aus der Liste übernehmen (sonst bleibt er, wie er ist)
-//   --bilder-neu          bei schon vorhandenen Produkten die Bilder ersetzen (sonst werden nur Produkte ohne Bilder bestückt)
-//   --andere-loeschen     Produkte löschen, die nicht in der Liste stehen (z. B. die Platzhalter)
+//   --file liste.csv     statt Google Sheets eine CSV-Datei lesen (in Sheets: Datei → Herunterladen → CSV, Blatt „Produkte“)
+//   --stock             bei schon vorhandenen Produkten auch den Bestand aus der Liste übernehmen (sonst bleibt er, wie er ist)
+//   --replace-images          bei schon vorhandenen Produkten die Bilder ersetzen (sonst werden nur Produkte ohne Bilder bestückt)
+//   --delete-others     Produkte löschen, die nicht in der Liste stehen (z. B. die Platzhalter)
 //
 // Die Einstellungen (Tabelle, Blattname, Bilderordner) stehen in shop.config.json unter "import".
 import { readFileSync, existsSync, readdirSync, statSync } from "node:fs";
@@ -22,8 +22,12 @@ const settings = config.import || {};
 const argv = process.argv.slice(2);
 const flag = (name) => argv.includes(`--${name}`);
 const option = (name) => (argv.includes(`--${name}`) ? argv[argv.indexOf(`--${name}`) + 1] : null);
-const WRITE = flag("schreiben");
-const TARGET = option("ziel") === "online" ? "online" : "lokal";
+const KNOWN = ["write", "target", "file", "stock", "replace-images", "delete-others"];
+const unknown = argv.filter((a) => a.startsWith("--") && !KNOWN.includes(a.slice(2)));
+if (unknown.length) { console.error(`Unbekannter Schalter: ${unknown.join(", ")}. Erlaubt sind: ${KNOWN.map((k) => "--" + k).join(", ")}`); process.exit(1); }
+if (option("target") && !["local", "online"].includes(option("target"))) { console.error("--target erwartet local oder online."); process.exit(1); }
+const WRITE = flag("write");
+const TARGET = option("target") === "online" ? "online" : "local";
 
 // ---------- Hilfen ----------
 export function slugify(s) {
@@ -93,7 +97,7 @@ const COLUMNS = {
 
 // ---------- Liste lesen ----------
 async function loadSheet() {
-  const file = option("datei");
+  const file = option("file");
   if (file) return { text: readFileSync(file, "utf8"), source: file };
   if (!settings.sheetId) throw new Error('In shop.config.json fehlt "import.sheetId".');
   const base = `https://docs.google.com/spreadsheets/d/${settings.sheetId}`;
@@ -109,7 +113,7 @@ async function loadSheet() {
   const res = await fetch(url);
   const text = await res.text();
   if (!res.ok || /^\s*<(!doctype|html)/i.test(text)) {
-    throw new Error("Die Tabelle ist nicht lesbar. Bitte in Google Sheets unter „Freigeben“ auf „Jeder, der über den Link verfügt: Betrachter“ stellen, oder die Liste als CSV herunterladen und mit --datei angeben.");
+    throw new Error("Die Tabelle ist nicht lesbar. Bitte in Google Sheets unter „Freigeben“ auf „Jeder, der über den Link verfügt: Betrachter“ stellen, oder die Liste als CSV herunterladen und mit --file angeben.");
   }
   return { text, source: `Google Sheets, Blatt „${name}“${gid !== null ? "" : " (vereinfachter Abruf)"}`, simplified: gid === null };
 }
@@ -212,7 +216,7 @@ async function connect() {
     if (typeof opts.body === "string") headers["content-type"] = "application/json";
     let res;
     try { res = await fetch(base + path, { ...opts, headers }); }
-    catch { throw new Error(TARGET === "lokal" ? "Der lokale Shop läuft nicht. Bitte in einem zweiten Fenster „npm run dev“ starten." : `${base} ist nicht erreichbar.`); }
+    catch { throw new Error(TARGET === "local" ? "Der lokale Shop läuft nicht. Bitte in einem zweiten Fenster „npm run dev“ starten." : `${base} ist nicht erreichbar.`); }
     const data = await res.json().catch(() => ({}));
     if (res.status === 401) throw new Error("Das Passwort der Verwaltung stimmt nicht.");
     if (!res.ok || data.ok === false) throw new Error(`${opts.method || "GET"} ${path}: ${data.error || res.status}`);
@@ -256,12 +260,12 @@ async function main() {
   }
   if (newWorlds.length) console.log(`\nNeue Themenwelten: ${newWorlds.join(", ")}`);
   if (newKinds.length) console.log(`Neue Kategorien: ${newKinds.join(", ")}`);
-  if (others.length) console.log(`\nNicht in der Liste, aber im Shop (${flag("andere-loeschen") ? "werden gelöscht" : "bleiben unverändert, löschen mit --andere-loeschen"}): ${others.map((p) => p.name_de).join(", ")}`);
+  if (others.length) console.log(`\nNicht in der Liste, aber im Shop (${flag("delete-others") ? "werden gelöscht" : "bleiben unverändert, löschen mit --delete-others"}): ${others.map((p) => p.name_de).join(", ")}`);
 
   const bad = products.filter((p) => p.errors.length);
   const good = products.filter((p) => !p.errors.length);
   console.log(`\n${good.length} Produkte in Ordnung, ${bad.length} mit Fehlern, ${products.reduce((n, p) => n + p.warnings.length, 0)} Hinweise.`);
-  if (!WRITE) { console.log("Das war ein Probelauf. Mit „--schreiben“ werden die Produkte ohne Fehler übernommen."); return; }
+  if (!WRITE) { console.log("Das war ein Probelauf. Mit „--write“ werden die Produkte ohne Fehler übernommen."); return; }
 
   // ---------- Schreiben ----------
   if (newWorlds.length || newKinds.length) {
@@ -275,10 +279,10 @@ async function main() {
     let oldFull = null;
     if (old) {
       oldFull = (await api(`/api/admin/products/${old.id}`)).product;
-      // Varianten über ihre Bezeichnung wiedererkennen. Der Bestand im Shop bleibt, außer mit --bestand.
+      // Varianten über ihre Bezeichnung wiedererkennen. Der Bestand im Shop bleibt, außer mit --stock.
       variants = p.variants.map((v) => {
         const hit = oldFull.variants.find((o) => same(o.label, v.label));
-        return hit ? { ...v, id: hit.id, stock: flag("bestand") ? v.stock : hit.stock } : v;
+        return hit ? { ...v, id: hit.id, stock: flag("stock") ? v.stock : hit.stock } : v;
       });
     }
     const body = JSON.stringify({
@@ -290,7 +294,7 @@ async function main() {
     old ? updated++ : created++;
 
     const hasImages = oldFull?.images?.length > 0;
-    if (p.images.length && (!hasImages || flag("bilder-neu"))) {
+    if (p.images.length && (!hasImages || flag("replace-images"))) {
       if (hasImages) for (const img of oldFull.images) await api(`/api/admin/images?id=${img.id}`, { method: "DELETE" });
       for (const img of p.images) {
         await api(`/api/admin/images?product=${id}`, { method: "POST", body: readFileSync(img.path), headers: { "content-type": img.type } });
@@ -300,7 +304,7 @@ async function main() {
     process.stdout.write(`\r${n + 1}/${good.length} übernommen`);
   }
   let deleted = 0;
-  if (flag("andere-loeschen")) for (const p of others) { await api(`/api/admin/products/${p.id}`, { method: "DELETE" }); deleted++; }
+  if (flag("delete-others")) for (const p of others) { await api(`/api/admin/products/${p.id}`, { method: "DELETE" }); deleted++; }
   console.log(`\n\nFertig: ${created} neu, ${updated} geändert, ${uploaded} Bilder hochgeladen${deleted ? `, ${deleted} gelöscht` : ""}.`);
   if (bad.length) console.log(`${bad.length} Zeilen mit Fehlern wurden übersprungen (siehe oben).`);
   console.log(`Ansehen: ${base}/`);

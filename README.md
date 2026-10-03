@@ -79,19 +79,19 @@ Die Produktliste liegt in Google Sheets (Blatt „Produkte“, Aufbau wie in der
 
 ```
 npm run import                                  # Probelauf gegen den lokalen Shop, ändert nichts
-npm run import -- --schreiben                   # übernimmt die Produkte lokal (dazu muss npm run dev laufen)
-npm run import -- --ziel online                 # Probelauf gegen den Shop bei Cloudflare
-npm run import -- --ziel online --schreiben     # übernimmt die Produkte online, fragt nach dem Passwort der Verwaltung
+npm run import -- --write                   # übernimmt die Produkte lokal (dazu muss npm run dev laufen)
+npm run import -- --target online                 # Probelauf gegen den Shop bei Cloudflare
+npm run import -- --target online --write     # übernimmt die Produkte online, fragt nach dem Passwort der Verwaltung
 ```
 
 Der Probelauf listet jede Zeile mit Fehlern (✗, die Zeile wird übersprungen) und Hinweisen (!). Produkte werden über ihren Namen wiedererkannt: Beim erneuten Import werden vorhandene geändert, neue angelegt. Fehlende Themenwelten und Kategorien legt der Import selbst an.
 
 | Schalter | Wirkung |
 |---|---|
-| `--bestand` | übernimmt bei vorhandenen Produkten auch die Stückzahlen aus der Liste. Ohne den Schalter bleibt der Bestand im Shop unangetastet, damit ein erneuter Import keine Verkäufe überschreibt |
-| `--bilder-neu` | ersetzt bei vorhandenen Produkten die Bilder. Ohne den Schalter bekommen nur Produkte ohne Bilder welche |
-| `--andere-loeschen` | löscht Produkte, die nicht in der Liste stehen, zum Beispiel die Platzhalter |
-| `--datei liste.csv` | liest eine CSV-Datei statt Google Sheets (in Sheets: Datei → Herunterladen → CSV) |
+| `--stock` | übernimmt bei vorhandenen Produkten auch die Stückzahlen aus der Liste. Ohne den Schalter bleibt der Bestand im Shop unangetastet, damit ein erneuter Import keine Verkäufe überschreibt |
+| `--replace-images` | ersetzt bei vorhandenen Produkten die Bilder. Ohne den Schalter bekommen nur Produkte ohne Bilder welche |
+| `--delete-others` | löscht Produkte, die nicht in der Liste stehen, zum Beispiel die Platzhalter |
+| `--file liste.csv` | liest eine CSV-Datei statt Google Sheets (in Sheets: Datei → Herunterladen → CSV) |
 
 „Zum Start dabei?“ = nein legt das Produkt als Entwurf an, es ist dann im Shop nicht sichtbar.
 
