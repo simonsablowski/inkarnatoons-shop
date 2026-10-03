@@ -236,5 +236,12 @@
         ]
       }
     ]
+  },
+  "import": {
+    "_hinweis": "Produktliste in Google Sheets für „npm run import“. sheetGid: Blattnummer aus der Adresse des Blatts (…#gid=123), leer = automatisch suchen. imageDir: Ordner mit den Produktbildern.",
+    "sheetId": "1yTh_MBFnuEOPbe3ZVRmRbhyZaX_nJJTuqW5K0qdHrR4",
+    "sheetName": "Produkte",
+    "sheetGid": "",
+    "imageDir": "import/bilder"
   }
 }

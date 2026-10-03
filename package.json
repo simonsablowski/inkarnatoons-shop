@@ -11,7 +11,8 @@
     "seed:local": "node ./node_modules/wrangler/bin/wrangler.js d1 execute judas-jesus-shop --local --file=seed/demo.sql",
     "seed:remote": "node ./node_modules/wrangler/bin/wrangler.js d1 execute judas-jesus-shop --remote --yes --file=seed/demo.sql",
     "setup:cloudflare": "node ./scripts/setup-cloudflare.mjs",
-    "deploy": "node ./node_modules/wrangler/bin/wrangler.js pages deploy --branch main"
+    "deploy": "node ./node_modules/wrangler/bin/wrangler.js pages deploy --branch main",
+    "import": "node ./scripts/import-produkte.mjs"
   },
   "devDependencies": {
     "wrangler": "^4.145.0"

@@ -73,6 +73,28 @@ In der Verwaltung unter „Produkte & Bestand“:
 
 Der Bestand lässt sich auch direkt in der Produktliste ändern. Bezahlte Bestellungen verringern ihn automatisch, Stornierungen buchen ihn zurück.
 
+## Produktliste aus Google Sheets übernehmen
+
+Die Produktliste liegt in Google Sheets (Blatt „Produkte“, Aufbau wie in der Vorlage). Welche Tabelle gelesen wird, steht in `shop.config.json` unter `import`. Die Tabelle muss für „Jeder, der über den Link verfügt“ lesbar sein. Die Produktbilder liegen im Ordner `import/bilder`, ihre Dateinamen stehen in der Spalte „Bilddateien“.
+
+```
+npm run import                                  # Probelauf gegen den lokalen Shop, ändert nichts
+npm run import -- --schreiben                   # übernimmt die Produkte lokal (dazu muss npm run dev laufen)
+npm run import -- --ziel online                 # Probelauf gegen den Shop bei Cloudflare
+npm run import -- --ziel online --schreiben     # übernimmt die Produkte online, fragt nach dem Passwort der Verwaltung
+```
+
+Der Probelauf listet jede Zeile mit Fehlern (✗, die Zeile wird übersprungen) und Hinweisen (!). Produkte werden über ihren Namen wiedererkannt: Beim erneuten Import werden vorhandene geändert, neue angelegt. Fehlende Themenwelten und Kategorien legt der Import selbst an.
+
+| Schalter | Wirkung |
+|---|---|
+| `--bestand` | übernimmt bei vorhandenen Produkten auch die Stückzahlen aus der Liste. Ohne den Schalter bleibt der Bestand im Shop unangetastet, damit ein erneuter Import keine Verkäufe überschreibt |
+| `--bilder-neu` | ersetzt bei vorhandenen Produkten die Bilder. Ohne den Schalter bekommen nur Produkte ohne Bilder welche |
+| `--andere-loeschen` | löscht Produkte, die nicht in der Liste stehen, zum Beispiel die Platzhalter |
+| `--datei liste.csv` | liest eine CSV-Datei statt Google Sheets (in Sheets: Datei → Herunterladen → CSV) |
+
+„Zum Start dabei?“ = nein legt das Produkt als Entwurf an, es ist dann im Shop nicht sichtbar.
+
 ## Rechnung, Adressaufkleber und Film
 
 In der Verwaltung unter „Bestellungen“ öffnen die Links „Rechnung“ und „Adressaufkleber“ eine Druckansicht in einem neuen Tab. Über den Druckdialog lässt sich die Rechnung drucken oder als PDF speichern, der Aufkleber geht an den Etikettendrucker. Die Rechnungsnummer wird beim Zahlungseingang fortlaufend vergeben. Die Rechnung erscheint in der Sprache der Bestellung. Der Film steht auf der Übersichtsseite von Judas & Jesus. Bei YouTube und Vimeo lädt das Video erst nach einem Klick, vorher werden keine Daten dorthin übertragen.
@@ -175,6 +197,8 @@ functions/_lib/             gemeinsame Logik (Katalog, Bestellungen, Versand, St
 public/                     Website (HTML, CSS, JS, Sprachdateien, Schriften, Bilder)
   print.html                Druckansicht für Rechnung und Adressaufkleber
 scripts/setup-cloudflare.mjs  Ersteinrichtung bei Cloudflare
+scripts/import-produkte.mjs   Import der Produktliste aus Google Sheets
+import/bilder/                Produktbilder für den Import
 ```
 
 Überverkäufe sind ausgeschlossen: Der Bestand wird in einer einzigen Datenbankanweisung geprüft und abgezogen.

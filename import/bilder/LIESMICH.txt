@@ -1,0 +1,4 @@
+In diesen Ordner gehören die Produktbilder für "npm run import".
+Die Dateinamen müssen zu den Einträgen in der Spalte "Bilddateien" der Produktliste passen.
+Groß- und Kleinschreibung und die Dateiendung spielen dabei keine Rolle.
+Erlaubt sind JPG, PNG und WebP bis 8 MB, am besten quadratisch und etwa 1600 Pixel breit.
