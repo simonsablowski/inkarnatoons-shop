@@ -1,0 +1,62 @@
+{
+  "shopName": "Judas & Jesus Shop",
+  "currency": "EUR",
+  "languages": ["de", "en"],
+  "orderPrefix": "JJ",
+  "payments": {
+    "methods": ["card", "paypal"],
+    "holdMinutes": 31
+  },
+  "shipping": {
+    "_hinweis": "Alle Versandpreise sind Platzhalter in Cent und müssen an die tatsächlichen Tarife des Versanddienstleisters angepasst werden. maxWeightG ist das Gesamtgewicht des Warenkorbs inklusive Verpackung in Gramm.",
+    "packagingWeightG": 150,
+    "freeShippingFromCents": null,
+    "excludedCountries": ["AS", "CC", "CU", "CX", "FM", "HM", "IR", "KP", "MH", "MP", "NF", "PW", "SD", "SY", "UM", "VI"],
+    "zones": [
+      {
+        "id": "de",
+        "name": { "de": "Deutschland", "en": "Germany" },
+        "countries": ["DE"],
+        "rates": [
+          { "maxWeightG": 500, "cents": 390 },
+          { "maxWeightG": 2000, "cents": 590 },
+          { "maxWeightG": 5000, "cents": 790 },
+          { "maxWeightG": 10000, "cents": 1090 }
+        ]
+      },
+      {
+        "id": "eu",
+        "name": { "de": "Europäische Union", "en": "European Union" },
+        "countries": ["AT", "BE", "BG", "CY", "CZ", "DK", "EE", "ES", "FI", "FR", "GR", "HR", "HU", "IE", "IT", "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO", "SE", "SI", "SK"],
+        "rates": [
+          { "maxWeightG": 500, "cents": 790 },
+          { "maxWeightG": 2000, "cents": 1490 },
+          { "maxWeightG": 5000, "cents": 1790 },
+          { "maxWeightG": 10000, "cents": 2290 }
+        ]
+      },
+      {
+        "id": "europe",
+        "name": { "de": "Europa außerhalb der EU", "en": "Europe outside the EU" },
+        "countries": ["AD", "AL", "BA", "CH", "FO", "GB", "GG", "GI", "IM", "IS", "JE", "LI", "MC", "MD", "ME", "MK", "NO", "RS", "SM", "TR", "UA", "VA", "XK"],
+        "rates": [
+          { "maxWeightG": 500, "cents": 990 },
+          { "maxWeightG": 2000, "cents": 1790 },
+          { "maxWeightG": 5000, "cents": 2990 },
+          { "maxWeightG": 10000, "cents": 3990 }
+        ]
+      },
+      {
+        "id": "world",
+        "name": { "de": "Rest der Welt", "en": "Rest of the world" },
+        "countries": "*",
+        "rates": [
+          { "maxWeightG": 500, "cents": 1290 },
+          { "maxWeightG": 2000, "cents": 1990 },
+          { "maxWeightG": 5000, "cents": 3990 },
+          { "maxWeightG": 10000, "cents": 5490 }
+        ]
+      }
+    ]
+  }
+}

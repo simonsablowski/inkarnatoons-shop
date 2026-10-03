@@ -1,0 +1,30 @@
+name = "judas-jesus-shop"
+compatibility_date = "2026-09-01"
+pages_build_output_dir = "./public"
+
+# Datenbank: Produkte, Bestände, Bestellungen
+[[d1_databases]]
+binding = "DB"
+database_name = "judas-jesus-shop"
+# Nach `npm run wrangler -- d1 create judas-jesus-shop` die ausgegebene ID hier eintragen:
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "migrations"
+
+# Bildspeicher für Produktfotos (Upload über /admin.html)
+# Anlegen mit `npm run wrangler -- r2 bucket create judas-jesus-shop-media`
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "judas-jesus-shop-media"
+
+[vars]
+# Absender für E-Mails (Domain muss bei Resend verifiziert sein)
+MAIL_FROM = "Judas & Jesus Shop <shop@example.com>"
+# Öffentliche Basis-URL, wird in E-Mails und für Stripe-Rücksprünge verwendet
+PUBLIC_URL = "https://judas-jesus-shop.pages.dev"
+
+# Secrets (nicht hier eintragen, sondern mit `npm run wrangler -- pages secret put NAME`):
+#   ADMIN_TOKEN            Passwort für /admin.html
+#   SHOP_EMAIL             Adresse, an die neue Bestellungen gemeldet werden
+#   RESEND_API_KEY         API-Key für den E-Mail-Versand (resend.com)
+#   STRIPE_SECRET_KEY      Stripe (zuerst Testschlüssel sk_test_...)
+#   STRIPE_WEBHOOK_SECRET  Signaturschlüssel des Webhooks (whsec_...)

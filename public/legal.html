@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Versand, Zahlung und Rechtliches · Judas &amp; Jesus Shop</title>
+  <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header id="site-header"></header>
+  <main>
+    <section class="spiral pagehead"><div class="wrap">
+      <h1 data-lang-only="de">Versand, Zahlung und Rechtliches</h1>
+      <h1 data-lang-only="en">Shipping, payment and legal</h1>
+    </div></section>
+    <div class="wrap prose">
+
+      <h2 id="versand" style="margin-top:0"><span data-lang-only="de">Versand &amp; Zahlung</span><span data-lang-only="en">Shipping &amp; payment</span></h2>
+      <div data-lang-only="de">
+        <p>Wir verschicken weltweit. Die Versandkosten hängen vom Lieferland und vom Gesamtgewicht der Bestellung ab. Im Warenkorb siehst du den genauen Betrag, sobald du das Lieferland gewählt hast.</p>
+        <p>Du bezahlst per Kreditkarte oder PayPal. Alle Preise enthalten die Mehrwertsteuer. Bei Lieferungen in Länder außerhalb der EU können Zölle und Einfuhrabgaben anfallen, die du bei der Zustellung zahlst.</p>
+      </div>
+      <div data-lang-only="en">
+        <p>We ship worldwide. Shipping costs depend on the delivery country and the total weight of the order. The cart shows the exact amount once you have chosen the delivery country.</p>
+        <p>You pay by credit card or PayPal. All prices include VAT. For deliveries to countries outside the EU, customs duties and import taxes may apply, which you pay on delivery.</p>
+      </div>
+      <div class="table-scroll" style="max-width:760px"><table id="rates"></table></div>
+
+      <h2 id="agb"><span data-lang-only="de">Allgemeine Geschäftsbedingungen</span><span data-lang-only="en">Terms and conditions</span></h2>
+      <p class="placeholder">Platzhalter: Die AGB liefert der Betreiber des Shops. / Placeholder: the shop operator will supply the terms and conditions.</p>
+
+      <h2 id="widerruf"><span data-lang-only="de">Widerrufsbelehrung</span><span data-lang-only="en">Cancellation policy</span></h2>
+      <p class="placeholder">Platzhalter: Widerrufsbelehrung und Muster-Widerrufsformular fehlen noch. / Placeholder: cancellation policy and model withdrawal form are still missing.</p>
+
+      <h2 id="datenschutz"><span data-lang-only="de">Datenschutz</span><span data-lang-only="en">Privacy</span></h2>
+      <p class="placeholder">Platzhalter: Die Datenschutzerklärung fehlt noch. Technisch gilt bisher: Der Shop setzt keine Cookies und kein Tracking ein. Warenkorb und Wunschliste liegen nur im Browser. Für die Zahlung werden Daten an Stripe übertragen, für E-Mails an Resend, gehostet wird bei Cloudflare.</p>
+
+      <h2 id="impressum"><span data-lang-only="de">Impressum</span><span data-lang-only="en">Legal notice</span></h2>
+      <p class="placeholder">Platzhalter: Name, Anschrift, Kontakt und Umsatzsteuer-ID des Betreibers fehlen noch.</p>
+    </div>
+  </main>
+  <footer id="site-footer"></footer>
+  <script type="module">
+    import { start, config, money, lang, countryName, esc } from "/js/shop.js";
+    start(() => {
+      const de = lang() === "de";
+      const c = config();
+      const fmtW = (g) => (g >= 1000 ? `${g / 1000} kg` : `${g} g`);
+      const tiers = c.zones[0].rates.map((r) => r.maxWeightG);
+      document.querySelector("#rates").innerHTML =
+        `<thead><tr><th>${de ? "Lieferung nach" : "Delivery to"}</th>${tiers.map((w) => `<th>${de ? "bis" : "up to"} ${fmtW(w)}</th>`).join("")}</tr></thead><tbody>` +
+        c.zones.map((z) => `<tr><td><strong>${esc(z.name[lang()])}</strong>${Array.isArray(z.countries) && z.countries.length > 1 ? `<br><span class="small">${z.countries.map(countryName).sort((a, b) => a.localeCompare(b)).join(", ")}</span>` : ""}</td>${z.rates.map((r) => `<td>${money(r.cents)}</td>`).join("")}</tr>`).join("") +
+        `</tbody>`;
+      // Sprungmarke nach dem Aufbau der Seite anspringen
+      if (location.hash) document.querySelector(location.hash)?.scrollIntoView();
+    });
+  </script>
+</body>
+</html>

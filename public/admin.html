@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Verwaltung · Judas &amp; Jesus Shop</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="admin">
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="/">Judas &amp; Jesus<span>Verwaltung</span></a>
+      <div class="tools"><button type="button" class="btn secondary small-btn" id="logout" hidden>Abmelden</button></div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <form id="login" class="editor" style="max-width:420px">
+      <h2>Anmelden</h2>
+      <label><span>Passwort</span><input type="password" id="token" autocomplete="current-password" required style="width:100%"></label>
+      <p class="notice error" id="login-error" hidden></p>
+      <p><button class="btn" type="submit">Anmelden</button></p>
+    </form>
+
+    <div id="panel" hidden>
+      <div class="tabs">
+        <button type="button" class="chip" data-tab="products" aria-pressed="true">Produkte &amp; Bestand</button>
+        <button type="button" class="chip" data-tab="orders" aria-pressed="false">Bestellungen</button>
+      </div>
+      <p class="notice error" id="panel-error" hidden></p>
+
+      <section id="tab-products">
+        <div id="editor" hidden></div>
+        <p class="actions"><button type="button" class="btn" id="new-product">Neues Produkt anlegen</button></p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th></th><th>Produkt</th><th>Kategorie</th><th>Preis</th><th>Bestand</th><th>Sichtbar</th><th></th></tr></thead>
+            <tbody id="product-rows"></tbody>
+          </table>
+        </div>
+        <p class="small">Der Bestand lässt sich direkt in der Liste ändern. Die Änderung wird gespeichert, sobald du das Feld verlässt.</p>
+      </section>
+
+      <section id="tab-orders" hidden>
+        <p><label class="check"><input type="checkbox" id="show-all"><span style="font-weight:400">auch offene, abgelaufene und stornierte zeigen</span></label></p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Nr.</th><th>Status</th><th>Datum</th><th>Artikel</th><th>Lieferadresse</th><th>Betrag</th><th></th></tr></thead>
+            <tbody id="order-rows"></tbody>
+          </table>
+        </div>
+        <p class="small">Beim Stornieren wird der Bestand zurückgebucht. Die Erstattung an die Kundin oder den Kunden löst du separat im Stripe-Dashboard aus.</p>
+      </section>
+    </div>
+  </main>
+  <script src="/js/admin.js" type="module"></script>
+</body>
+</html>

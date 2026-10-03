@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Judas &amp; Jesus Shop</title>
+  <meta name="description" content="Der offizielle Shop zum Zeichentrickfilm Judas &amp; Jesus: DVDs, Originalzeichnungen und T-Shirts, weltweit verschickt.">
+  <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header id="site-header"></header>
+  <main>
+    <section class="spiral hero" id="hero">
+      <div class="wrap">
+        <h1 class="sr-only">Judas &amp; Jesus Shop</h1>
+        <img src="/img/titelkarte.jpg" alt="Judas &amp; Jesus" width="1400" height="1220">
+        <p data-i18n="hero.line"></p>
+      </div>
+    </section>
+    <div class="wrap">
+      <form class="filters" id="filters">
+        <div class="chips" id="chips"></div>
+        <label><span data-i18n="filter.search"></span><input type="search" name="q" data-i18n-attr="placeholder:filter.searchPlaceholder"></label>
+        <label><span data-i18n="filter.sort"></span>
+          <select name="sort">
+            <option value="default" data-i18n="filter.sort.default"></option>
+            <option value="newest" data-i18n="filter.sort.newest"></option>
+            <option value="price_asc" data-i18n="filter.sort.price_asc"></option>
+            <option value="price_desc" data-i18n="filter.sort.price_desc"></option>
+          </select>
+        </label>
+        <label class="maxprice"><span data-i18n="filter.maxPrice"></span><input type="number" name="max" min="0" step="1" inputmode="numeric"></label>
+        <label class="check"><input type="checkbox" name="instock"><span data-i18n="filter.inStock"></span></label>
+        <p class="small result-count" id="count" aria-live="polite"></p>
+      </form>
+      <div class="grid" id="grid"></div>
+      <div class="empty" id="empty" hidden>
+        <p data-i18n="list.empty"></p>
+        <p><button type="button" class="btn secondary" id="reset" data-i18n="filter.reset"></button></p>
+      </div>
+    </div>
+  </main>
+  <footer id="site-footer"></footer>
+  <script type="module" src="/js/catalog.js"></script>
+</body>
+</html>

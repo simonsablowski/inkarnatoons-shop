@@ -1,0 +1,19 @@
+{
+  "name": "judas-jesus-shop",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "wrangler": "node ./node_modules/wrangler/bin/wrangler.js",
+    "predev": "node ./node_modules/wrangler/bin/wrangler.js d1 migrations apply judas-jesus-shop --local",
+    "dev": "node ./node_modules/wrangler/bin/wrangler.js pages dev",
+    "db:local": "node ./node_modules/wrangler/bin/wrangler.js d1 migrations apply judas-jesus-shop --local",
+    "db:remote": "node ./node_modules/wrangler/bin/wrangler.js d1 migrations apply judas-jesus-shop --remote",
+    "seed:local": "node ./node_modules/wrangler/bin/wrangler.js d1 execute judas-jesus-shop --local --file=seed/demo.sql",
+    "seed:remote": "node ./node_modules/wrangler/bin/wrangler.js d1 execute judas-jesus-shop --remote --file=seed/demo.sql",
+    "setup:cloudflare": "node ./scripts/setup-cloudflare.mjs",
+    "deploy": "node ./node_modules/wrangler/bin/wrangler.js pages deploy --branch main"
+  },
+  "devDependencies": {
+    "wrangler": "^4.145.0"
+  }
+}

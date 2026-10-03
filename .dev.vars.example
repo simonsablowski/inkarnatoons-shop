@@ -1,0 +1,8 @@
+# Lokale Secrets für `npm run dev`. Als .dev.vars kopieren und ausfüllen. Nicht einchecken.
+ADMIN_TOKEN=lokales-test-passwort
+SHOP_EMAIL=
+RESEND_API_KEY=
+# Ohne Stripe-Schlüssel: Bestellungen lokal sofort als bezahlt markieren (nur zum Testen, niemals online setzen)
+DEV_FAKE_PAYMENT=1
+# STRIPE_SECRET_KEY=sk_test_...
+# STRIPE_WEBHOOK_SECRET=whsec_...
