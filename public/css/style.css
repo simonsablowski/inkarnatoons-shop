@@ -258,3 +258,14 @@ td .stock-input { width: 74px; padding: 5px 8px; }
 .hero-film h2 { color: var(--red); -webkit-text-stroke: 5px var(--cream); paint-order: stroke fill; filter: drop-shadow(0 3px 0 rgba(0,0,0,.4)); margin-bottom: 12px; }
 .hero .film-note { margin: 0; font-size: .95rem; font-weight: 600; text-shadow: 0 2px 0 rgba(0,0,0,.55); max-width: none; }
 @media (max-width: 900px) { .hero.with-film .wrap { grid-template-columns: 1fr; gap: 20px; } .hero.with-film .hero-title img { width: min(420px, 88%); } }
+
+/* Freiwillige Unterstützung über Ko-fi unter dem Film */
+.support { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin-top: 14px; padding: 12px 16px; background: var(--sheet); color: var(--ink); border: var(--line); border-radius: 14px; box-shadow: var(--pop); }
+.hero .support p { margin: 0; text-shadow: none; max-width: none; font-size: 1rem; font-weight: 400; }
+.hero .support .support-text { flex: 1 1 260px; }
+.hero .support .support-placeholder { flex: 1 1 100%; font-size: .85rem; color: var(--red-dark); font-weight: 600; }
+.btn.kofi { background: var(--blond); color: var(--ink); white-space: nowrap; }
+.btn.kofi:hover { background: #f7e391; }
+.btn.kofi svg { width: 22px; height: 22px; }
+.btn.kofi[aria-disabled="true"] { cursor: default; }
+.btn.kofi[aria-disabled="true"]:active { transform: none; box-shadow: var(--pop); }

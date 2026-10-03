@@ -48,6 +48,7 @@ Alles Wichtige steht in `shop.config.json`:
 | `invoice.prefix` | Anfang der Rechnungsnummer, z. B. `RE-` ergibt `RE-2026-0001` |
 | `label.widthMm`, `label.heightMm` | Größe des Adressaufklebers, passend zum Etikettendrucker |
 | `film.world`, `film.provider`, `film.id` | Welt, auf deren Übersicht der Film erscheint, und die Videoquelle: `youtube`, `vimeo` oder `file` mit Video-ID bzw. Dateiadresse. Leer zeigt einen Platzhalter |
+| `kofi.name`, `kofi.show` | Name der Ko-fi-Seite für den Button „Auf Ko-fi unterstützen“ unter dem Film. Ohne Namen erscheint er als Platzhalter, `show: false` blendet ihn aus |
 | `payments.methods` | Zahlarten in Stripe Checkout: `card`, `paypal` |
 | `payments.holdMinutes` | So lange bleibt die Bezahlseite offen (Stripe verlangt mindestens 30 Minuten) |
 | `shipping.zones` | Versandzonen mit Ländern und Preisstufen nach Gewicht (Preise in Cent) |
@@ -146,7 +147,7 @@ In Cloudflare Pages unter *Custom domains* die Domain hinzufügen und den genann
 
 - Name des gemeinsamen Dachs und Domain.
 - Firmendaten für Rechnung und Aufkleber (`seller`) und die Steuerart (`tax.mode`).
-- Videoquelle für den Film.
+- Videoquelle für den Film und Name der Ko-fi-Seite.
 - Echte Produkte, Fotos, Texte, Preise und Gewichte, auch für Wild Wolf, King of Fools und Schwarzer Peter.
 - Echte Versandtarife und Entscheidung, in welche Länder geliefert wird.
 - Rechtstexte: AGB, Widerrufsbelehrung, Datenschutzerklärung, Impressum.

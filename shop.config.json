@@ -43,6 +43,11 @@
     "provider": "",
     "id": ""
   },
+  "kofi": {
+    "_hinweis": "name: Name der Ko-fi-Seite (ko-fi.com/NAME). Leer = der Button erscheint als Platzhalter ohne Link. show: false blendet den Bereich ganz aus.",
+    "name": "",
+    "show": true
+  },
   "payments": {
     "methods": [
       "card",

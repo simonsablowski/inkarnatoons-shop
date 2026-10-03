@@ -94,5 +94,8 @@
   "film.soon": "The film will be available here soon.",
   "world.merch": "Merch",
   "film.heading": "Watch the film",
-  "film.note": "You can watch the complete film here for free."
+  "film.note": "You can watch the complete film here for free.",
+  "support.text": "The film is free to watch. If you like it, you can support us with a voluntary amount.",
+  "support.button": "Support us on Ko-fi",
+  "support.placeholder": "Placeholder: the Ko-fi page has not been set up yet."
 }

@@ -27,3 +27,17 @@ export function mountPlayer(player, note) {
     });
   }
 }
+
+// Freiwillige Unterstützung über Ko-fi. Es ist ein einfacher Link: Bis zum Klick werden keine Daten an Ko-fi übertragen.
+// Ohne eingetragenen Namen erscheint der Button als Platzhalter ohne Link.
+const CUP = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h12v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V7z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M16 9h1.5a2.5 2.5 0 0 1 0 5H16" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M10 13.6s-2.3-1.4-2.3-3a1.3 1.3 0 0 1 2.3-.8 1.3 1.3 0 0 1 2.3.8c0 1.6-2.3 3-2.3 3z" fill="currentColor"/></svg>`;
+
+export function mountSupport(el) {
+  const kofi = config().kofi;
+  if (!kofi?.show) { el.hidden = true; return; }
+  const name = (kofi.name || "").trim();
+  const button = name
+    ? `<a class="btn kofi" href="https://ko-fi.com/${encodeURIComponent(name)}" target="_blank" rel="noopener">${CUP}${t("support.button")}</a>`
+    : `<span class="btn kofi" role="link" aria-disabled="true">${CUP}${t("support.button")}</span>`;
+  el.innerHTML = `<p class="support-text">${t("support.text")}</p>${button}${name ? "" : `<p class="support-placeholder">${t("support.placeholder")}</p>`}`;
+}
