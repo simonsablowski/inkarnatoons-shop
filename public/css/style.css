@@ -67,7 +67,7 @@ p { margin: 0 0 1em; max-width: 68ch; }
     repeating-radial-gradient(circle at 50% 46%, var(--spiral-light) 0, var(--spiral-dark) 44px, var(--spiral-light) 88px);
   border-bottom: var(--line); }
 .hero { text-align: center; padding: 18px 0 30px; color: #fff; }
-.hero img { width: min(480px, 88%); margin: 0 auto;
+.hero .hero-title img { width: min(480px, 88%); margin: 0 auto;
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent), linear-gradient(transparent, #000 8%, #000 94%, transparent);
   mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent), linear-gradient(transparent, #000 8%, #000 94%, transparent);
   -webkit-mask-composite: source-in; mask-composite: intersect; }
@@ -235,17 +235,26 @@ td .stock-input { width: 74px; padding: 5px 8px; }
 .world-tile .pic img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
 .world-tile.no-image:nth-child(2) .pic { background: var(--judas); }
 .world-tile.no-image:nth-child(3) .pic { background: var(--blond); }
-.world-tile .world-name { font-family: var(--display); font-size: 2rem; color: var(--cream); -webkit-text-stroke: 5px var(--ink); paint-order: stroke fill; text-align: center; padding: 0 12px; }
+.world-tile.no-image:nth-child(4) .pic { background: var(--red); }
+.world-tile .world-name { font-family: var(--display); font-size: 1.7rem; line-height: 1.2; color: var(--cream); -webkit-text-stroke: 5px var(--ink); paint-order: stroke fill; text-align: center; padding: 0 12px; }
 .world-tile .body { padding: 14px 16px 16px; }
 .world-tile h3 { margin: 0 0 4px; }
 .world-tile p { margin: 0 0 6px; font-size: 1rem; }
 
 /* Filmseite */
-.player { position: relative; aspect-ratio: 16 / 9; background: var(--ink); border: var(--line); border-radius: 16px; box-shadow: var(--pop); overflow: hidden; margin: 34px 0 14px; }
+.player { position: relative; aspect-ratio: 16 / 9; background: var(--ink); border: var(--line); border-radius: 16px; box-shadow: var(--pop); overflow: hidden; margin: 0 0 10px; }
 .player iframe, .player video, .player .poster { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 .player .poster { display: grid; place-items: end center; padding-bottom: 5%; cursor: pointer; padding: 0; background: repeating-radial-gradient(circle at 50% 46%, var(--spiral-light) 0, var(--spiral-dark) 44px, var(--spiral-light) 88px); }
-.player .poster img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.player .poster img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .player .poster:has(.play) { place-items: center; padding: 0; }
 .player .play { position: relative; display: inline-flex; align-items: center; gap: 10px; font: 700 1.1rem var(--text); color: #fff; background: var(--red); border: var(--line); border-radius: 999px; padding: 14px 26px; box-shadow: var(--pop); }
 .player .play svg { width: 22px; height: 22px; fill: #fff; }
-.player .soon { position: relative; background: var(--blond); border: var(--line); border-radius: 12px; padding: 10px 18px; font-weight: 700; }
+.player .soon { position: relative; color: var(--ink); background: var(--blond); border: var(--line); border-radius: 12px; padding: 10px 18px; font-weight: 700; }
+
+/* Judas & Jesus: Titelkarte und Film nebeneinander */
+.hero.with-film .wrap { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 36px; align-items: center; text-align: left; }
+.hero.with-film .hero-title { text-align: center; }
+.hero.with-film .hero-title img { width: 100%; }
+.hero-film h2 { color: var(--red); -webkit-text-stroke: 5px var(--cream); paint-order: stroke fill; filter: drop-shadow(0 3px 0 rgba(0,0,0,.4)); margin-bottom: 12px; }
+.hero .film-note { margin: 0; font-size: .95rem; font-weight: 600; text-shadow: 0 2px 0 rgba(0,0,0,.55); max-width: none; }
+@media (max-width: 900px) { .hero.with-film .wrap { grid-template-columns: 1fr; gap: 20px; } .hero.with-film .hero-title img { width: min(420px, 88%); } }

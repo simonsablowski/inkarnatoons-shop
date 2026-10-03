@@ -1,9 +1,9 @@
-// Filmseite. Die Videoquelle steht in shop.config.json unter "film".
+// Filmplayer für die Übersichtsseite von Judas & Jesus. Die Videoquelle steht in shop.config.json unter "film".
 // Videos von YouTube oder Vimeo werden erst nach einem Klick geladen, vorher fließen keine Daten dorthin.
-import { start, t, config, esc } from "./shop.js";
+import { t, config, esc } from "./shop.js";
 
 const PLAY = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>`;
-const POSTER = `<img src="/img/titelkarte.jpg" alt="">`;
+const POSTER = `<img src="/img/szene-tuer.jpg" alt="">`;
 
 function embedUrl(film) {
   const id = encodeURIComponent(film.id);
@@ -12,24 +12,18 @@ function embedUrl(film) {
   return null;
 }
 
-function render() {
+export function mountPlayer(player, note) {
   const film = config().film;
-  const player = document.querySelector("#player");
-  const consent = document.querySelector("#consent");
-  document.querySelector("#to-shop").href = `/?world=${film.world}`;
-  consent.textContent = "";
-  document.querySelector("#intro").hidden = !film.id;
-
+  note.textContent = film.id ? t("film.note") : "";
   if (!film.id) {
     player.innerHTML = `<div class="poster" style="cursor:default">${POSTER}<span class="soon">${t("film.soon")}</span></div>`;
   } else if (film.provider === "file") {
-    player.innerHTML = `<video controls preload="metadata" poster="/img/titelkarte.jpg" src="${esc(film.id)}"></video>`;
+    player.innerHTML = `<video controls preload="metadata" poster="/img/szene-tuer.jpg" src="${esc(film.id)}"></video>`;
   } else if (embedUrl(film)) {
     player.innerHTML = `<button type="button" class="poster" id="play">${POSTER}<span class="play">${PLAY}${t("film.play")}</span></button>`;
-    consent.textContent = t(`film.consent.${film.provider}`);
-    document.querySelector("#play").addEventListener("click", () => {
+    note.textContent = `${t("film.note")} ${t(`film.consent.${film.provider}`)}`;
+    player.querySelector("#play").addEventListener("click", () => {
       player.innerHTML = `<iframe src="${embedUrl(film)}" title="Judas &amp; Jesus" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
     });
   }
 }
-start(render);

@@ -38,8 +38,9 @@ Placeholder text: size, paper and print method will be listed here.', 1200, 180,
  (8, 'postkartenset', 'sonstiges', 'Postkartenset mit Filmszenen', 'Postcard set with film scenes', 'Sechs Postkarten mit Szenen aus dem Film im Umschlag.', 'Six postcards with scenes from the film in an envelope.', 800, 60, 0, 1, 80);
 
 INSERT INTO products (id, slug, world, category, name_de, name_en, desc_de, desc_en, price_cents, weight_g, is_unique, active, sort) VALUES
- (9, 'kartenspiel', 'kartenspiel', 'spiele', 'Kartenspiel (Platzhalter)', 'Card game (placeholder)', 'Platzhalter für das Kartenspiel. Name, Beschreibung, Bilder und Preis folgen.', 'Placeholder for the card game. Name, description, pictures and price to follow.', 1500, 250, 0, 1, 90),
- (10, 'wild-wolf', 'wild-wolf', 'sonstiges', 'Wild Wolf (Platzhalter)', 'Wild Wolf (placeholder)', 'Platzhalter für Wild Wolf. Name, Beschreibung, Bilder und Preis folgen.', 'Placeholder for Wild Wolf. Name, description, pictures and price to follow.', 1500, 250, 0, 1, 100);
+ (9, 'wild-wolf', 'wild-wolf', 'sonstiges', 'Wild Wolf (Platzhalter)', 'Wild Wolf (placeholder)', 'Platzhalter für Wild Wolf. Name, Beschreibung, Bilder und Preis folgen.', 'Placeholder for Wild Wolf. Name, description, pictures and price to follow.', 1500, 250, 0, 1, 90),
+ (10, 'king-of-fools', 'king-of-fools', 'sonstiges', 'King of Fools (Platzhalter)', 'King of Fools (placeholder)', 'Platzhalter für King of Fools. Name, Beschreibung, Bilder und Preis folgen.', 'Placeholder for King of Fools. Name, description, pictures and price to follow.', 1500, 250, 0, 1, 100),
+ (11, 'schwarzer-peter', 'schwarzer-peter', 'spiele', 'Kartenspiel Schwarzer Peter (Platzhalter)', 'Card game Schwarzer Peter (placeholder)', 'Platzhalter für das Kartenspiel. Beschreibung, Bilder und Preis folgen.', 'Placeholder for the card game. Description, pictures and price to follow.', 1200, 150, 0, 1, 110);
 
 INSERT INTO variants (product_id, label, sku, stock, sort) VALUES
  (1, '', 'DVD-001', 40, 0),
@@ -50,8 +51,9 @@ INSERT INTO variants (product_id, label, sku, stock, sort) VALUES
  (6, '', 'ORIG-003', 0, 0),
  (7, '', 'POSTER-001', 30, 0),
  (8, '', 'PK-001', 25, 0),
- (9, '', 'KS-001', 20, 0),
- (10, '', 'WW-001', 20, 0);
+ (9, '', 'WW-001', 20, 0),
+ (10, '', 'KOF-001', 20, 0),
+ (11, '', 'SP-001', 20, 0);
 
 INSERT INTO images (product_id, path, sort) VALUES
  (1, '/img/demo/dvd.jpg', 0), (1, '/img/dvd-cover.jpg', 1),
@@ -63,4 +65,5 @@ INSERT INTO images (product_id, path, sort) VALUES
  (7, '/img/demo/poster.jpg', 0),
  (8, '/img/demo/postkarten.jpg', 0), (8, '/img/szene-love-peace.jpg', 1), (8, '/img/szene-kreuz.jpg', 2),
  (9, '/img/platzhalter.svg', 0),
- (10, '/img/platzhalter.svg', 0);
+ (10, '/img/platzhalter.svg', 0),
+ (11, '/img/platzhalter.svg', 0);

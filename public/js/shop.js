@@ -131,7 +131,6 @@ function renderShell() {
       <a class="brand" href="/">${esc(shopConfig.brand.name)}<span>${esc(shopConfig.brand.suffix)}</span></a>
       <nav class="mainnav" aria-label="Produktwelten">
         ${shopConfig.worlds.map((w) => `<a href="/?world=${w.slug}"${isHome && world === w.slug ? ' aria-current="page"' : ""}>${esc(w.name)}</a>`).join("")}
-        <a href="/film.html"${here === "/film" ? ' aria-current="page"' : ""}>${t("nav.film")}</a>
       </nav>
       <div class="tools">
         <div class="lang" role="group" aria-label="Sprache / Language">

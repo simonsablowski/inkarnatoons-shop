@@ -1,6 +1,7 @@
 // Startseite (alle Produktwelten) und Übersicht einer Produktwelt mit Kategorien, Suche,
 // Sortierung und Filtern. Der Zustand steht in der Adresse.
-import { start, api, t, loc, config, productCard, worldOf, brandName, esc } from "./shop.js";
+import { start, api, t, loc, lang, config, productCard, worldOf, brandName, esc } from "./shop.js";
+import { mountPlayer } from "./film.js";
 
 const form = document.querySelector("#filters");
 const grid = document.querySelector("#grid");
@@ -30,18 +31,36 @@ function worldTile(w) {
   </a>`;
 }
 
-// Kopfbereich: Startseite zeigt die Produktwelten, eine Welt zeigt ihren eigenen Titel
+// Kopfbereich: Startseite zeigt die Themenwelten, eine Welt zeigt ihren eigenen Titel.
+// Er wird nur neu aufgebaut, wenn Welt oder Sprache wechseln, damit ein laufender Film
+// beim Filtern der Artikel nicht abbricht.
+let heroKey = null;
 function renderHero(s) {
   const hero = document.querySelector("#hero");
   const world = worldOf(s.world);
+  document.title = world ? `${world.name} · ${brandName()}` : brandName();
+  const hasFilm = world && world.slug === config().film.world;
+  document.querySelector("#list-title").hidden = Boolean(world) && !hasFilm;
+  document.querySelector("#list-title").textContent = hasFilm ? t("world.merch") : t("home.all");
+  const key = `${world?.slug || ""}|${lang()}`;
+  if (key === heroKey) return;
+  heroKey = key;
   document.body.dataset.world = world?.slug || "";
-  if (world?.slug === "judas-jesus") {
-    hero.innerHTML = `<section class="spiral hero"><div class="wrap">
-      <h1 class="sr-only">Judas &amp; Jesus</h1>
-      <img src="/img/titelkarte.jpg" alt="Judas &amp; Jesus" width="1400" height="1220">
-      <p>${t("hero.line")}</p>
-      <p style="margin-top:16px"><a class="btn secondary small-btn" href="/film.html">${t("nav.film")}</a></p>
+  if (world && world.slug === config().film.world) {
+    // Judas & Jesus: Titelkarte und daneben der Film zum Ansehen
+    hero.innerHTML = `<section class="spiral hero with-film"><div class="wrap">
+      <div class="hero-title">
+        <h1 class="sr-only">${esc(world.name)}</h1>
+        <img src="/img/titelkarte.jpg" alt="${esc(world.name)}" width="1400" height="1220">
+        <p>${t("hero.line")}</p>
+      </div>
+      <div class="hero-film" id="film">
+        <h2>${t("film.heading")}</h2>
+        <div class="player" id="player"></div>
+        <p class="film-note" id="film-note"></p>
+      </div>
     </div></section>`;
+    mountPlayer(document.querySelector("#player"), document.querySelector("#film-note"));
   } else if (world) {
     hero.innerHTML = `<section class="pagehead plain"><div class="wrap"><h1>${esc(world.name)}</h1><p>${esc(loc(world, "tagline"))}</p></div></section>`;
   } else {
@@ -50,8 +69,6 @@ function renderHero(s) {
       <div class="worlds">${config().worlds.map(worldTile).join("")}</div>
     </div></section>`;
   }
-  document.title = world ? `${world.name} · ${brandName()}` : brandName();
-  document.querySelector("#list-title").hidden = Boolean(world);
 }
 
 async function render() {
