@@ -11,7 +11,7 @@ const TOML = new URL("../wrangler.toml", import.meta.url);
 
 const step = (text) => console.log(`\n=== ${text}`);
 // wrangler wird direkt über node gestartet, ohne Umweg über die Eingabeaufforderung.
-// Das "&" im Ordnernamen bringt sonst die .cmd-Starter von npm durcheinander.
+// So spielt es keine Rolle, welche Sonderzeichen im Ordnernamen stehen.
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const WRANGLER = fileURLToPath(new URL("../node_modules/wrangler/bin/wrangler.js", import.meta.url));
 const args = (cmd) => (Array.isArray(cmd) ? cmd : cmd.split(" "));

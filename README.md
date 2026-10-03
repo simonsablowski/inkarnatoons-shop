@@ -72,30 +72,28 @@ npm run setup:cloudflare
 ```
 Das Skript meldet dich bei Cloudflare an, legt Datenbank, Bildspeicher und Pages-Projekt an, trägt die `database_id` in `wrangler.toml` ein, spielt Schema und Platzhalterprodukte ein, setzt ein Passwort für die Verwaltung und deployt. Es kann beliebig oft laufen. Spätere Deployments: `npm run deploy`.
 
-Hinweis: Der Ordnername enthält ein `&`. Damit funktionieren unter Windows `npx wrangler …` und die üblichen npm-Starter nicht. Deshalb rufen alle Skripte wrangler direkt über node auf, und einzelne Befehle laufen über `npm run wrangler -- …`.
-
 Die einzelnen Schritte von Hand:
 
 ```
 npm install
-npm run wrangler -- login
-npm run wrangler -- d1 create judas-jesus-shop
-npm run wrangler -- r2 bucket create judas-jesus-shop-media
+npx wrangler login
+npx wrangler d1 create judas-jesus-shop
+npx wrangler r2 bucket create judas-jesus-shop-media
 ```
 Die ausgegebene `database_id` in `wrangler.toml` eintragen, dann:
 ```
 npm run db:remote
-npm run wrangler -- pages project create judas-jesus-shop --production-branch main
+npx wrangler pages project create judas-jesus-shop --production-branch main
 ```
 R2 muss im Cloudflare-Konto einmal aktiviert werden (Dashboard → R2).
 
 Secrets setzen (jeweils wird nach dem Wert gefragt):
 ```
-npm run wrangler -- pages secret put ADMIN_TOKEN            # Passwort für /admin.html
-npm run wrangler -- pages secret put SHOP_EMAIL             # Adresse für Bestellbenachrichtigungen
-npm run wrangler -- pages secret put RESEND_API_KEY         # E-Mail-Versand
-npm run wrangler -- pages secret put STRIPE_SECRET_KEY      # zuerst Testschlüssel sk_test_...
-npm run wrangler -- pages secret put STRIPE_WEBHOOK_SECRET  # whsec_...
+npx wrangler pages secret put ADMIN_TOKEN            # Passwort für /admin.html
+npx wrangler pages secret put SHOP_EMAIL             # Adresse für Bestellbenachrichtigungen
+npx wrangler pages secret put RESEND_API_KEY         # E-Mail-Versand
+npx wrangler pages secret put STRIPE_SECRET_KEY      # zuerst Testschlüssel sk_test_...
+npx wrangler pages secret put STRIPE_WEBHOOK_SECRET  # whsec_...
 ```
 In `wrangler.toml` `MAIL_FROM` und `PUBLIC_URL` auf die echte Adresse setzen. Deployen:
 ```
