@@ -165,6 +165,8 @@ Konto bei resend.com anlegen, die Absender-Domain hinzufügen, die angezeigten D
 
 In Cloudflare Pages unter *Custom domains* die Domain hinzufügen und den genannten DNS-Eintrag beim Domain-Anbieter anlegen. Danach `PUBLIC_URL` in `wrangler.toml` anpassen, neu deployen und die Webhook-Adresse in Stripe ändern.
 
+Der Shop läuft unter `shop.inkarnatoons.com` (CNAME-Eintrag bei STRATO, wo die Domain `inkarnatoons.com` liegt). Aufrufe der technischen Adresse `judas-jesus-shop.pages.dev` leitet `functions/_middleware.js` dauerhaft auf die Adresse aus `PUBLIC_URL` um.
+
 ### Verwaltung absichern
 
 `/admin.html` ist mit `ADMIN_TOKEN` geschützt. Zusätzlich lässt sich in Cloudflare Zero Trust eine Access-Regel für `/admin.html` und `/api/admin/*` anlegen, die nur bestimmte E-Mail-Adressen zulässt.
