@@ -88,7 +88,7 @@ npm run import -- --target online                 # Probelauf gegen den Shop bei
 npm run import -- --target online --write     # übernimmt die Produkte online, fragt nach dem Passwort der Verwaltung
 ```
 
-Der Probelauf listet jede Zeile mit Fehlern (✗, die Zeile wird übersprungen) und Hinweisen (!). Produkte werden über ihren Namen wiedererkannt: Beim erneuten Import werden vorhandene geändert, neue angelegt. Fehlende Themenwelten und Kategorien legt der Import selbst an.
+Der Probelauf listet jede Zeile mit Fehlern (✗, die Zeile wird übersprungen) und Hinweisen (!). Produkte werden über ihren Namen wiedererkannt (wird ein Produkt in der Liste umbenannt, legt der Import es neu an): Beim erneuten Import werden vorhandene geändert, neue angelegt. Fehlende Themenwelten und Kategorien legt der Import selbst an.
 
 | Schalter | Wirkung |
 |---|---|
@@ -98,6 +98,8 @@ Der Probelauf listet jede Zeile mit Fehlern (✗, die Zeile wird übersprungen) 
 | `--file liste.csv` | liest eine CSV-Datei statt Google Sheets (in Sheets: Datei → Herunterladen → CSV) |
 
 „Zum Start dabei?“ = nein legt das Produkt als Entwurf an, es ist dann im Shop nicht sichtbar.
+
+Name und Beschreibung dürfen in nur einer Sprache ausgefüllt sein, zum Beispiel nur auf Englisch. Der Text gilt dann für beide Sprachen des Shops. Die Adresse eines Produkts richtet sich nach dem englischen Namen, ersatzweise nach dem deutschen.
 
 ## Rechnung, Adressaufkleber und Film
 

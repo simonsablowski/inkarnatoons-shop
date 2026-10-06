@@ -75,6 +75,7 @@ const yes = (v) => /^(ja|j|yes|y|x|1|true|wahr)$/i.test(String(v || "").trim());
 // "S=5; M=12; L=2" → [{ label:"S", stock:5 }, …]
 export function parseVariants(raw) {
   const out = [];
+  if (/^\s*(0|-|–|nein|keine|none|no)?\s*$/i.test(String(raw ?? ""))) return { variants: out };
   for (const part of String(raw || "").split(/[;\n]+/).map((p) => p.trim()).filter(Boolean)) {
     const m = part.match(/^(.+?)\s*[=:]\s*(\d+)\s*$/);
     if (!m) return { error: `„${part}“ hat nicht das Format Größe=Stückzahl` };
@@ -123,7 +124,8 @@ function readProducts(text) {
   const header = (rows.shift() || []).map((h) => h.trim().toLowerCase());
   const col = {};
   for (const [key, start] of Object.entries(COLUMNS)) col[key] = header.findIndex((h) => h.startsWith(start));
-  const missing = ["world", "kind", "name_de", "price"].filter((k) => col[k] < 0);
+  const missing = ["world", "kind", "price"].filter((k) => col[k] < 0);
+  if (col.name_de < 0 && col.name_en < 0) missing.push("name_en");
   if (missing.length) throw new Error(`In der Tabelle fehlen Spalten: ${missing.map((k) => COLUMNS[k]).join(", ")}`);
   const get = (row, key) => (col[key] >= 0 ? String(row[col[key]] ?? "").trim() : "");
 
@@ -137,8 +139,11 @@ function readProducts(text) {
     p.name_de = get(row, "name_de"); p.name_en = get(row, "name_en");
     p.desc_de = get(row, "desc_de"); p.desc_en = get(row, "desc_en");
     p.sku = get(row, "sku"); p.is_unique = yes(get(row, "unique")); p.active = yes(get(row, "launch"));
-    p.slug = slugify(p.name_de);
-    if (!p.name_de) p.errors.push("Name (Deutsch) fehlt");
+    // Name und Beschreibung dürfen nur in einer Sprache vorliegen, dann gilt dieser Text für beide.
+    // Die Adresse des Produkts richtet sich nach dem englischen Namen, sonst nach dem deutschen.
+    p.title = p.name_en || p.name_de;
+    p.slug = slugify(p.title);
+    if (!p.title) p.errors.push("Name fehlt");
     if (!p.world) p.errors.push("Themenwelt fehlt");
     if (!p.kind) p.errors.push("Produktart fehlt");
     if (p.slug && seen.has(p.slug)) p.errors.push(`gleicher Name wie in Zeile ${seen.get(p.slug)}`);
@@ -166,7 +171,7 @@ function readProducts(text) {
       p.variants = [{ label: "", sku: p.sku, stock: Math.round(stock ?? (p.is_unique ? 1 : 0)) }];
     }
     if (p.is_unique && (p.variants?.length > 1 || p.variants?.[0]?.stock > 1)) p.warnings.push("als Einzelstück markiert, aber Stückzahl größer als 1");
-    if (!p.name_en) p.warnings.push("englischer Name fehlt, es wird der deutsche gezeigt");
+    if (!p.desc_de && !p.desc_en) p.warnings.push("Beschreibung fehlt");
     p.imageNames = get(row, "images").split(/[;\n]+/).map((s) => s.trim()).filter(Boolean);
     if (!p.imageNames.length) p.warnings.push("keine Bilder angegeben");
     products.push(p);
@@ -254,7 +259,7 @@ async function main() {
     const old = existing.get(p.slug);
     const state = p.errors.length ? "FEHLER   " : old ? "ändern   " : "neu      ";
     const stock = p.variants ? p.variants.map((v) => (v.label ? `${v.label}=${v.stock}` : v.stock)).join(" ") : "";
-    console.log(`${state} Zeile ${String(p.line).padStart(3)}  ${p.name_de || "(ohne Name)"}  ·  ${p.world} / ${p.kind}  ·  ${p.price_cents != null ? (p.price_cents / 100).toFixed(2) + " €" : "?"}  ·  Bestand ${stock}  ·  ${p.images.length}/${p.imageNames.length} Bilder${p.active ? "" : "  ·  Entwurf (nicht zum Start)"}`);
+    console.log(`${state} Zeile ${String(p.line).padStart(3)}  ${p.title || "(ohne Name)"}  ·  ${p.world} / ${p.kind}  ·  ${p.price_cents != null ? (p.price_cents / 100).toFixed(2) + " €" : "?"}  ·  Bestand ${stock}  ·  ${p.images.length}/${p.imageNames.length} Bilder${p.active ? "" : "  ·  Entwurf (nicht zum Start)"}`);
     for (const e of p.errors) console.log(`           ✗ ${e}`);
     for (const w of p.warnings) console.log(`           ! ${w}`);
   }
@@ -286,8 +291,8 @@ async function main() {
       });
     }
     const body = JSON.stringify({
-      slug: p.slug, world: worldSlug(p.world), category: categorySlug(p.kind), name_de: p.name_de, name_en: p.name_en || p.name_de,
-      desc_de: p.desc_de, desc_en: p.desc_en || p.desc_de, price_cents: p.price_cents, weight_g: p.weight_g,
+      slug: p.slug, world: worldSlug(p.world), category: categorySlug(p.kind), name_de: p.name_de || p.name_en, name_en: p.name_en || p.name_de,
+      desc_de: p.desc_de || p.desc_en, desc_en: p.desc_en || p.desc_de, price_cents: p.price_cents, weight_g: p.weight_g,
       is_unique: p.is_unique, active: p.active, sort: (n + 1) * 10, variants,
     });
     const id = old ? (await api(`/api/admin/products/${old.id}`, { method: "PUT", body })).id : (await api("/api/admin/products", { method: "POST", body })).id;
