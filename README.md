@@ -9,7 +9,7 @@ Cloudflare Pages liefert die Seite aus, Pages Functions bilden die API, eine D1-
 - Die Übersicht von Judas & Jesus zeigt neben der Titelkarte den Film zum kostenlosen Anschauen, darunter das Merch.
 - Produktübersicht mit Kategorien, Suche, Sortierung, Höchstpreis und „nur lieferbare Artikel“. Die Filter stehen in der Adresse und lassen sich verlinken.
 - Detailansicht mit Bildergalerie, Varianten (z. B. Größen) und Bestandsanzeige. Einzelstücke (Originalzeichnungen) werden als solche gekennzeichnet und nach dem Verkauf als „Verkauft“ gezeigt.
-- Altersabfrage ab 16 vor allen Seiten des Shops (Selbstauskunft). Die Seite mit Impressum und Datenschutz bleibt ohne Abfrage erreichbar.
+- Altersabfrage ab 18 vor allen Seiten des Shops (Selbstauskunft). Die Seite mit Impressum und Datenschutz bleibt ohne Abfrage erreichbar.
 - Wunschliste und Warenkorb ohne Kundenkonto. Beide liegen nur im Browser.
 - Versandkosten nach Lieferland (Zone) und Gesamtgewicht, berechnet auf dem Server.
 - Bezahlung per Kreditkarte und PayPal über Stripe Checkout. Die Lieferadresse wird dort abgefragt.
@@ -43,7 +43,7 @@ Alles Wichtige steht in `shop.config.json`:
 | Einstellung | Bedeutung |
 |---|---|
 | `brand.name`, `brand.suffix`, `shopName` | Name des gemeinsamen Dachs in Kopfzeile, Seitentiteln und E-Mails |
-| `ageGate.enabled`, `ageGate.minAge`, `ageGate.rememberDays`, `ageGate.exitUrl` | Altersabfrage vor dem Shop: an/aus, Mindestalter (16), wie viele Tage sich der Browser die Bestätigung merkt, und wohin der Link für Jüngere führt |
+| `ageGate.enabled`, `ageGate.minAge`, `ageGate.rememberDays`, `ageGate.exitUrl` | Altersabfrage vor dem Shop: an/aus, Mindestalter (18), wie viele Tage sich der Browser die Bestätigung merkt, und wohin der Link für Jüngere führt |
 | `currency` | Währung des Shops (EUR) |
 | `seller` | Firmenname, Anschrift, Steuernummer, USt-IdNr. für Rechnung und Adressaufkleber |
 | `tax.mode`, `tax.ratePercent` | `vat` weist die enthaltene Umsatzsteuer aus, `small_business` druckt den Hinweis nach § 19 UStG |
