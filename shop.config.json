@@ -5,6 +5,13 @@
     "name": "Inkarnatoons",
     "suffix": "Shop"
   },
+  "ageGate": {
+    "_hinweis": "Altersabfrage vor dem Shop. enabled: false schaltet sie ab. minAge: Mindestalter. rememberDays: so lange merkt sich der Browser die Bestätigung. exitUrl: dorthin führt der Link für alle, die jünger sind.",
+    "enabled": true,
+    "minAge": 16,
+    "rememberDays": 30,
+    "exitUrl": "https://www.inkarnatoons.com"
+  },
   "currency": "EUR",
   "languages": [
     "de",

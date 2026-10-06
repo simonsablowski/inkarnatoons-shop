@@ -97,5 +97,14 @@
   "film.note": "You can watch the complete film here for free.",
   "support.text": "The film is free to watch. If you like it, you can support us with a voluntary amount.",
   "support.button": "Support us on Ko-fi",
-  "support.placeholder": "Placeholder: the Ko-fi page has not been set up yet."
+  "support.placeholder": "Placeholder: the Ko-fi page has not been set up yet.",
+  "age.title": "This shop is for ages {n} and over",
+  "age.text": "It shows artwork from the animated film Judas & Jesus (rated 16 in Germany), including nudity and crude humour.",
+  "age.question": "Are you at least {n} years old?",
+  "age.yes": "Yes, I am {n} or older",
+  "age.no": "No",
+  "age.deniedTitle": "Ages {n} and over only",
+  "age.denied": "This shop is only available to visitors aged {n} and over.",
+  "age.leave": "Leave this site",
+  "age.back": "Back to the question"
 }

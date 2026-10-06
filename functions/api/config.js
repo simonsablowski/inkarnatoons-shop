@@ -8,6 +8,7 @@ export async function onRequestGet({ env }) {
     ok: true,
     shopName: config.shopName,
     brand: { name: config.brand.name, suffix: config.brand.suffix },
+    ageGate: { enabled: config.ageGate?.enabled === true, minAge: config.ageGate?.minAge || 16, rememberDays: config.ageGate?.rememberDays || 30, exitUrl: config.ageGate?.exitUrl || "" },
     film: { world: config.film.world, provider: config.film.provider, id: config.film.id },
     kofi: { name: config.kofi?.name || "", show: config.kofi?.show !== false },
     worlds: await listWorlds(env.DB),

@@ -167,6 +167,72 @@ function updateCounts() {
   });
 }
 
+// ---------- Altersabfrage ----------
+// Der Shop ist erst ab dem eingestellten Mindestalter zugänglich. Die Abfrage ist eine Selbstauskunft:
+// Wer bestätigt, wird für die eingestellte Zahl von Tagen in diesem Browser nicht erneut gefragt.
+// Die Seite „Versand, Zahlung und Rechtliches“ bleibt ohne Abfrage erreichbar (Impressum, Datenschutz).
+const AGE_KEY = "jj-age-ok";
+const gateExempt = () => document.documentElement.hasAttribute("data-no-age-gate");
+
+function ageConfirmed() {
+  const gate = shopConfig.ageGate;
+  if (!gate?.enabled || gateExempt()) return true;
+  const saved = readJson(AGE_KEY, null);
+  return Boolean(saved && saved.minAge >= gate.minAge && Date.now() - saved.at < gate.rememberDays * 86400000);
+}
+
+function showAgeGate(onConfirm) {
+  const gate = shopConfig.ageGate;
+  document.querySelector("#age-gate")?.remove();
+  const el = document.createElement("div");
+  el.id = "age-gate";
+  el.className = "age-gate spiral";
+  el.setAttribute("role", "dialog");
+  el.setAttribute("aria-modal", "true");
+  el.setAttribute("aria-labelledby", "age-gate-title");
+  const ask = () => {
+    el.innerHTML = `<div class="age-box">
+      <p class="age-brand">${esc(brandName())}</p>
+      <h1 id="age-gate-title">${t("age.title", { n: gate.minAge })}</h1>
+      <p>${t("age.text")}</p>
+      <p class="age-question">${t("age.question", { n: gate.minAge })}</p>
+      <div class="age-actions">
+        <button type="button" class="btn" id="age-yes">${t("age.yes", { n: gate.minAge })}</button>
+        <button type="button" class="btn secondary" id="age-no">${t("age.no")}</button>
+      </div>
+      <div class="age-foot">
+        <div class="lang" role="group" aria-label="Sprache / Language">
+          ${LANGS.map((l) => `<button type="button" data-lang="${l}" aria-pressed="${l === current}">${l.toUpperCase()}</button>`).join("")}
+        </div>
+        <a href="/legal.html#impressum">${t("footer.legal")}</a>
+        <a href="/legal.html#datenschutz">${t("footer.privacy")}</a>
+      </div>
+    </div>`;
+    el.querySelector("#age-yes").addEventListener("click", () => {
+      storageSet(AGE_KEY, JSON.stringify({ minAge: gate.minAge, at: Date.now() }));
+      el.remove();
+      document.documentElement.classList.add("age-ok");
+      onConfirm();
+    });
+    el.querySelector("#age-no").addEventListener("click", () => {
+      el.innerHTML = `<div class="age-box">
+        <p class="age-brand">${esc(brandName())}</p>
+        <h1 id="age-gate-title">${t("age.deniedTitle", { n: gate.minAge })}</h1>
+        <p>${t("age.denied", { n: gate.minAge })}</p>
+        <div class="age-actions">
+          ${gate.exitUrl ? `<a class="btn" href="${esc(gate.exitUrl)}">${t("age.leave")}</a>` : ""}
+          <button type="button" class="btn secondary" id="age-back">${t("age.back")}</button>
+        </div>
+      </div>`;
+      el.querySelector("#age-back").addEventListener("click", ask);
+      el.querySelector("a, button").focus();
+    });
+    el.querySelector("#age-yes").focus();
+  };
+  document.body.append(el);
+  ask();
+}
+
 // Startet eine Seite: lädt Sprache und Einstellungen, baut Kopf- und Fußzeile und ruft render() auf.
 // Beim Sprachwechsel wird render() erneut aufgerufen.
 export async function start(render) {
@@ -182,6 +248,8 @@ export async function start(render) {
     document.documentElement.lang = current;
     renderShell();
     applyStatic();
+    if (!ageConfirmed()) return showAgeGate(() => render?.());
+    document.documentElement.classList.add("age-ok");
     await render?.();
   }
   document.addEventListener("click", (e) => {
