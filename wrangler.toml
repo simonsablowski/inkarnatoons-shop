@@ -6,12 +6,12 @@ pages_build_output_dir = "./public"
 [[d1_databases]]
 binding = "DB"
 database_name = "judas-jesus-shop"
-# Nach `npm run wrangler -- d1 create judas-jesus-shop` die ausgegebene ID hier eintragen:
-database_id = "00000000-0000-0000-0000-000000000000"
+# Nach `npx wrangler d1 create judas-jesus-shop` die ausgegebene ID hier eintragen:
+database_id = "915589a7-ccf8-488e-b932-5cab31981f05"
 migrations_dir = "migrations"
 
 # Bildspeicher für Produktfotos (Upload über /admin.html)
-# Anlegen mit `npm run wrangler -- r2 bucket create judas-jesus-shop-media`
+# Anlegen mit `npx wrangler r2 bucket create judas-jesus-shop-media`
 [[r2_buckets]]
 binding = "MEDIA"
 bucket_name = "judas-jesus-shop-media"
@@ -20,9 +20,9 @@ bucket_name = "judas-jesus-shop-media"
 # Absender für E-Mails (Domain muss bei Resend verifiziert sein)
 MAIL_FROM = "Judas & Jesus Shop <shop@example.com>"
 # Öffentliche Basis-URL, wird in E-Mails und für Stripe-Rücksprünge verwendet
-PUBLIC_URL = "https://judas-jesus-shop.pages.dev"
+PUBLIC_URL = "https://shop.inkarnatoons.com"
 
-# Secrets (nicht hier eintragen, sondern mit `npm run wrangler -- pages secret put NAME`):
+# Secrets (nicht hier eintragen, sondern mit `npx wrangler pages secret put NAME`):
 #   ADMIN_TOKEN            Passwort für /admin.html
 #   SHOP_EMAIL             Adresse, an die neue Bestellungen gemeldet werden
 #   RESEND_API_KEY         API-Key für den E-Mail-Versand (resend.com)
