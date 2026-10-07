@@ -7,8 +7,9 @@ function baseHeaders(obj, k) {
   obj.writeHttpMetadata(headers);
   headers.set("etag", obj.httpEtag);
   headers.set("accept-ranges", "bytes");
-  // Bilder haben zufällige Namen und ändern sich nie. Videos behalten ihren Namen, wenn sie ersetzt werden.
-  headers.set("cache-control", k.startsWith("film/") ? "public, max-age=3600" : "public, max-age=31536000, immutable");
+  // Bilder haben zufällige Namen und ändern sich nie. Videos behalten ihren Namen, wenn sie ersetzt werden:
+  // Der Browser darf sie speichern, muss aber vor jeder Wiedergabe nachfragen, ob es eine neue Fassung gibt.
+  headers.set("cache-control", k.startsWith("film/") ? "public, no-cache" : "public, max-age=31536000, immutable");
   return headers;
 }
 
