@@ -1,7 +1,7 @@
 /* Inkarnatoons Shop
    Sachlich und flächig: nur Schwarz, Weiß und ein Rot, eine Schrift für alles, keine runden Ecken,
    keine Schatten. Gezeichnet sind allein der Schriftzug des Shops und die Titel der Themenwelten (Bilddateien).
-   Oben ist alles schwarz. Der untere Bereich ist weiß, rot oder schwarz (shop.config.json, "theme.lower"). */
+   Oben ist alles schwarz, der untere Bereich weiß. */
 
 @font-face { font-family: "Figtree"; font-weight: 400; src: url("../fonts/figtree-latin-400-normal.woff2") format("woff2"); font-display: swap; }
 @font-face { font-family: "Figtree"; font-weight: 600; src: url("../fonts/figtree-latin-600-normal.woff2") format("woff2"); font-display: swap; }
@@ -13,15 +13,10 @@
   --red: #e2001a;              /* der eine Rotton, überall derselbe: das Rot aus Olafs Zeichnungen */
   --bg: var(--white);          /* unterer Bereich */
   --fg: var(--black);
-  --accent: var(--red);        /* Akzentfarbe für Schaltflächen und Hinweise, auf rotem Grund Schwarz */
+  --accent: var(--red);        /* Akzentfarbe für Schaltflächen und Hinweise */
   --line: 2px solid var(--fg);
   --text: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
-html[data-lower="black"] { --bg: var(--black); --fg: var(--white); }
-html[data-lower="red"] { --bg: var(--red); --fg: var(--white); --accent: var(--black); }
-/* Auf Rot: Eingabefelder weiß mit schwarzer Schrift, damit sie gut lesbar bleiben */
-html[data-lower="red"] main :is(input[type="text"], input[type="search"], input[type="number"], select, .qty) { background: var(--white); color: var(--black); }
-html[data-lower="red"] main .qty :is(button, input) { color: var(--black); border-color: var(--black); }
 /* Bereiche, die immer schwarz sind */
 .topbar, .hero, .pagehead, .footer, .age-gate, .zoom { --bg: var(--black); --fg: var(--white); --accent: var(--red); --line: 2px solid var(--white); background: var(--bg); color: var(--fg); }
 /* Weiße Flächen auf Schwarz */
@@ -65,8 +60,6 @@ p { margin: 0 0 1em; max-width: 68ch; }
 .count[data-n="0"] { display: none; }
 
 /* Schwarzer Kopfbereich der Seiten */
-html[data-lower="black"] :is(.hero, .pagehead) { border-bottom: 2px solid var(--white); }
-html[data-lower="black"] .footer { border-top: 2px solid var(--white); }
 .hero { text-align: center; padding: 18px 0 34px; }
 .hero .hero-title img { width: min(480px, 88%); margin: 0 auto; }
 .hero .hero-title img.titelkarte {

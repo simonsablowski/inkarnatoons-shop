@@ -1,14 +1,10 @@
 {
   "shopName": "Inkarnatoons Shop",
   "brand": {
-    "_hinweis": "Name des gemeinsamen Dachs, vorläufig. Erscheint in Kopfzeile, Seitentiteln und E-Mails.",
+    "_hinweis": "Name des Shops. Erscheint in Kopfzeile, Seitentiteln und E-Mails. logo: Pfad zum gezeichneten Schriftzug (weiß auf Schwarz oder mit transparentem Hintergrund), z. B. \"/img/marke/logo.png\". Leer zeigt den Namen als Text.",
     "name": "Inkarnatoons",
     "suffix": "Shop",
     "logo": "/img/marke/logo.png"
-  },
-  "theme": {
-    "_hinweis": "lower: Farbe des unteren Seitenbereichs unter dem schwarzen Kopf, \"white\", \"red\" oder \"black\". Zum Ausprobieren ohne Änderung hier: Adresse mit ?lower=red, ?lower=black oder ?lower=white aufrufen. brand.logo oben: Pfad zum gezeichneten Schriftzug des Shops (weiß auf Schwarz oder mit transparentem Hintergrund), z. B. \"/img/marke/logo.png\". Leer zeigt den Namen als Text.",
-    "lower": "white"
   },
   "ageGate": {
     "_hinweis": "Altersabfrage vor dem Shop. enabled: false schaltet sie ab. minAge: Mindestalter. rememberDays: so lange merkt sich der Browser die Bestätigung. exitUrl: dorthin führt der Link für alle, die jünger sind.",

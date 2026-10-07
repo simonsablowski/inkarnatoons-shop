@@ -126,18 +126,6 @@ export const brandMark = (cls = "") =>
 export const worldTitle = (w, tag = "h1") =>
   w.title_image ? `<${tag} class="sr-only">${esc(w.name)}</${tag}><img class="lettering" src="${esc(w.title_image)}" alt="">` : `<${tag}>${esc(w.name)}</${tag}>`;
 
-// Unterer Seitenbereich weiß, rot oder schwarz. Zum Ausprobieren gilt ?lower=red, ?lower=black oder ?lower=white, solange der Tab offen ist.
-const LOWER = ["white", "red", "black"];
-function applyTheme() {
-  const q = new URLSearchParams(location.search).get("lower");
-  let pick = null;
-  try {
-    if (LOWER.includes(q)) sessionStorage.setItem("jj-lower", q);
-    pick = sessionStorage.getItem("jj-lower");
-  } catch { pick = q; }
-  document.documentElement.dataset.lower = LOWER.includes(pick) ? pick : shopConfig.theme?.lower || "white";
-}
-
 function renderShell() {
   const here = location.pathname.replace(/\/index\.html$/, "/").replace(/\.html$/, "");
   const world = new URLSearchParams(location.search).get("world");
@@ -264,7 +252,6 @@ export async function start(render) {
     shopConfig = c;
     storageSet("jj-lang", current);
     document.documentElement.lang = current;
-    applyTheme();
     renderShell();
     applyStatic();
     if (!ageConfirmed()) return showAgeGate(() => render?.());
