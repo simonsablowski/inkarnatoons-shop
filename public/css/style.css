@@ -269,7 +269,11 @@ td .stock-input { width: 74px; padding: 5px 8px; }
 .player .play svg { width: 22px; height: 22px; fill: var(--white); }
 .player .soon { position: relative; color: var(--black); background: var(--white); padding: 10px 18px; font-weight: 700; }
 
-.versions { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
+/* Fassungen: gleich breite Kästen, vier nebeneinander, bei wenig Platz zwei mal zwei */
+.hero-film { container-type: inline-size; }
+.versions { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 0 0 12px; }
+.versions .chip { padding: 8px 6px; text-align: center; }
+@container (min-width: 640px) { .versions { grid-template-columns: repeat(4, 1fr); } }
 .player video { background: var(--black); object-fit: contain; }
 
 /* Judas & Jesus: Titel und Film nebeneinander */
