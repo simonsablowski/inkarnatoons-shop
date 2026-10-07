@@ -251,8 +251,9 @@ td .stock-input { width: 74px; padding: 5px 8px; }
 .world-tile .world-name { font-weight: 700; font-size: 1.5rem; line-height: 1.2; text-align: center; padding: 0 12px; }
 /* Einzelne Figur: gespiegelt, links neben der Kachel am unteren Rand. Nur ein kleines Stück ragt in die Kachel.
    Auf schmalen Bildschirmen rücken die Kacheln dafür etwas nach rechts. */
-.world-tile .figure { position: absolute; right: 93%; bottom: 0; width: 30%; max-width: none; transform: scaleX(-1); pointer-events: none; }
-@media (max-width: 1340px) { .worlds:has(.has-figure) { padding-left: clamp(44px, 14vw, 70px); } }
+.world-tile .figure { position: absolute; right: 93%; bottom: -9%; width: 40%; max-width: none; transform: scaleX(-1); pointer-events: none; }
+.world-tile.has-figure .body { padding-left: 8%; }
+@media (max-width: 1400px) { .worlds:has(.has-figure) { padding-left: clamp(60px, 20vw, 96px); } }
 .world-tile .body { padding: 14px 0 0; }
 .world-tile .body .lettering { max-height: 64px; margin-bottom: 6px; }
 .world-tile h3 { margin: 0 0 4px; }
