@@ -1,7 +1,7 @@
 /* Inkarnatoons Shop
    Sachlich und flächig: nur Schwarz, Weiß und ein Rot, eine Schrift für alles, keine runden Ecken,
    keine Schatten. Gezeichnet sind allein der Schriftzug des Shops und die Titel der Themenwelten (Bilddateien).
-   Oben ist alles schwarz. Der untere Bereich ist weiß oder schwarz (shop.config.json, "theme.lower"). */
+   Oben ist alles schwarz. Der untere Bereich ist weiß, rot oder schwarz (shop.config.json, "theme.lower"). */
 
 @font-face { font-family: "Figtree"; font-weight: 400; src: url("../fonts/figtree-latin-400-normal.woff2") format("woff2"); font-display: swap; }
 @font-face { font-family: "Figtree"; font-weight: 600; src: url("../fonts/figtree-latin-600-normal.woff2") format("woff2"); font-display: swap; }
@@ -13,14 +13,19 @@
   --red: #e2001a;              /* der eine Rotton, überall derselbe: das Rot aus Olafs Zeichnungen */
   --bg: var(--white);          /* unterer Bereich */
   --fg: var(--black);
+  --accent: var(--red);        /* Akzentfarbe für Schaltflächen und Hinweise, auf rotem Grund Schwarz */
   --line: 2px solid var(--fg);
   --text: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 html[data-lower="black"] { --bg: var(--black); --fg: var(--white); }
+html[data-lower="red"] { --bg: var(--red); --fg: var(--white); --accent: var(--black); }
+/* Auf Rot: Eingabefelder weiß mit schwarzer Schrift, damit sie gut lesbar bleiben */
+html[data-lower="red"] main :is(input[type="text"], input[type="search"], input[type="number"], select, .qty) { background: var(--white); color: var(--black); }
+html[data-lower="red"] main .qty :is(button, input) { color: var(--black); border-color: var(--black); }
 /* Bereiche, die immer schwarz sind */
-.topbar, .hero, .pagehead, .footer, .age-gate, .zoom { --bg: var(--black); --fg: var(--white); --line: 2px solid var(--white); background: var(--bg); color: var(--fg); }
+.topbar, .hero, .pagehead, .footer, .age-gate, .zoom { --bg: var(--black); --fg: var(--white); --accent: var(--red); --line: 2px solid var(--white); background: var(--bg); color: var(--fg); }
 /* Weiße Flächen auf Schwarz */
-.age-box { --bg: var(--white); --fg: var(--black); --line: 2px solid var(--black); background: var(--bg); color: var(--fg); }
+.age-box { --bg: var(--white); --fg: var(--black); --accent: var(--red); --line: 2px solid var(--black); background: var(--bg); color: var(--fg); }
 
 * { box-sizing: border-box; border-radius: 0; }
 html { -webkit-text-size-adjust: 100%; }
@@ -28,7 +33,7 @@ body { margin: 0; font-family: var(--text); font-size: 17px; line-height: 1.5; c
 main { flex: 1; }
 img { max-width: 100%; height: auto; display: block; }
 a { color: inherit; text-underline-offset: 3px; }
-a:hover { color: var(--red); }
+a:hover { color: var(--accent); }
 h1, h2, h3 { font-family: var(--text); font-weight: 700; line-height: 1.15; margin: 0 0 .5em; }
 h1 { font-size: clamp(1.8rem, 4.4vw, 2.8rem); }
 h2 { font-size: clamp(1.35rem, 2.6vw, 1.8rem); }
@@ -37,7 +42,7 @@ p { margin: 0 0 1em; max-width: 68ch; }
 .wrap { width: min(1180px, 100% - 32px); margin-inline: auto; }
 .small { font-size: .88rem; }
 [hidden] { display: none !important; }
-:focus-visible { outline: 3px solid var(--red); outline-offset: 3px; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* Kopfzeile */
@@ -75,23 +80,23 @@ html[data-lower="black"] .footer { border-top: 2px solid var(--white); }
 .lettering { max-width: min(520px, 100%); max-height: 150px; width: auto; height: auto; object-fit: contain; object-position: left center; }
 
 /* Schaltflächen und Formulare */
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font: 700 1rem var(--text); color: var(--white); background: var(--red); border: 2px solid var(--red); padding: 12px 22px; cursor: pointer; text-decoration: none; }
-.btn:hover { background: var(--white); color: var(--red); }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font: 700 1rem var(--text); color: var(--white); background: var(--accent); border: 2px solid var(--accent); padding: 12px 22px; cursor: pointer; text-decoration: none; }
+.btn:hover { background: var(--white); color: var(--accent); }
 .btn[disabled] { background: none; color: var(--fg); border: 2px dashed var(--fg); opacity: .45; cursor: not-allowed; }
 .btn.secondary { background: var(--bg); color: var(--fg); border-color: var(--fg); }
 .btn.secondary:hover { background: var(--fg); color: var(--bg); }
 .btn.small-btn { padding: 7px 14px; font-size: .9rem; }
 .linkish { background: none; border: 0; padding: 0; font: inherit; color: inherit; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
-.linkish:hover { color: var(--red); }
+.linkish:hover { color: var(--accent); }
 input[type="text"], input[type="search"], input[type="number"], input[type="password"], select, textarea { font: inherit; color: var(--fg); background: var(--bg); border: var(--line); padding: 9px 12px; max-width: 100%; }
 /* Eingabefelder und Auswahllisten gleich hoch */
 input[type="text"], input[type="search"], input[type="number"], input[type="password"], select { height: 46px; padding-block: 0; }
 textarea { width: 100%; min-height: 110px; }
 label > span { display: block; font-weight: 600; font-size: .9rem; margin-bottom: 4px; }
 .check { display: flex; gap: 10px; align-items: flex-start; }
-.check input { width: 20px; height: 20px; margin-top: 3px; accent-color: var(--red); flex: none; }
+.check input { width: 20px; height: 20px; margin-top: 3px; accent-color: var(--accent); flex: none; }
 .notice { border: var(--line); padding: 12px 16px; margin: 0 0 20px; font-weight: 600; }
-.notice.error { border-color: var(--red); color: var(--red); }
+.notice.error { border-color: var(--accent); color: var(--accent); }
 
 /* Filter */
 .filters { display: flex; flex-wrap: wrap; gap: 14px 18px; align-items: end; padding: 26px 0 8px; }
@@ -133,7 +138,7 @@ label > span { display: block; font-weight: 600; font-size: .9rem; margin-bottom
 .gallery .zoom-hint svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.2; }
 .thumbs { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
 .thumbs button { width: 76px; height: 76px; padding: 0; border: var(--line); overflow: hidden; cursor: pointer; background: var(--white); }
-.thumbs button[aria-pressed="true"] { border-color: var(--red); outline: 2px solid var(--red); }
+.thumbs button[aria-pressed="true"] { border-color: var(--accent); outline: 2px solid var(--accent); }
 .thumbs img { width: 100%; height: 100%; object-fit: cover; }
 .info .crumb { font-size: .9rem; margin-bottom: 10px; }
 .info h1 { font-size: clamp(1.6rem, 3.2vw, 2.3rem); }
@@ -145,7 +150,7 @@ label > span { display: block; font-weight: 600; font-size: .9rem; margin-bottom
 .options span { display: grid; place-items: center; min-width: 52px; padding: 9px 14px; border: var(--line); background: var(--bg); font-weight: 700; cursor: pointer; margin: 0; }
 .options input:checked + span { background: var(--fg); color: var(--bg); }
 .options input:disabled + span { opacity: .45; border-style: dashed; text-decoration: line-through; cursor: not-allowed; }
-.options input:focus-visible + span { outline: 3px solid var(--red); outline-offset: 3px; }
+.options input:focus-visible + span { outline: 3px solid var(--accent); outline-offset: 3px; }
 .buyrow { display: flex; gap: 12px; align-items: stretch; flex-wrap: wrap; margin: 18px 0 10px; }
 .qty { display: inline-flex; border: var(--line); background: var(--bg); }
 .qty button { width: 40px; border: 0; background: none; color: var(--fg); font: 700 1.2rem var(--text); cursor: pointer; }
@@ -153,7 +158,7 @@ label > span { display: block; font-weight: 600; font-size: .9rem; margin-bottom
 .qty input { height: auto; width: 48px; border: 0; border-inline: var(--line); text-align: center; padding: 8px 0; -moz-appearance: textfield; }
 .qty input::-webkit-outer-spin-button, .qty input::-webkit-inner-spin-button { -webkit-appearance: none; }
 .stockline { font-weight: 600; }
-.stockline.low { color: var(--red); }
+.stockline.low { color: var(--accent); }
 
 /* Großansicht mit Zoom */
 .zoom { position: fixed; inset: 0; z-index: 200; }
@@ -180,7 +185,7 @@ label > span { display: block; font-weight: 600; font-size: .9rem; margin-bottom
 .line h3 a { color: inherit; }
 .line .controls { display: flex; gap: 14px; align-items: center; margin-top: 8px; flex-wrap: wrap; }
 .line .sum { font-weight: 700; font-size: 1.1rem; white-space: nowrap; }
-.line .issue { color: var(--red); font-weight: 600; font-size: .92rem; margin: 6px 0 0; }
+.line .issue { color: var(--accent); font-weight: 600; font-size: .92rem; margin: 6px 0 0; }
 .summary { border: var(--line); padding: 22px; position: sticky; top: 90px; display: grid; gap: 14px; }
 .summary h2 { font-size: 1.4rem; margin: 0; }
 .summary select { width: 100%; }
