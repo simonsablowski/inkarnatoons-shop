@@ -239,7 +239,7 @@ function arrows(kind, slug, i, n) {
 const WORLD_SLOTS = [
   { kind: "tile", field: "image", label: "Kachel", hint: "Bild auf der Startseite" },
   { kind: "title", field: "title_image", label: "Schriftzug", hint: "gezeichneter Titel, ersetzt den Namen als Text" },
-  { kind: "figure", field: "figure_image", label: "Figur", hint: "steht schräg unter der Kachel, am besten PNG ohne Hintergrund" },
+  { kind: "figure", field: "figure_image", label: "Figur", hint: "steht gespiegelt links neben der Kachel, am besten PNG ohne Hintergrund" },
 ];
 function worldSlot(w, s) {
   const src = w[s.field];
