@@ -60,7 +60,7 @@
       { "id": "layout", "title_de": "Layout-Animatic", "title_en": "Layout animatic", "note_de": "Noch eine Stufe früher: die Einstellungen im Layout, mit Hintergründen und Figuren.", "note_en": "One stage earlier still: the shots laid out with backgrounds and characters.",
         "src": "/media/film/02-layout-animatic.mp4", "poster": "/img/film/02-layout-animatic.jpg", "upload": "import/film/02-layout-animatic" },
       { "id": "thumbnail", "title_de": "Thumbnail-Animatic", "title_en": "Thumbnail animatic", "note_de": "Ganz am Anfang: der ganze Film als erste grobe Skizzen.", "note_en": "At the very beginning: the whole film as first rough sketches.",
-        "src": "/media/film/01-thumbnail-animatic.mp4", "poster": "/img/film/01-thumbnail-animatic.jpg", "upload": "import/film/01-thumbnail-animatic-stumm" }
+        "src": "/media/film/01-thumbnail-animatic.mp4", "poster": "/img/film/01-thumbnail-animatic.jpg", "upload": "import/film/01-thumbnail-animatic-layoutton" }
     ]
   },
   "kofi": {
