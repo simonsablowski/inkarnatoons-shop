@@ -59,11 +59,11 @@
       { "id": "film", "title_de": "Film", "title_en": "Film", "note_de": "Der fertige Film in voller Länge.", "note_en": "The finished film, full length.",
         "src": "/media/film/judas-und-jesus.mp4", "poster": "/img/szene-tuer.jpg",
         "upload": "import/olaf/04_JUDAS_UND_JESUS_2009_H.264_1920x1080_25fps_OV_20TH-51TH_260526.mp4" },
-      { "id": "thumbnail", "title_de": "1 · Thumbnail-Animatic", "title_en": "1 · Thumbnail animatic", "note_de": "So fing es an: der ganze Film als erste grobe Skizzen.", "note_en": "Where it started: the whole film as first rough sketches.",
+      { "id": "thumbnail", "title_de": "Thumbnail-Animatic", "title_en": "Thumbnail animatic", "note_de": "So fing es an: der ganze Film als erste grobe Skizzen.", "note_en": "Where it started: the whole film as first rough sketches.",
         "src": "/media/film/01-thumbnail-animatic.mp4", "poster": "/img/film/01-thumbnail-animatic.jpg", "upload": "import/film/01-thumbnail-animatic" },
-      { "id": "layout", "title_de": "2 · Layout-Animatic", "title_en": "2 · Layout animatic", "note_de": "Der nächste Schritt: die Einstellungen mit Hintergründen und Figuren im Layout.", "note_en": "The next step: the shots laid out with backgrounds and characters.",
+      { "id": "layout", "title_de": "Layout-Animatic", "title_en": "Layout animatic", "note_de": "Der nächste Schritt: die Einstellungen mit Hintergründen und Figuren im Layout.", "note_en": "The next step: the shots laid out with backgrounds and characters.",
         "src": "/media/film/02-layout-animatic.mp4", "poster": "/img/film/02-layout-animatic.jpg", "upload": "import/film/02-layout-animatic" },
-      { "id": "rough", "title_de": "3 · Rough Animation", "title_en": "3 · Rough animation", "note_de": "Die Rohanimation, bevor Reinzeichnung und Farbe dazukamen.", "note_en": "The rough animation, before clean-up and colour.",
+      { "id": "rough", "title_de": "Rough Animation", "title_en": "Rough animation", "note_de": "Die Rohanimation, bevor Reinzeichnung und Farbe dazukamen.", "note_en": "The rough animation, before clean-up and colour.",
         "src": "/media/film/03-rough-animation.mp4", "poster": "/img/film/03-rough-animation.jpg", "upload": "import/film/03-rough-animation" }
     ]
   },
