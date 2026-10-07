@@ -25,9 +25,9 @@ function readForm() {
 function worldTile(w) {
   const pic = w.image ? `<img src="${esc(w.image)}" alt="" loading="lazy">` : `<span class="world-name">${esc(w.name)}</span>`;
   const figure = w.figure_image ? `<img class="figure" src="${esc(w.figure_image)}" alt="" loading="lazy">` : "";
-  return `<a class="world-tile${w.image ? "" : " no-image"}" href="/?world=${w.slug}">
+  return `<a class="world-tile${w.image ? "" : " no-image"}${w.figure_image ? " has-figure" : ""}" href="/?world=${w.slug}">
     <div class="pic">${pic}${figure}</div>
-    <div class="body">${worldTitle(w, "h3")}<p>${esc(loc(w, "tagline"))}</p>
+    <div class="body">${w.image && !w.title_image ? `<h3 class="sr-only">${esc(w.name)}</h3>` : worldTitle(w, "h3")}<p>${esc(loc(w, "tagline"))}</p>
     <span class="small">${w.product_count ? t("world.items", { n: w.product_count }) : t("world.soon")}</span></div>
   </a>`;
 }
@@ -52,17 +52,18 @@ function renderHero(s) {
     hero.innerHTML = `<section class="hero with-film"><div class="wrap">
       <div class="hero-title">
         <h1 class="sr-only">${esc(world.name)}</h1>
-        ${world.title_image ? `<img src="${esc(world.title_image)}" alt="${esc(world.name)}">` : `<img class="titelkarte" src="/img/titelkarte.jpg" alt="${esc(world.name)}" width="1400" height="1220">`}
+        ${world.title_image || world.image ? `<img src="${esc(world.title_image || world.image)}" alt="${esc(world.name)}">` : `<img class="titelkarte" src="/img/titelkarte.jpg" alt="${esc(world.name)}" width="1400" height="1220">`}
         <p>${t("hero.line")}</p>
       </div>
       <div class="hero-film" id="film">
         <h2>${t("film.heading")}</h2>
+        <div class="versions" id="versions" role="group" aria-label="${esc(t("film.versions"))}" hidden></div>
         <div class="player" id="player"></div>
         <p class="film-note" id="film-note"></p>
         <div class="support" id="support"></div>
       </div>
     </div></section>`;
-    mountPlayer(document.querySelector("#player"), document.querySelector("#film-note"));
+    mountPlayer(document.querySelector("#player"), document.querySelector("#film-note"), document.querySelector("#versions"));
     mountSupport(document.querySelector("#support"));
   } else if (world) {
     hero.innerHTML = `<section class="pagehead"><div class="wrap">${worldTitle(world)}<p>${esc(loc(world, "tagline"))}</p></div></section>`;

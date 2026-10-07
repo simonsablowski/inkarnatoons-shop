@@ -50,6 +50,7 @@ Alles Wichtige steht in `shop.config.json`:
 | `invoice.prefix` | Anfang der Rechnungsnummer, z. B. `RE-` ergibt `RE-2026-0001` |
 | `label.widthMm`, `label.heightMm` | Größe des Adressaufklebers, passend zum Etikettendrucker |
 | `film.world`, `film.provider`, `film.id` | Welt, auf deren Übersicht der Film erscheint, und die Videoquelle: `youtube`, `vimeo` oder `file` mit Video-ID bzw. Dateiadresse. Leer zeigt einen Platzhalter |
+| `film.versions` | Mehrere Fassungen zum Umschalten (fertiger Film, Animatics). Sind Fassungen eingetragen, gelten sie anstelle von `provider` und `id`. Siehe „Filme hochladen“ |
 | `kofi.name`, `kofi.show` | Name der Ko-fi-Seite für den Button „Auf Ko-fi unterstützen“ unter dem Film. Ohne Namen erscheint er als Platzhalter, `show: false` blendet ihn aus |
 | `payments.methods` | Zahlarten in Stripe Checkout: `card`, `paypal` |
 | `payments.holdMinutes` | So lange bleibt die Bezahlseite offen (Stripe verlangt mindestens 30 Minuten) |
@@ -116,6 +117,17 @@ Name und Beschreibung dürfen in nur einer Sprache ausgefüllt sein, zum Beispie
 ## Rechnung, Adressaufkleber und Film
 
 In der Verwaltung unter „Bestellungen“ öffnen die Links „Rechnung“ und „Adressaufkleber“ eine Druckansicht in einem neuen Tab. Über den Druckdialog lässt sich die Rechnung drucken oder als PDF speichern, der Aufkleber geht an den Etikettendrucker. Die Rechnungsnummer wird beim Zahlungseingang fortlaufend vergeben. Die Rechnung erscheint in der Sprache der Bestellung. Der Film steht auf der Übersichtsseite von Judas & Jesus. Bei YouTube und Vimeo lädt das Video erst nach einem Klick, vorher werden keine Daten dorthin übertragen.
+
+## Filme hochladen
+
+Die Videodateien liegen im selben Speicher wie die Produktbilder (R2) und werden vom Shop selbst ausgeliefert, ohne YouTube oder Vimeo. Welche Fassungen es gibt, steht in `shop.config.json` unter `film.versions`: Titel, kurzer Satz, Adresse im Speicher (`src`), Standbild (`poster`) und die Quelle auf diesem Rechner (`upload`, eine Datei oder ein Ordner mit Teilen, die aneinandergehängt werden).
+
+```
+npm run film:upload -- --target online            # alle Fassungen hochladen, schon vorhandene werden übersprungen
+npm run film:upload -- --target online --only film --force   # eine Fassung ersetzen
+```
+
+Das Skript fragt nach dem Passwort der Verwaltung und überträgt in Stücken von 20 MB, darum gehen auch sehr große Dateien. Ohne `--target online` lädt es in den lokalen Testshop (`npm run dev` muss laufen). Videos müssen MP4 mit H.264-Bild und AAC-Ton sein, damit sie in allen Browsern laufen. Die Rohdateien in `import/` werden nicht mit veröffentlicht.
 
 ## Änderungen einspielen (nach der ersten Einrichtung)
 

@@ -4,7 +4,7 @@
     "_hinweis": "Name des gemeinsamen Dachs, vorläufig. Erscheint in Kopfzeile, Seitentiteln und E-Mails.",
     "name": "Inkarnatoons",
     "suffix": "Shop",
-    "logo": ""
+    "logo": "/img/marke/logo.png"
   },
   "theme": {
     "_hinweis": "lower: Farbe des unteren Seitenbereichs unter dem schwarzen Kopf, \"white\" oder \"black\". Zum Ausprobieren ohne Änderung hier: Adresse mit ?lower=black oder ?lower=white aufrufen. brand.logo oben: Pfad zum gezeichneten Schriftzug des Shops (weiß auf Schwarz oder mit transparentem Hintergrund), z. B. \"/img/marke/logo.png\". Leer zeigt den Namen als Text.",
@@ -53,7 +53,19 @@
     "_hinweis": "provider: \"youtube\", \"vimeo\" oder \"file\". id: Video-ID bei YouTube/Vimeo bzw. Adresse der Videodatei bei \"file\". Leer = Platzhalter.",
     "world": "judas-jesus",
     "provider": "",
-    "id": ""
+    "id": "",
+    "_hinweis_versions": "versions: mehrere Fassungen zum Umschalten unter dem Player. Sind hier Fassungen eingetragen, gelten sie anstelle von provider und id. src: Adresse der Videodatei im Speicher. poster: Standbild vor dem Start. note_de/note_en: kurzer Satz zur Fassung. upload: Quelle auf diesem Rechner (Datei oder Ordner mit Teilen) für npm run film:upload.",
+    "versions": [
+      { "id": "film", "title_de": "Film", "title_en": "Film", "note_de": "Der fertige Film in voller Länge.", "note_en": "The finished film, full length.",
+        "src": "/media/film/judas-und-jesus.mp4", "poster": "/img/szene-tuer.jpg",
+        "upload": "import/olaf/04_JUDAS_UND_JESUS_2009_H.264_1920x1080_25fps_OV_20TH-51TH_260526.mp4" },
+      { "id": "thumbnail", "title_de": "1 · Thumbnail-Animatic", "title_en": "1 · Thumbnail animatic", "note_de": "So fing es an: der ganze Film als erste grobe Skizzen.", "note_en": "Where it started: the whole film as first rough sketches.",
+        "src": "/media/film/01-thumbnail-animatic.mp4", "poster": "/img/film/01-thumbnail-animatic.jpg", "upload": "import/film/01-thumbnail-animatic" },
+      { "id": "layout", "title_de": "2 · Layout-Animatic", "title_en": "2 · Layout animatic", "note_de": "Der nächste Schritt: die Einstellungen mit Hintergründen und Figuren im Layout.", "note_en": "The next step: the shots laid out with backgrounds and characters.",
+        "src": "/media/film/02-layout-animatic.mp4", "poster": "/img/film/02-layout-animatic.jpg", "upload": "import/film/02-layout-animatic" },
+      { "id": "rough", "title_de": "3 · Rough Animation", "title_en": "3 · Rough animation", "note_de": "Die Rohanimation, bevor Reinzeichnung und Farbe dazukamen.", "note_en": "The rough animation, before clean-up and colour.",
+        "src": "/media/film/03-rough-animation.mp4", "poster": "/img/film/03-rough-animation.jpg", "upload": "import/film/03-rough-animation" }
+    ]
   },
   "kofi": {
     "_hinweis": "name: Name der Ko-fi-Seite (ko-fi.com/NAME). Leer = der Button erscheint als Platzhalter ohne Link. show: false blendet den Bereich ganz aus.",

@@ -113,5 +113,6 @@
   "zoom.out": "Whole image",
   "zoom.prev": "Previous image",
   "zoom.next": "Next image",
-  "zoom.label": "Large view"
+  "zoom.label": "Large view",
+  "film.versions": "Choose a version"
 }

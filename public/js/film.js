@@ -1,6 +1,6 @@
 // Filmplayer für die Übersichtsseite von Judas & Jesus. Die Videoquelle steht in shop.config.json unter "film".
 // Videos von YouTube oder Vimeo werden erst nach einem Klick geladen, vorher fließen keine Daten dorthin.
-import { t, config, esc } from "./shop.js";
+import { t, loc, config, esc } from "./shop.js";
 
 const PLAY = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>`;
 const POSTER = `<img src="/img/szene-tuer.jpg" alt="">`;
@@ -12,8 +12,29 @@ function embedUrl(film) {
   return null;
 }
 
-export function mountPlayer(player, note) {
+// Mehrere Fassungen (fertiger Film und Animatics): Auswahl über dem Player, abgespielt wird die eigene Videodatei.
+function mountVersions(player, note, picker, versions) {
+  let current = versions[0];
+  const show = (autoplay) => {
+    player.innerHTML = `<video controls playsinline preload="${autoplay ? "auto" : "none"}"${current.poster ? ` poster="${esc(current.poster)}"` : ""} src="${esc(current.src)}"${autoplay ? " autoplay" : ""}></video>`;
+    note.textContent = loc(current, "note");
+    picker.innerHTML = versions.map((v) => `<button type="button" class="chip" data-version="${esc(v.id)}" aria-pressed="${v === current}">${esc(loc(v, "title"))}</button>`).join("");
+  };
+  picker.hidden = versions.length < 2;
+  picker.onclick = (e) => {
+    const id = e.target.closest("[data-version]")?.dataset.version;
+    const next = versions.find((v) => v.id === id);
+    if (!next || next === current) return;
+    current = next;
+    show(true);
+  };
+  show(false);
+}
+
+export function mountPlayer(player, note, picker) {
   const film = config().film;
+  if (film.versions?.length && picker) return mountVersions(player, note, picker, film.versions);
+  if (picker) picker.hidden = true;
   note.textContent = film.id ? t("film.note") : "";
   if (!film.id) {
     player.innerHTML = `<div class="poster" style="cursor:default">${POSTER}<span class="soon">${t("film.soon")}</span></div>`;

@@ -113,5 +113,6 @@
   "zoom.out": "Ganzes Bild",
   "zoom.prev": "Vorheriges Bild",
   "zoom.next": "Nächstes Bild",
-  "zoom.label": "Großansicht"
+  "zoom.label": "Großansicht",
+  "film.versions": "Fassung wählen"
 }
