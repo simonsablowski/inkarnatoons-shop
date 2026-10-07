@@ -49,9 +49,9 @@ p { margin: 0 0 1em; max-width: 68ch; }
 .mainnav { display: flex; gap: 4px 18px; flex-wrap: wrap; flex: 1; }
 .mainnav a { color: var(--white); text-decoration: none; font-weight: 600; padding: 6px 0; border-bottom: 3px solid transparent; }
 .mainnav a:hover, .mainnav a[aria-current="page"] { border-bottom-color: var(--red); color: var(--white); }
-.tools { display: flex; align-items: center; gap: 10px; margin-left: auto; }
+.tools { display: flex; align-items: stretch; gap: 10px; margin-left: auto; }
 .lang { display: flex; border: var(--line); }
-.lang button { background: none; border: 0; color: var(--fg); font: 600 .85rem var(--text); padding: 5px 10px; cursor: pointer; }
+.lang button { background: none; border: 0; color: var(--fg); font: 600 .85rem var(--text); padding: 0 10px; min-height: 32px; cursor: pointer; }
 .lang button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
 .iconlink { position: relative; display: inline-flex; align-items: center; gap: 6px; color: var(--fg); text-decoration: none; font-weight: 600; padding: 6px 10px; border: var(--line); }
 .iconlink:hover { background: var(--fg); color: var(--bg); }
@@ -84,6 +84,8 @@ html[data-lower="black"] .footer { border-top: 2px solid var(--white); }
 .linkish { background: none; border: 0; padding: 0; font: inherit; color: inherit; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 .linkish:hover { color: var(--red); }
 input[type="text"], input[type="search"], input[type="number"], input[type="password"], select, textarea { font: inherit; color: var(--fg); background: var(--bg); border: var(--line); padding: 9px 12px; max-width: 100%; }
+/* Eingabefelder und Auswahllisten gleich hoch */
+input[type="text"], input[type="search"], input[type="number"], input[type="password"], select { height: 46px; padding-block: 0; }
 textarea { width: 100%; min-height: 110px; }
 label > span { display: block; font-weight: 600; font-size: .9rem; margin-bottom: 4px; }
 .check { display: flex; gap: 10px; align-items: flex-start; }
@@ -119,7 +121,7 @@ label > span { display: block; font-weight: 600; font-size: .9rem; margin-bottom
 .heart { position: absolute; right: 10px; top: 10px; width: 40px; height: 40px; border: 2px solid var(--black); background: var(--white); display: grid; place-items: center; cursor: pointer; padding: 0; }
 .heart svg { width: 22px; height: 22px; fill: none; stroke: var(--black); stroke-width: 2.2; }
 .heart[aria-pressed="true"] svg { fill: var(--red); stroke: var(--red); }
-.heart.inline { position: static; }
+.heart.inline { position: static; height: auto; min-height: 40px; width: 46px; }
 .empty { text-align: center; padding: 60px 0 80px; }
 .empty p { margin-inline: auto; }
 
@@ -144,11 +146,11 @@ label > span { display: block; font-weight: 600; font-size: .9rem; margin-bottom
 .options input:checked + span { background: var(--fg); color: var(--bg); }
 .options input:disabled + span { opacity: .45; border-style: dashed; text-decoration: line-through; cursor: not-allowed; }
 .options input:focus-visible + span { outline: 3px solid var(--red); outline-offset: 3px; }
-.buyrow { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin: 18px 0 10px; }
+.buyrow { display: flex; gap: 12px; align-items: stretch; flex-wrap: wrap; margin: 18px 0 10px; }
 .qty { display: inline-flex; border: var(--line); background: var(--bg); }
 .qty button { width: 40px; border: 0; background: none; color: var(--fg); font: 700 1.2rem var(--text); cursor: pointer; }
 .qty button:hover { background: var(--fg); color: var(--bg); }
-.qty input { width: 48px; border: 0; border-inline: var(--line); text-align: center; padding: 8px 0; -moz-appearance: textfield; }
+.qty input { height: auto; width: 48px; border: 0; border-inline: var(--line); text-align: center; padding: 8px 0; -moz-appearance: textfield; }
 .qty input::-webkit-outer-spin-button, .qty input::-webkit-inner-spin-button { -webkit-appearance: none; }
 .stockline { font-weight: 600; }
 .stockline.low { color: var(--red); }
@@ -209,7 +211,7 @@ th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--fg
 tr:last-child td { border-bottom: 0; }
 th { background: var(--fg); color: var(--bg); font-weight: 600; white-space: nowrap; }
 td img { width: 52px; height: 52px; object-fit: cover; border: var(--line); }
-td .stock-input { width: 74px; padding: 5px 8px; }
+td .stock-input { width: 74px; height: 36px; padding: 0 8px; }
 .variant-stock { display: flex; gap: 6px; align-items: center; margin-bottom: 4px; }
 .variant-stock span { min-width: 34px; font-weight: 600; }
 .status { font-weight: 700; padding: 2px 10px; border: var(--line); white-space: nowrap; }
