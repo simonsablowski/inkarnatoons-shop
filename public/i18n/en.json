@@ -106,5 +106,12 @@
   "age.deniedTitle": "Ages {n} and over only",
   "age.denied": "This shop is only available to visitors aged {n} and over.",
   "age.leave": "Leave this site",
-  "age.back": "Back to the question"
+  "age.back": "Back to the question",
+  "zoom.open": "Enlarge",
+  "zoom.close": "Close",
+  "zoom.in": "Zoom in",
+  "zoom.out": "Whole image",
+  "zoom.prev": "Previous image",
+  "zoom.next": "Next image",
+  "zoom.label": "Large view"
 }

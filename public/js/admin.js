@@ -14,7 +14,7 @@ const ERRORS = {
   name_required: "Bitte einen Namen eingeben.", slug_taken: "Diese Adresse (Slug) wird schon von einem anderen Produkt verwendet.",
   price_invalid: "Der Preis ist ungültig.", weight_invalid: "Das Gewicht ist ungültig.", stock_invalid: "Ein Bestand ist ungültig.",
   variant_label_required: "Bei mehreren Varianten braucht jede eine Bezeichnung (z. B. S, M, L).", category_unknown: "Bitte eine Kategorie wählen.", world_unknown: "Bitte eine Produktwelt wählen.",
-  image_type_unsupported: "Bitte JPG, PNG oder WebP hochladen.", image_too_large: "Das Bild ist größer als 8 MB.",
+  image_kind_unknown: "Unbekannte Bildart.", image_type_unsupported: "Bitte JPG, PNG oder WebP hochladen.", image_too_large: "Das Bild ist größer als 8 MB.",
   world_in_use: "Dieser Themenwelt sind noch Produkte zugeordnet. Bitte die Produkte zuerst einer anderen Welt zuordnen oder löschen.", category_in_use: "Dieser Kategorie sind noch Produkte zugeordnet. Bitte die Produkte zuerst einer anderen Kategorie zuordnen oder löschen.",
   not_paid: "Die Bestellung ist noch nicht bezahlt.", cannot_cancel: "Diese Bestellung kann nicht mehr storniert werden.",
 };
@@ -235,9 +235,27 @@ function arrows(kind, slug, i, n) {
     <button type="button" class="btn secondary small-btn" data-move="${kind}" data-slug="${esc(slug)}" data-dir="1" aria-label="nach unten" ${i === n - 1 ? "disabled" : ""}>↓</button>`;
 }
 
+// Die drei Bilder einer Themenwelt. Sie stehen im Shop auf Schwarz, deshalb ist auch die Vorschau schwarz.
+const WORLD_SLOTS = [
+  { kind: "tile", field: "image", label: "Kachel", hint: "Bild auf der Startseite" },
+  { kind: "title", field: "title_image", label: "Schriftzug", hint: "gezeichneter Titel, ersetzt den Namen als Text" },
+  { kind: "figure", field: "figure_image", label: "Figur", hint: "steht schräg unter der Kachel, am besten PNG ohne Hintergrund" },
+];
+function worldSlot(w, s) {
+  const src = w[s.field];
+  return `<div class="world-slot">
+    <strong>${s.label}</strong>
+    <div class="world-pic">${src ? `<img src="${esc(src)}" alt="">` : `<span>kein Bild</span>`}</div>
+    <span class="small">${s.hint}</span>
+    <div class="actions">
+      <label class="btn secondary small-btn file-btn">${src ? "ersetzen" : "hochladen"}<input type="file" accept="image/jpeg,image/png,image/webp" data-world-image="${esc(w.slug)}" data-kind="${s.kind}" hidden></label>
+      ${src ? `<button type="button" class="linkish" data-remove-world-image="${esc(w.slug)}" data-kind="${s.kind}">entfernen</button>` : ""}
+    </div>
+  </div>`;
+}
+
 function renderTaxonomy() {
   $("#world-list").innerHTML = tax.worlds.map((w, i) => `<form class="editor world" data-world="${esc(w.slug)}">
-      <div class="world-pic">${w.image ? `<img src="${esc(w.image)}" alt="">` : `<span>kein Bild</span>`}</div>
       <div class="world-fields">
         <div class="row">
           <label><span>Name</span><input type="text" name="name" value="${esc(w.name)}" required></label>
@@ -245,11 +263,10 @@ function renderTaxonomy() {
         </div>
         <label><span>Kurztext (Deutsch)</span><input type="text" name="tagline_de" value="${esc(w.tagline_de)}" maxlength="200"></label>
         <label><span>Kurztext (Englisch)</span><input type="text" name="tagline_en" value="${esc(w.tagline_en)}" maxlength="200"></label>
+        <div class="world-pics">${WORLD_SLOTS.map((s) => worldSlot(w, s)).join("")}</div>
         <div class="actions">
           <button type="submit" class="btn small-btn">Speichern</button>
           ${arrows("worlds", w.slug, i, tax.worlds.length)}
-          <label class="btn secondary small-btn file-btn">Bild ${w.image ? "ersetzen" : "hochladen"}<input type="file" accept="image/jpeg,image/png,image/webp" data-world-image="${esc(w.slug)}" hidden></label>
-          ${w.image ? `<button type="button" class="linkish" data-remove-world-image="${esc(w.slug)}">Bild entfernen</button>` : ""}
           <span class="small" style="margin-left:auto">${w.product_count === 1 ? "1 Produkt" : `${w.product_count} Produkte`}</span>
           ${w.product_count ? "" : `<button type="button" class="linkish" data-delete-world="${esc(w.slug)}">löschen</button>`}
         </div>
@@ -315,7 +332,7 @@ $("#tab-worlds").addEventListener("click", async (e) => {
       return renderTaxonomy();
     }
     const rmImg = e.target.closest("[data-remove-world-image]");
-    if (rmImg) { await api(`/api/admin/worlds/${rmImg.dataset.removeWorldImage}/image`, { method: "DELETE" }); return await loadTaxonomy(); }
+    if (rmImg) { await api(`/api/admin/worlds/${rmImg.dataset.removeWorldImage}/image?kind=${rmImg.dataset.kind}`, { method: "DELETE" }); return await loadTaxonomy(); }
     const delWorld = e.target.closest("[data-delete-world]");
     if (delWorld) {
       if (!confirm("Diese Themenwelt wirklich löschen?")) return;
@@ -343,7 +360,7 @@ $("#tab-worlds").addEventListener("change", async (e) => {
   clearError();
   try {
     const file = e.target.files[0];
-    await api(`/api/admin/worlds/${slug}/image`, { method: "POST", body: file, headers: { "content-type": file.type } });
+    await api(`/api/admin/worlds/${slug}/image?kind=${e.target.dataset.kind}`, { method: "POST", body: file, headers: { "content-type": file.type } });
     await loadTaxonomy();
   } catch (err) { fail(err); }
 });

@@ -77,7 +77,17 @@ Der Bestand lässt sich auch direkt in der Produktliste ändern. Bezahlte Bestel
 
 ## Themenwelten und Kategorien pflegen
 
-In der Verwaltung unter „Themenwelten & Kategorien“ lassen sich Themenwelten anlegen, umbenennen, mit Kurztext (deutsch und englisch) und Kachelbild versehen und mit den Pfeilen in die gewünschte Reihenfolge bringen. Die Reihenfolge gilt für die Kacheln auf der Startseite und für das Menü. Kategorien lassen sich dort ebenfalls anlegen, umbenennen und sortieren. Löschen geht nur, solange keine Produkte zugeordnet sind. Die Adresse einer Themenwelt (`/?world=…`) bleibt beim Umbenennen gleich, damit Links weiter funktionieren.
+In der Verwaltung unter „Themenwelten & Kategorien“ lassen sich Themenwelten anlegen, umbenennen, mit Kurztext (deutsch und englisch), Kachelbild, gezeichnetem Schriftzug und Figur versehen und mit den Pfeilen in die gewünschte Reihenfolge bringen. Die Reihenfolge gilt für die Kacheln auf der Startseite und für das Menü. Kategorien lassen sich dort ebenfalls anlegen, umbenennen und sortieren. Löschen geht nur, solange keine Produkte zugeordnet sind. Die Adresse einer Themenwelt (`/?world=…`) bleibt beim Umbenennen gleich, damit Links weiter funktionieren.
+
+## Aussehen: Schwarz, Weiß, Rot
+
+Der Shop ist bewusst sachlich und flächig gehalten: nur Schwarz, Weiß und ein einziger Rotton, eine Schrift für alles (auch Preise), keine runden Ecken, keine Schatten. Gezeichnet sind nur der Schriftzug des Shops und die Titel der Themenwelten, beides Bilddateien.
+
+- **Rotton:** steht einmal in `public/css/style.css` als `--red` und gilt überall.
+- **Unterer Bereich weiß oder schwarz:** `theme.lower` in `shop.config.json` (`"white"` oder `"black"`). Zum Ausprobieren ohne Änderung die Adresse mit `?lower=black` oder `?lower=white` aufrufen, das gilt, solange der Tab offen ist.
+- **Schriftzug des Shops:** Bilddatei (weiß auf Schwarz oder mit transparentem Hintergrund) nach `public/img/marke/` legen und den Pfad in `shop.config.json` unter `brand.logo` eintragen, z. B. `"/img/marke/logo.png"`. Ohne Eintrag steht der Name als Text da.
+- **Bilder der Themenwelten:** in der Verwaltung unter „Themenwelten & Kategorien“ je Welt drei Plätze: Kachel (Bild auf der Startseite), Schriftzug (gezeichneter Titel, ersetzt den Namen als Text) und Figur (steht schräg unter der Kachel, z. B. Maria Magdalena bei Judas & Jesus, am besten PNG ohne Hintergrund).
+- **Großansicht:** Auf der Produktseite öffnet ein Klick auf das Bild die Großansicht. Ein weiterer Klick holt die angeklickte Stelle nah heran, bei hoch aufgelösten Bildern bis zur vollen Auflösung. Für gute Detailansichten Bilder mit etwa 2500 bis 3000 Pixeln an der langen Seite hochladen (höchstens 8 MB). Mehrere Bilder je Produkt sind möglich, etwa eine zusätzliche Nahaufnahme.
 
 ## Produktliste aus Google Sheets übernehmen
 

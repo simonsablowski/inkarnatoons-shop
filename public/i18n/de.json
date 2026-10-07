@@ -106,5 +106,12 @@
   "age.deniedTitle": "Erst ab {n} Jahren",
   "age.denied": "Der Shop ist erst ab {n} Jahren zugänglich.",
   "age.leave": "Seite verlassen",
-  "age.back": "Zurück zur Frage"
+  "age.back": "Zurück zur Frage",
+  "zoom.open": "Vergrößern",
+  "zoom.close": "Schließen",
+  "zoom.in": "Näher heran",
+  "zoom.out": "Ganzes Bild",
+  "zoom.prev": "Vorheriges Bild",
+  "zoom.next": "Nächstes Bild",
+  "zoom.label": "Großansicht"
 }

@@ -51,7 +51,7 @@ export async function listCategories(db) {
 export async function listWorlds(db) {
   const { results } = await db
     .prepare(
-      `SELECT w.slug, w.name, w.tagline_de, w.tagline_en, w.image,
+      `SELECT w.slug, w.name, w.tagline_de, w.tagline_en, w.image, w.title_image, w.figure_image,
          (SELECT COUNT(*) FROM products p WHERE p.world = w.slug AND p.active = 1) AS product_count
        FROM worlds w ORDER BY w.sort, w.slug`
     )

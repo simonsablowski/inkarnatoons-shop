@@ -119,6 +119,23 @@ export function productCard(p) {
 
 export const worldOf = (slug) => shopConfig.worlds.find((w) => w.slug === slug);
 export const brandName = () => `${shopConfig.brand.name} ${shopConfig.brand.suffix}`.trim();
+// Schriftzug des Shops: die gezeichnete Bilddatei aus shop.config.json ("brand.logo"), sonst der Name als Text
+export const brandMark = (cls = "") =>
+  shopConfig.brand.logo ? `<img${cls ? ` class="${cls}"` : ""} src="${esc(shopConfig.brand.logo)}" alt="${esc(brandName())}">` : esc(brandName());
+// Titel einer Themenwelt: der gezeichnete Schriftzug, sonst der Name als Text
+export const worldTitle = (w, tag = "h1") =>
+  w.title_image ? `<${tag} class="sr-only">${esc(w.name)}</${tag}><img class="lettering" src="${esc(w.title_image)}" alt="">` : `<${tag}>${esc(w.name)}</${tag}>`;
+
+// Unterer Seitenbereich weiß oder schwarz. Zum Ausprobieren gilt ?lower=black oder ?lower=white, solange der Tab offen ist.
+function applyTheme() {
+  const q = new URLSearchParams(location.search).get("lower");
+  let pick = null;
+  try {
+    if (q === "black" || q === "white") sessionStorage.setItem("jj-lower", q);
+    pick = sessionStorage.getItem("jj-lower");
+  } catch { pick = q; }
+  document.documentElement.dataset.lower = pick === "black" || pick === "white" ? pick : shopConfig.theme?.lower || "white";
+}
 
 function renderShell() {
   const here = location.pathname.replace(/\/index\.html$/, "/").replace(/\.html$/, "");
@@ -128,7 +145,7 @@ function renderShell() {
   if (header) {
     header.className = "topbar";
     header.innerHTML = `<div class="wrap topbar-inner">
-      <a class="brand" href="/">${esc(shopConfig.brand.name)}<span>${esc(shopConfig.brand.suffix)}</span></a>
+      <a class="brand" href="/">${brandMark()}</a>
       <nav class="mainnav" aria-label="Produktwelten">
         ${shopConfig.worlds.map((w) => `<a href="/?world=${w.slug}"${isHome && world === w.slug ? ' aria-current="page"' : ""}>${esc(w.name)}</a>`).join("")}
       </nav>
@@ -186,7 +203,7 @@ function showAgeGate(onConfirm) {
   document.querySelector("#age-gate")?.remove();
   const el = document.createElement("div");
   el.id = "age-gate";
-  el.className = "age-gate spiral";
+  el.className = "age-gate";
   el.setAttribute("role", "dialog");
   el.setAttribute("aria-modal", "true");
   el.setAttribute("aria-labelledby", "age-gate-title");
@@ -246,6 +263,7 @@ export async function start(render) {
     shopConfig = c;
     storageSet("jj-lang", current);
     document.documentElement.lang = current;
+    applyTheme();
     renderShell();
     applyStatic();
     if (!ageConfirmed()) return showAgeGate(() => render?.());

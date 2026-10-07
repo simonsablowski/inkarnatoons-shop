@@ -19,10 +19,12 @@ export async function onRequestPut({ request, env, params }) {
 export async function onRequestDelete({ request, env, params }) {
   const denied = await requireAdmin(request, env);
   if (denied) return denied;
-  const world = await env.DB.prepare(`SELECT image, (SELECT COUNT(*) FROM products p WHERE p.world = worlds.slug) AS n FROM worlds WHERE slug = ?1`).bind(params.slug).first();
+  const world = await env.DB.prepare(`SELECT image, title_image, figure_image, (SELECT COUNT(*) FROM products p WHERE p.world = worlds.slug) AS n FROM worlds WHERE slug = ?1`).bind(params.slug).first();
   if (!world) return error("not_found", 404);
   if (world.n > 0) return error("world_in_use", 409);
   await env.DB.prepare(`DELETE FROM worlds WHERE slug = ?1`).bind(params.slug).run();
-  if (world.image?.startsWith("/media/")) await env.MEDIA.delete(world.image.slice(7));
+  for (const img of [world.image, world.title_image, world.figure_image]) {
+    if (img?.startsWith("/media/")) await env.MEDIA.delete(img.slice(7));
+  }
   return json({ ok: true });
 }

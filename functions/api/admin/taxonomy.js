@@ -8,7 +8,7 @@ import { slugify } from "../../_lib/adminProducts.js";
 
 export async function lists(db) {
   const [w, c] = await db.batch([
-    db.prepare(`SELECT slug, name, tagline_de, tagline_en, image, sort,
+    db.prepare(`SELECT slug, name, tagline_de, tagline_en, image, title_image, figure_image, sort,
                   (SELECT COUNT(*) FROM products p WHERE p.world = worlds.slug) AS product_count
                 FROM worlds ORDER BY sort, slug`),
     db.prepare(`SELECT slug, name_de, name_en, sort,
