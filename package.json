@@ -13,7 +13,8 @@
     "setup:cloudflare": "node ./scripts/setup-cloudflare.mjs",
     "deploy": "node ./node_modules/wrangler/bin/wrangler.js pages deploy --branch main",
     "import": "node ./scripts/import-produkte.mjs",
-    "film:upload": "node ./scripts/upload-film.mjs"
+    "film:upload": "node ./scripts/upload-film.mjs",
+    "split": "node ./scripts/split-file.mjs"
   },
   "devDependencies": {
     "wrangler": "^4.145.0"
