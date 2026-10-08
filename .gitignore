@@ -1,3 +1,17 @@
 node_modules/
 .wrangler/
 .dev.vars
+
+# Rohdateien und große Videos bleiben nur auf dem Rechner (GitHub nimmt keine Dateien über 100 MB)
+import/olaf/
+import/film/
+import/teile/
+import/bilder/*
+!import/bilder/LIESMICH.txt
+*.mp4
+*.mov
+
+# Systemdateien
+.DS_Store
+Thumbs.db
+desktop.ini
