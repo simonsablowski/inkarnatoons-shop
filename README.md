@@ -1,7 +1,11 @@
-# Inkarnatoons Shop (Projekt jj-shop)
+# Inkarnatoons Shop (Projekt inkarnatoons-shop)
 
 Online-Shop mit mehreren Themenwelten unter einem gemeinsamen Dach: Judas & Jesus (Merch und Film ansehen), Wild Wolf, King of Fools und das Kartenspiel Schwarzer Peter. Deutsch und Englisch, mit weltweitem Versand. Der Name des Dachs ist vorläufig und steht in `shop.config.json` unter `brand`.
 Cloudflare Pages liefert die Seite aus, Pages Functions bilden die API, eine D1-Datenbank speichert Produkte, Bestände und Bestellungen, ein R2-Speicher die hochgeladenen Produktfotos. Bezahlt wird über Stripe Checkout (Kreditkarte und PayPal).
+
+## Namen
+
+Projektordner und GitHub-Repository heißen `inkarnatoons-shop` (https://github.com/simonsablowski/inkarnatoons-shop, privat). Bei Cloudflare tragen Pages-Projekt, Datenbank und Bildspeicher noch die ursprünglichen Namen `judas-jesus-shop` und `judas-jesus-shop-media`, weil sie sich dort nicht umbenennen lassen. Diese Namen stehen deshalb weiter in `wrangler.toml`, `package.json` (Datenbankbefehle) und `scripts/setup-cloudflare.mjs` und dürfen nicht geändert werden.
 
 ## Was der Shop kann
 
@@ -127,6 +131,17 @@ npm run film:upload -- --target online --only film --force   # eine Fassung erse
 ```
 
 Das Skript fragt nach dem Passwort der Verwaltung und überträgt in Stücken von 20 MB, darum gehen auch sehr große Dateien. Ohne `--target online` lädt es in den lokalen Testshop (`npm run dev` muss laufen). Videos müssen MP4 mit H.264-Bild und AAC-Ton sein, damit sie in allen Browsern laufen. Die Rohdateien in `import/` werden nicht mit veröffentlicht.
+
+## Git
+
+Der Code liegt auf GitHub. Ausgenommen sind Rohdateien und Videos in `import/` (GitHub nimmt keine Dateien über 100 MB), `node_modules`, die lokale Testdatenbank in `.wrangler` und `.dev.vars` mit dem lokalen Passwort (siehe `.gitignore`). Commit-Nachrichten werden auf Englisch geschrieben.
+
+Nach Änderungen:
+```
+git add -A
+git commit -m "Short description in English"
+git push
+```
 
 ## Änderungen einspielen (nach der ersten Einrichtung)
 
