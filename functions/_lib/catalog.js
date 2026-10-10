@@ -8,7 +8,8 @@ const LIST_SQL = `
   FROM products p`;
 
 const SORTS = {
-  default: "p.sort ASC, p.id ASC",
+  // Standard: günstigste zuerst. Später soll hier "neueste zuerst" stehen (wie newest).
+  default: "p.price_cents ASC, p.sort ASC, p.id ASC",
   newest: "p.created_at DESC, p.id DESC",
   price_asc: "p.price_cents ASC, p.id ASC",
   price_desc: "p.price_cents DESC, p.id ASC",

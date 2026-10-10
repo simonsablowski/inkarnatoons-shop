@@ -261,8 +261,8 @@ function renderTaxonomy() {
           <label><span>Name</span><input type="text" name="name" value="${esc(w.name)}" required></label>
           <label><span>Adresse im Shop</span><input type="text" value="/?world=${esc(w.slug)}" readonly></label>
         </div>
-        <label><span>Kurztext (Deutsch)</span><input type="text" name="tagline_de" value="${esc(w.tagline_de)}" maxlength="200"></label>
-        <label><span>Kurztext (Englisch)</span><input type="text" name="tagline_en" value="${esc(w.tagline_en)}" maxlength="200"></label>
+        <label><span>Kurztext (Deutsch)</span><textarea name="tagline_de" rows="2" maxlength="200" style="min-height:0">${esc(w.tagline_de)}</textarea></label>
+        <label><span>Kurztext (Englisch)</span><textarea name="tagline_en" rows="2" maxlength="200" style="min-height:0">${esc(w.tagline_en)}</textarea></label>
         <div class="world-pics">${WORLD_SLOTS.map((s) => worldSlot(w, s)).join("")}</div>
         <div class="actions">
           <button type="submit" class="btn small-btn">Speichern</button>

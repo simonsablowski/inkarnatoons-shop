@@ -28,7 +28,7 @@ function worldTile(w) {
   return `<a class="world-tile${w.image ? "" : " no-image"}${w.figure_image ? " has-figure" : ""}" href="/?world=${w.slug}">
     <div class="pic">${pic}${figure}</div>
     <div class="body">${w.image && !w.title_image ? `<h3 class="sr-only">${esc(w.name)}</h3>` : worldTitle(w, "h3")}<p>${esc(loc(w, "tagline"))}</p>
-    <span class="small">${w.product_count ? t("world.items", { n: w.product_count }) : t("world.soon")}</span></div>
+    <span class="small">${w.product_count ? t(w.product_count === 1 ? "world.itemsOne" : "world.items", { n: w.product_count }) : t("world.soon")}</span></div>
   </a>`;
 }
 
@@ -69,7 +69,7 @@ function renderHero(s) {
     hero.innerHTML = `<section class="pagehead"><div class="wrap">${worldTitle(world)}<p>${esc(loc(world, "tagline"))}</p></div></section>`;
   } else {
     hero.innerHTML = `<section class="pagehead home"><div class="wrap">
-      ${config().brand.logo ? `<h1 class="sr-only">${esc(brandName())}</h1>${brandMark("lettering")}` : `<h1>${esc(brandName())}</h1>`}<p>${t("home.line")}</p>
+      ${config().brand.logo ? `<h1 class="sr-only">${esc(brandName())}</h1>${brandMark("lettering")}` : `<h1>${esc(brandName())}</h1>`}
       <div class="worlds">${config().worlds.map(worldTile).join("")}</div>
     </div></section>`;
   }
@@ -96,7 +96,7 @@ async function render() {
       config().categories.filter((c) => used.has(c.slug) || c.slug === s.category)
         .map((c) => `<button type="button" class="chip" data-cat="${c.slug}" aria-pressed="${s.category === c.slug}">${esc(loc(c, "name"))}</button>`).join("");
     grid.innerHTML = products.map(productCard).join("");
-    document.querySelector("#count").textContent = t("list.count", { n: products.length });
+    document.querySelector("#count").textContent = t(products.length === 1 ? "list.countOne" : "list.count", { n: products.length });
     document.querySelector("#empty").hidden = products.length > 0;
   } catch {
     grid.innerHTML = `<p class="notice error">${t("list.error")}</p>`;
