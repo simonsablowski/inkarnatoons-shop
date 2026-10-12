@@ -238,9 +238,9 @@ td .stock-input { width: 74px; height: 36px; padding: 0 8px; }
   .variant-row { grid-template-columns: 1fr 1fr; }
 }
 
-/* Startseite: Schriftzug des Shops und die Kacheln der Themenwelten, alles auf Schwarz */
+/* Startseite: die Kacheln der Themenwelten auf Schwarz (der Schriftzug steht nur oben in der Leiste) */
 .pagehead.home { padding: 40px 0 52px; }
-.pagehead.home .lettering { max-height: 190px; }
+.pagehead.home .worlds { margin-top: 0; }
 .worlds { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 36px 28px; margin-top: 34px; }
 .world-tile { position: relative; display: flex; flex-direction: column; color: var(--white); text-decoration: none; }
 .world-tile:hover { color: var(--white); }

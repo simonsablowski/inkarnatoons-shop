@@ -1,6 +1,6 @@
 // Startseite (alle Produktwelten) und Übersicht einer Produktwelt mit Kategorien, Suche,
 // Sortierung und Filtern. Der Zustand steht in der Adresse.
-import { start, api, t, loc, lang, config, productCard, worldOf, worldTitle, brandName, brandMark, esc } from "./shop.js";
+import { start, api, t, loc, lang, config, productCard, worldOf, worldTitle, brandName, esc } from "./shop.js";
 import { mountPlayer, mountSupport } from "./film.js";
 
 const form = document.querySelector("#filters");
@@ -69,7 +69,7 @@ function renderHero(s) {
     hero.innerHTML = `<section class="pagehead"><div class="wrap">${worldTitle(world)}<p>${esc(loc(world, "tagline"))}</p></div></section>`;
   } else {
     hero.innerHTML = `<section class="pagehead home"><div class="wrap">
-      ${config().brand.logo ? `<h1 class="sr-only">${esc(brandName())}</h1>${brandMark("lettering")}` : `<h1>${esc(brandName())}</h1>`}
+      <h1 class="sr-only">${esc(brandName())}</h1>
       <div class="worlds">${config().worlds.map(worldTile).join("")}</div>
     </div></section>`;
   }
