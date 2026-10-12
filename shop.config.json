@@ -50,16 +50,16 @@
     "world": "judas-jesus",
     "provider": "",
     "id": "",
-    "_hinweis_versions": "versions: mehrere Fassungen zum Umschalten unter dem Player. Sind hier Fassungen eingetragen, gelten sie anstelle von provider und id. src: Adresse der Videodatei im Speicher. poster: Standbild vor dem Start. note_de/note_en: kurzer Satz zur Fassung. upload: Quelle auf diesem Rechner (Datei oder Ordner mit Teilen) für npm run film:upload.",
+    "_hinweis_versions": "versions: mehrere Fassungen zum Umschalten unter dem Player. Sind hier Fassungen eingetragen, gelten sie anstelle von provider und id. src: Adresse der Videodatei im Speicher. poster: Standbild vor dem Start. note_de/note_en: kurzer Satz zur Fassung. upload: Quelle auf diesem Rechner (Datei oder Ordner mit Teilen) für npm run film:upload. hidden: true blendet die Fassung im Shop aus.",
     "versions": [
       { "id": "film", "title_de": "Film", "title_en": "Film", "note_de": "Der fertige Film in voller Länge.", "note_en": "The finished film, full length.",
         "src": "/media/film/judas-und-jesus.mp4", "poster": "/img/szene-tuer.jpg",
         "upload": "import/olaf/04_JUDAS_UND_JESUS_2009_H.264_1920x1080_25fps_OV_20TH-51TH_260526.mp4" },
       { "id": "rough", "title_de": "Rough Animation", "title_en": "Rough animation", "note_de": "Ein Schritt zurück: die Rohanimation, bevor Reinzeichnung und Farbe dazukamen.", "note_en": "One step back: the rough animation, before clean-up and colour.",
         "src": "/media/film/03-rough-animation.mp4", "poster": "/img/film/03-rough-animation.jpg", "upload": "import/film/03-rough-animation" },
-      { "id": "layout", "title_de": "Layout-Animatic", "title_en": "Layout animatic", "note_de": "Noch eine Stufe früher: die Einstellungen im Layout, mit Hintergründen und Figuren.", "note_en": "One stage earlier still: the shots laid out with backgrounds and characters.",
+      { "id": "layout", "hidden": true, "title_de": "Layout-Animatic", "title_en": "Layout animatic", "note_de": "Noch eine Stufe früher: die Einstellungen im Layout, mit Hintergründen und Figuren.", "note_en": "One stage earlier still: the shots laid out with backgrounds and characters.",
         "src": "/media/film/02-layout-animatic.mp4", "poster": "/img/film/02-layout-animatic.jpg", "upload": "import/10-11/02_J&J_LayoutAnimatic_musikRECHTE.mp4" },
-      { "id": "thumbnail", "title_de": "Thumbnail-Animatic", "title_en": "Thumbnail animatic", "note_de": "Ganz am Anfang: der ganze Film als erste grobe Skizzen.", "note_en": "At the very beginning: the whole film as first rough sketches.",
+      { "id": "thumbnail", "hidden": true, "title_de": "Thumbnail-Animatic", "title_en": "Thumbnail animatic", "note_de": "Ganz am Anfang: der ganze Film als erste grobe Skizzen.", "note_en": "At the very beginning: the whole film as first rough sketches.",
         "src": "/media/film/01-thumbnail-animatic.mp4", "poster": "/img/film/01-thumbnail-animatic.jpg", "upload": "import/10-11/01_J&J_Thumbnail_musikRECHTE.mp4" }
     ]
   },

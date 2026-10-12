@@ -41,7 +41,7 @@ export async function priceCart(db, items, country, language = "de") {
   let weight = 0;
   for (const it of items) {
     const r = byId.get(it.variantId);
-    if (!r || !r.active) { issues.push({ variantId: it.variantId, code: "unavailable" }); continue; }
+    if (!r || !r.active || r.price_cents <= 0) { issues.push({ variantId: it.variantId, code: "unavailable" }); continue; }
     if (r.stock <= 0) issues.push({ variantId: it.variantId, code: "sold_out" });
     else if (r.stock < it.qty) issues.push({ variantId: it.variantId, code: "not_enough", available: r.stock });
     const line = {

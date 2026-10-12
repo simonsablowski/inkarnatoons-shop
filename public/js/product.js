@@ -149,17 +149,17 @@ function render() {
     <div class="info">
       <p class="crumb"><a href="/">${t("product.back")}</a>${world ? ` / <a href="/?world=${world.slug}">${esc(world.name)}</a>` : ""}${cat ? ` / <a href="/?${world ? `world=${world.slug}&` : ""}category=${cat.slug}">${esc(loc(cat, "name"))}</a>` : ""}</p>
       <h1>${esc(name)}</h1>
-      <p class="price">${money(product.priceCents)}</p>
-      <p class="small">${t("product.priceNote", { link: `<a href="/legal.html#versand">${t("product.shippingLink")}</a>` })}</p>
+      ${product.priceCents > 0 ? `<p class="price">${money(product.priceCents)}</p>
+      <p class="small">${t("product.priceNote", { link: `<a href="/legal.html#versand">${t("product.shippingLink")}</a>` })}</p>` : `<p class="price">${t("product.notForSale")}</p>`}
       ${multi ? `<fieldset style="border:0;padding:0;margin:18px 0 0"><legend style="font-weight:600;padding:0">${t("product.option")}</legend>
         <div class="options">${product.variants.map((v) => `<label><input type="radio" name="variant" value="${v.id}" ${v.stock.available ? "" : "disabled"} ${chosen?.id === v.id ? "checked" : ""}><span>${esc(v.label)}</span></label>`).join("")}</div></fieldset>` : ""}
-      <div id="stock">${multi && !chosen ? "" : stockLine(chosen)}</div>
+      ${product.priceCents > 0 ? `<div id="stock">${multi && !chosen ? "" : stockLine(chosen)}</div>
       <div class="buyrow">
         ${product.isUnique ? "" : `<div class="qty"><button type="button" data-step="-1" aria-label="−">−</button><input type="number" id="qty" value="1" min="1" max="${maxQty}" aria-label="${esc(t("product.qty"))}"><button type="button" data-step="1" aria-label="+">+</button></div>`}
         <button type="button" class="btn" id="add" ${multi && !chosen ? "" : canBuy ? "" : "disabled"}>${t("product.add")}</button>
         ${heartButton(product.slug, "inline")}
       </div>
-      <p id="msg" class="small" aria-live="polite"></p>
+      <p id="msg" class="small" aria-live="polite"></p>` : ""}
       <div class="desc">${esc(loc(product, "desc"))}</div>
     </div>
   </div>`;

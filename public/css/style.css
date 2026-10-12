@@ -247,7 +247,7 @@ td .stock-input { width: 74px; height: 36px; padding: 0 8px; }
 .world-tile .pic { position: relative; }
 .world-tile .pic > img:first-child { width: 100%; }
 .world-tile.no-image .pic { aspect-ratio: 1; border: 2px solid var(--white); display: grid; place-items: center; }
-.world-tile:hover .pic { outline: 3px solid var(--red); outline-offset: 3px; }
+.world-tile:hover .pic { outline: 3px solid var(--white); outline-offset: 3px; }
 .world-tile .world-name { font-weight: 700; font-size: 1.5rem; line-height: 1.2; text-align: center; padding: 0 12px; }
 /* Einzelne Figur: gespiegelt, links neben der Kachel am unteren Rand. Nur ein kleines Stück ragt in die Kachel.
    Auf schmalen Bildschirmen rücken die Kacheln dafür etwas nach rechts. */

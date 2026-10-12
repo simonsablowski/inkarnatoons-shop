@@ -4,11 +4,14 @@
 //   npm run film:upload -- --target online    lädt in den Online-Shop
 //   --only <id>     nur diese Fassung (z. B. --only film)
 //   --force         auch hochladen, wenn dieselbe Datei schon im Speicher liegt
+//   --part-mb <n>   Größe der Stücke in MB (Standard 8, mindestens 5). Kleiner hilft bei wackliger Leitung.
+//
+// Bricht die Übertragung ab (z. B. weil die Leitung weg ist), einfach denselben Befehl noch einmal
+// ausführen: Das Skript merkt sich die fertigen Stücke in import/.upload-stand.json und macht dort weiter.
 //
 // Jede Fassung nennt unter "upload" ihre Quelle: eine Datei oder einen Ordner. Bei einem Ordner
 // werden alle Dateien darin in der Reihenfolge ihrer Namen aneinandergehängt (teil-00, teil-01, …).
-// Übertragen wird in Stücken von 20 MB, darum funktioniert es auch mit sehr großen Dateien.
-import { readFileSync, existsSync, statSync, readdirSync, openSync, readSync, closeSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync, statSync, readdirSync, openSync, readSync, closeSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createInterface } from "node:readline/promises";
@@ -19,12 +22,20 @@ const config = JSON.parse(readFileSync(join(ROOT, "shop.config.json"), "utf8"));
 const argv = process.argv.slice(2);
 const flag = (name) => argv.includes(`--${name}`);
 const option = (name) => (argv.includes(`--${name}`) ? argv[argv.indexOf(`--${name}`) + 1] : null);
-const KNOWN = ["target", "only", "force"];
+const KNOWN = ["target", "only", "force", "part-mb"];
 const unknown = argv.filter((a) => a.startsWith("--") && !KNOWN.includes(a.slice(2)));
 if (unknown.length) { console.error(`Unbekannter Schalter: ${unknown.join(", ")}. Erlaubt sind: ${KNOWN.map((k) => "--" + k).join(", ")}`); process.exit(1); }
 if (option("target") && !["local", "online"].includes(option("target"))) { console.error("--target erwartet local oder online."); process.exit(1); }
 const TARGET = option("target") === "online" ? "online" : "local";
-const PART = 20 * 1024 * 1024;
+const PART_MB = Math.max(5, Math.min(90, Number(option("part-mb")) || 8));
+let PART = PART_MB * 1024 * 1024;
+
+// Stand angefangener Übertragungen, damit ein Abbruch nicht von vorn beginnen muss
+const STATE_FILE = join(ROOT, "import", ".upload-stand.json");
+const readState = () => { try { return JSON.parse(readFileSync(STATE_FILE, "utf8")); } catch { return {}; } };
+function saveState(state) {
+  try { mkdirSync(dirname(STATE_FILE), { recursive: true }); writeFileSync(STATE_FILE, JSON.stringify(state, null, 2)); } catch { /* egal */ }
+}
 const mb = (n) => `${(n / 1048576).toFixed(0)} MB`;
 
 async function connect() {
@@ -68,7 +79,8 @@ function* blocks(file) {
     }
   } finally { closeSync(fd); }
 }
-function* pieces(files) {
+function* pieces(files, skip = 0) {
+  let index = 0;
   let buf = Buffer.allocUnsafe(PART), filled = 0;
   for (const file of files) {
     for (let block of blocks(file)) {
@@ -77,11 +89,11 @@ function* pieces(files) {
         block.copy(buf, filled, 0, n);
         filled += n;
         block = block.subarray(n);
-        if (filled === PART) { yield buf; buf = Buffer.allocUnsafe(PART); filled = 0; }
+        if (filled === PART) { if (index++ >= skip) yield buf; buf = Buffer.allocUnsafe(PART); filled = 0; }
       }
     }
   }
-  if (filled) yield buf.subarray(0, filled);
+  if (filled && index >= skip) yield buf.subarray(0, filled);
 }
 const sizeOf = (file) => (file.endsWith(".gz") ? gunzipSync(readFileSync(file)).length : statSync(file).size);
 
@@ -111,15 +123,16 @@ async function call(base, token, method, query, body) {
   const url = `${base}/api/admin/upload?${new URLSearchParams(query)}`;
   for (let attempt = 1; ; attempt++) {
     try {
-      const res = await fetch(url, { method, body, headers: { authorization: `Bearer ${token}`, ...(typeof body === "string" ? { "content-type": "application/json" } : {}) } });
+      const res = await fetch(url, { method, body, signal: AbortSignal.timeout(5 * 60 * 1000), headers: { authorization: `Bearer ${token}`, ...(typeof body === "string" ? { "content-type": "application/json" } : {}) } });
       const data = await res.json().catch(() => ({}));
       if (res.status === 401 || res.status === 403) throw Object.assign(new Error("Das Passwort der Verwaltung stimmt nicht."), { fatal: true });
       if (!res.ok || data.ok === false) throw new Error(`${data.error || "http_" + res.status}${data.detail ? ": " + data.detail : ""}`);
       return data;
     } catch (err) {
-      if (err.fatal || attempt >= 4) throw err;
-      process.stdout.write(` (Versuch ${attempt} fehlgeschlagen, neuer Versuch) `);
-      await new Promise((r) => setTimeout(r, attempt * 2000));
+      if (err.fatal || attempt >= 8) throw err;
+      const wait = Math.min(60, attempt * 5);
+      process.stdout.write(`\n  Versuch ${attempt} fehlgeschlagen (${err.cause?.code || err.message}), neuer Versuch in ${wait} s `);
+      await new Promise((r) => setTimeout(r, wait * 1000));
     }
   }
 }
@@ -144,23 +157,43 @@ for (const v of versions) {
     console.log(`  ${v.id}: Bild ${info.video.join("/") || "?"}, Ton ${info.audio.join("/") || "?"}`);
     for (const n of info.notes) console.log(`  Hinweis: ${n}`);
   }
-  process.stdout.write(`↑ ${v.id}: ${mb(total)} `);
-  let uploadId;
+  // Angefangene Übertragung derselben Datei fortsetzen
+  const state = readState();
+  const fingerprint = `${total}:${files.map((f) => statSync(f).mtimeMs).join(",")}`;
+  let job = state[key];
+  if (job && job.fingerprint !== fingerprint) job = null;
   try {
-    ({ uploadId } = await call(base, token, "POST", { key, action: "create" }));
-    const parts = [];
-    let sent = 0;
-    for (const piece of pieces(files)) {
-      const { part } = await call(base, token, "PUT", { key, uploadId, part: parts.length + 1 }, piece);
-      parts.push(part);
+    if (job) {
+      PART = job.partBytes;
+      console.log(`  Setze fort: ${job.parts.length} Stücke à ${mb(PART)} sind schon übertragen.`);
+    } else {
+      PART = PART_MB * 1024 * 1024;
+      const { uploadId } = await call(base, token, "POST", { key, action: "create" });
+      job = { uploadId, fingerprint, partBytes: PART, parts: [] };
+      state[key] = job; saveState(state);
+    }
+    let sent = job.parts.length * PART;
+    process.stdout.write(`↑ ${v.id}: ${mb(sent)} von ${mb(total)} `);
+    for (const piece of pieces(files, job.parts.length)) {
+      const { part } = await call(base, token, "PUT", { key, uploadId: job.uploadId, part: job.parts.length + 1 }, piece);
+      job.parts.push(part);
+      saveState(state);
       sent += piece.length;
       process.stdout.write(`\r↑ ${v.id}: ${mb(sent)} von ${mb(total)}   `);
     }
-    await call(base, token, "POST", { key, uploadId, action: "complete" }, JSON.stringify({ parts }));
+    await call(base, token, "POST", { key, uploadId: job.uploadId, action: "complete" }, JSON.stringify({ parts: job.parts }));
+    delete state[key]; saveState(state);
     console.log(`\r✓ ${v.id}: ${mb(total)} hochgeladen → ${v.src}        `);
   } catch (err) {
     console.log(`\n✗ ${v.id}: ${err.message}`);
-    if (uploadId) await call(base, token, "POST", { key, uploadId, action: "abort" }).catch(() => {});
+    if (/does not exist|NoSuchUpload|upload_id/i.test(err.message)) {
+      // Die angefangene Übertragung gibt es im Speicher nicht mehr (abgelaufen): beim nächsten Mal von vorn
+      delete state[key]; saveState(state);
+      console.log("  Die angefangene Übertragung ist abgelaufen. Beim nächsten Aufruf beginnt sie neu.");
+      failed++;
+      continue;
+    }
+    if (job?.parts?.length) console.log(`  ${job.parts.length} Stücke sind schon oben. Denselben Befehl später noch einmal ausführen, dann geht es dort weiter.`);
     failed++;
     if (err.fatal) break;
   }

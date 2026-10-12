@@ -6,6 +6,7 @@ node_modules/
 import/olaf/
 import/film/
 import/teile/
+import/.upload-stand.json
 import/bilder/*
 !import/bilder/LIESMICH.txt
 *.mp4

@@ -116,5 +116,6 @@
   "zoom.prev": "Vorheriges Bild",
   "zoom.next": "Nächstes Bild",
   "zoom.label": "Großansicht",
-  "film.versions": "Fassung wählen"
+  "film.versions": "Fassung wählen",
+  "product.notForSale": "Unverkäuflich"
 }

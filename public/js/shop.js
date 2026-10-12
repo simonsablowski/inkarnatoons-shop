@@ -100,16 +100,17 @@ export function productCard(p) {
   const world = worldOf(p.world);
   const label = [world?.name, cat ? loc(cat, "name") : ""].filter(Boolean).join(", ");
   const badges = [];
-  if (!p.stock.available) badges.push(`<span class="badge out">${t(p.isUnique ? "badge.sold" : "badge.soldout")}</span>`);
+  if (p.priceCents <= 0) { /* unverkäuflich: keine Bestandsangaben */ }
+  else if (!p.stock.available) badges.push(`<span class="badge out">${t(p.isUnique ? "badge.sold" : "badge.soldout")}</span>`);
   else if (p.isUnique) badges.push(`<span class="badge">${t("badge.unique")}</span>`);
   else if (p.stock.low && !p.hasOptions) badges.push(`<span class="badge low">${t("badge.low", { n: p.stock.left })}</span>`);
-  return `<article class="card${p.stock.available ? "" : " soldout"}">
+  return `<article class="card${p.stock.available || p.priceCents <= 0 ? "" : " soldout"}">
     <a class="card-link" href="/product.html?p=${encodeURIComponent(p.slug)}">
       <div class="pic">${p.image ? `<img src="${esc(p.image)}" alt="" loading="lazy" width="600" height="600">` : ""}</div>
       <div class="body">
         <span class="cat">${esc(label)}</span>
         <h3>${esc(name)}</h3>
-        <span class="price">${money(p.priceCents)}</span>
+        <span class="price">${p.priceCents > 0 ? money(p.priceCents) : t("product.notForSale")}</span>
       </div>
     </a>
     <div class="badges">${badges.join("")}</div>
