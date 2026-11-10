@@ -14,6 +14,11 @@ function form(obj, prefix = "", out = new URLSearchParams()) {
 }
 
 const SHIPPING_LABEL = { de: "Versand", en: "Shipping" };
+// Hinweis unter dem Bezahlbutton (Button-Lösung, § 312j BGB)
+const SUBMIT_NOTE = {
+  de: "Mit Klick auf „Zahlen“ gibst du eine zahlungspflichtige Bestellung ab.",
+  en: "By clicking “Pay” you place an order with an obligation to pay.",
+};
 
 export async function createCheckoutSession(env, order, lines, expiresAt) {
   const l = order.language === "de" ? "de" : "en";
@@ -49,6 +54,7 @@ export async function createCheckoutSession(env, order, lines, expiresAt) {
     phone_number_collection: { enabled: true },
     metadata: { order_id: order.id },
     payment_intent_data: { metadata: { order_id: order.id }, description: `${config.shopName} ${order.id}` },
+    custom_text: { submit: { message: SUBMIT_NOTE[l] } },
     expires_at: expiresAt,
     success_url: `${env.PUBLIC_URL}/success.html?order=${order.id}&t=${order.token}&lang=${l}`,
     cancel_url: `${env.PUBLIC_URL}/cart.html?cancelled=${order.id}&t=${order.token}&lang=${l}`,

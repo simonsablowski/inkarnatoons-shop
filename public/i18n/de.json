@@ -53,7 +53,7 @@
   "cart.terms": "Ich habe die {terms} und die {withdrawal} gelesen und bin einverstanden.",
   "cart.termsLink": "AGB",
   "cart.withdrawalLink": "Widerrufsbelehrung",
-  "cart.checkout": "Zur Kasse",
+  "cart.checkout": "Zahlungspflichtig bestellen",
   "cart.payInfo": "Du bezahlst im nächsten Schritt per Kreditkarte oder PayPal und gibst dort deine Lieferadresse an.",
   "cart.busy": "Einen Moment …",
   "cart.cancelled": "Die Zahlung wurde abgebrochen. Dein Warenkorb ist noch da.",
