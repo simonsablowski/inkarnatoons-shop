@@ -2,6 +2,7 @@
 // die Mails nur ins Log geschrieben, damit lokal alles funktioniert.
 import { config } from "./config.js";
 import { escapeHtml as e } from "./http.js";
+import { cancellationHtml } from "./cancellation.js";
 
 async function send(env, { to, subject, html, replyTo }) {
   if (!to) return { skipped: "no_recipient" };
@@ -93,7 +94,7 @@ export function sendOrderConfirmation(env, order) {
     ${itemsTable(order, t, l)}
     ${addr ? `<p><strong>${t.shipTo}</strong><br>${addr}</p>` : ""}
     ${order.shipping_zone === "de" || order.shipping_zone === "eu" ? "" : `<p style="font-size:13px">${t.customs}</p>`}
-    ${orderLink(env, order, t, l)}<p>${t.questions}</p>`);
+    ${orderLink(env, order, t, l)}<p>${t.questions}</p>${cancellationHtml(l)}`);
   return send(env, { to: order.email, subject: t.confirmSubject(order.id), html, replyTo: env.SHOP_EMAIL });
 }
 
