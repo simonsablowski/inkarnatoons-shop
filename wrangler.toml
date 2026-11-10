@@ -18,7 +18,7 @@ bucket_name = "judas-jesus-shop-media"
 
 [vars]
 # Absender für E-Mails (Domain muss bei Resend verifiziert sein)
-MAIL_FROM = "Judas & Jesus Shop <shop@example.com>"
+MAIL_FROM = "Inkarnatoons Shop <shop@inkarnatoons.com>"
 # Öffentliche Basis-URL, wird in E-Mails und für Stripe-Rücksprünge verwendet
 PUBLIC_URL = "https://shop.inkarnatoons.com"
 
