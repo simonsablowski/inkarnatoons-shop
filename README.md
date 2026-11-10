@@ -56,7 +56,7 @@ Alles Wichtige steht in `shop.config.json`:
 | `film.world`, `film.provider`, `film.id` | Welt, auf deren Übersicht der Film erscheint, und die Videoquelle: `youtube`, `vimeo` oder `file` mit Video-ID bzw. Dateiadresse. Leer zeigt einen Platzhalter |
 | `film.versions` | Mehrere Fassungen zum Umschalten (fertiger Film, Animatics). Sind Fassungen eingetragen, gelten sie anstelle von `provider` und `id`. Siehe „Filme hochladen“ |
 | `kofi.name`, `kofi.show` | Name der Ko-fi-Seite für den Button „Auf Ko-fi unterstützen“ unter dem Film. Ohne Namen erscheint er als Platzhalter, `show: false` blendet ihn aus |
-| `payments.methods` | Zahlarten in Stripe Checkout: `card`, `paypal` |
+| `payments.methods` | Zahlarten, die der Shop der Oberfläche meldet. Welche Zahlarten Stripe Checkout tatsächlich anbietet, steht im Stripe-Dashboard |
 | `payments.holdMinutes` | So lange bleibt die Bezahlseite offen (Stripe verlangt mindestens 30 Minuten) |
 | `shipping.zones` | Versandzonen mit Ländern und Preisstufen nach Gewicht (Preise in Cent) |
 | `shipping.packagingWeightG` | Gewicht der Verpackung, wird zu jeder Bestellung addiert |
@@ -191,7 +191,7 @@ Für eine Vorschau mit den Platzhalterprodukten: `npm run seed:remote`. Achtung,
 
 ### Stripe
 
-1. Unter *Settings → Payment methods* Karte und PayPal aktivieren. Ist PayPal dort nicht aktiv, lehnt Stripe die Bezahlseite ab. Zum Testen kann in `shop.config.json` vorübergehend nur `["card"]` stehen.
+1. Unter *Settings → Payment methods* Karte und PayPal aktivieren. Der Shop schickt keine Liste von Zahlarten mit, Stripe bietet an, was dort eingeschaltet ist (`payment_method_types` ist bei Stripe nicht mehr zulässig).
 2. Unter *Developers → Webhooks* einen Endpunkt auf `https://<domain>/api/stripe-webhook` anlegen, mit den Ereignissen `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.async_payment_failed` und `checkout.session.expired`.
 3. `STRIPE_SECRET_KEY` und `STRIPE_WEBHOOK_SECRET` als Secrets setzen.
 

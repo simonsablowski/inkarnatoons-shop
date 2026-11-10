@@ -1,6 +1,6 @@
 // Stripe-Anbindung ohne SDK (direkt über die REST-API, läuft so in Workers).
-// Karte und PayPal laufen beide über Stripe Checkout. PayPal muss im
-// Stripe-Dashboard unter Settings → Payment methods aktiviert sein.
+// Karte und PayPal laufen beide über Stripe Checkout. Welche Zahlarten angeboten
+// werden, bestimmt allein das Stripe-Dashboard unter Settings → Payment methods.
 import { config } from "./config.js";
 
 function form(obj, prefix = "", out = new URLSearchParams()) {
@@ -22,7 +22,6 @@ export async function createCheckoutSession(env, order, lines, expiresAt) {
     mode: "payment",
     locale: l,
     client_reference_id: order.id,
-    payment_method_types: Object.fromEntries(config.payments.methods.map((m, i) => [i, m])),
     line_items: Object.fromEntries(
       lines.map((line, i) => [
         i,
