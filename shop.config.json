@@ -20,7 +20,7 @@
   ],
   "orderPrefix": "JJ",
   "seller": {
-    "_hinweis": "Diese Angaben stehen auf Rechnung und Adressaufkleber. Die Steuernummer fehlt noch.",
+    "_hinweis": "Diese Angaben stehen auf Rechnung und Adressaufkleber. Steuernummer und Umsatzsteuer-ID fehlen noch.",
     "name": "Inkarnatoons UG (haftungsbeschränkt)",
     "street": "Kopenhagener Str. 31c",
     "zip": "10437",
@@ -29,7 +29,7 @@
     "email": "info@inkarnatoons.com",
     "web": "https://www.inkarnatoons.com",
     "taxNumber": "",
-    "vatId": "DE308082487",
+    "vatId": "",
     "bank": ""
   },
   "tax": {
