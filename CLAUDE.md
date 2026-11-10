@@ -45,7 +45,7 @@ Diese Datei fasst zusammen, was beim Arbeiten an diesem Projekt wichtig ist und 
 ## Noch nicht erledigt
 
 - Stripe (Testlauf) und Resend (E-Mail) sind nicht eingerichtet, bisher nur lokal mit `DEV_FAKE_PAYMENT` getestet.
-- Firmendaten (`seller`), Steuerart, Rechtstexte, Verpackungsregister, Jugendschutz beim Versand der FSK-16-DVD: Das müssen Olaf und Claudia klären.
+- Firmendaten (`seller`) und Rechtstexte sind seit dem 10. November 2026 eingepflegt (IKS-017). Offen: die Umsatzsteuer-ID im Impressum und in `seller` ist noch nicht bestätigt (Olaf nannte zwei verschiedene), die Steuernummer fehlt, die Texte gibt es nur auf Deutsch (IKS-021), Verpackungsregister und Jugendschutz beim Versand der FSK-16-DVD müssen Olaf und Claudia klären. Die elektronische Widerrufsfunktion (IKS-018) und die Beschriftung des Bestellbuttons (IKS-019) fehlen noch.
 - Ob Stripe, PayPal und Ko-fi erotische Inhalte erlauben, ist ungeklärt.
 - Versand: eine günstigere Stufe für kleine Sendungen fehlt, die Tarife basieren auf DHL Paket für Privatkunden.
 - Formate der Zeichnungen stehen bisher nur im Sheet unter „Anmerkungen“ und werden im Shop nicht angezeigt (eine Spalte „Format“ wurde angeboten).

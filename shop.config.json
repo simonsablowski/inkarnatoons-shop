@@ -20,16 +20,16 @@
   ],
   "orderPrefix": "JJ",
   "seller": {
-    "_hinweis": "Platzhalter. Diese Angaben stehen auf Rechnung und Adressaufkleber.",
-    "name": "Platzhalter Firmenname",
-    "street": "Musterstraße 1",
-    "zip": "10000",
+    "_hinweis": "Diese Angaben stehen auf Rechnung und Adressaufkleber. Die Steuernummer fehlt noch.",
+    "name": "Inkarnatoons UG (haftungsbeschränkt)",
+    "street": "Kopenhagener Str. 31c",
+    "zip": "10437",
     "city": "Berlin",
     "country": "Deutschland",
-    "email": "shop@example.com",
-    "web": "",
+    "email": "info@inkarnatoons.com",
+    "web": "https://www.inkarnatoons.com",
     "taxNumber": "",
-    "vatId": "",
+    "vatId": "DE308082487",
     "bank": ""
   },
   "tax": {
